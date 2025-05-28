@@ -1,0 +1,88 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "Character/TPSCharacterBase.h"
+#include "GameFramework/CharacterMovementComponent.h"
+#include "Components/CapsuleComponent.h"
+#include "TPSCharacterControlData.h"
+#include "Camera/CameraComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+
+// Sets default values
+ATPSCharacterBase::ATPSCharacterBase()
+{
+ 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	PrimaryActorTick.bCanEverTick = true;
+
+	// Mesh
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> CharacterMesh(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Meshes/Wraith.Wraith"));
+	if (CharacterMesh.Object)
+	{
+		// Mesh컴포넌트에 접근
+		GetMesh()->SetSkeletalMesh(CharacterMesh.Object);
+	}
+
+	//무브먼트 설정
+	GetCharacterMovement()->RotationRate = FRotator(0.0f, 360.0f, 0.0f);
+	GetCharacterMovement()->JumpZVelocity = 600.0f;
+	GetCharacterMovement()->bEnablePhysicsInteraction = false;
+
+	//이단 점프 설정
+	JumpMaxCount = 2;
+
+	//캡슐 컴포넌트 설정
+	GetCapsuleComponent()->SetCapsuleHalfHeight(88.0f);
+
+	//Mesh 위치 설정
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+
+	//Character Control Manager 설정
+	static ConstructorHelpers::FObjectFinder<UTPSCharacterControlData> NonCombatControlDataRef(TEXT("/Game/TPSProject/CharacterControl/TPSNonCombatControl.TPSNonCombatControl"));
+	if (NonCombatControlDataRef.Object)
+	{
+		CharacterControlManager.Add(ECharacterControlType::NonCombat, NonCombatControlDataRef.Object);
+	}
+
+	static ConstructorHelpers::FObjectFinder<UTPSCharacterControlData> CombatControlDataRef(TEXT("/Game/TPSProject/CharacterControl/TPSCombatControl.TPSCombatControl"));
+	if (NonCombatControlDataRef.Object)
+	{
+		CharacterControlManager.Add(ECharacterControlType::Combat, CombatControlDataRef.Object);
+	}
+
+	//Camera, Spring Arm 설정
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	SpringArm->SetupAttachment(RootComponent);
+
+	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
+	Camera->SetupAttachment(SpringArm);
+}
+
+void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlType)
+{
+	auto CharacterControlData = CharacterControlManager[ControlType];
+
+	// Character Control Setting
+
+	// pawn
+	bUseControllerRotationYaw = CharacterControlData->bUseControllerRotationYaw;
+
+	// CharacterMovement
+	GetCharacterMovement()->bOrientRotationToMovement = CharacterControlData->bOrientRotationToMovement;
+	GetCharacterMovement()->bUseControllerDesiredRotation = CharacterControlData->bUseControllerDesiredRotation;
+	GetCharacterMovement()->RotationRate = CharacterControlData->RotationRate;
+
+	// SpringArm
+	SpringArm->TargetArmLength = CharacterControlData->TargetArmLength;
+	SpringArm->SetRelativeLocation(CharacterControlData->RelativeLocation);
+	SpringArm->bUsePawnControlRotation = CharacterControlData->bUsePawnControlRotation;
+	SpringArm->bInheritPitch = CharacterControlData->bInheritPitch;
+	SpringArm->bInheritRoll = CharacterControlData->bInheritRoll;
+	SpringArm->bInheritYaw = CharacterControlData->bInheritYaw;
+	SpringArm->bDoCollisionTest = CharacterControlData->bDoCollisionTest;
+
+	// AnimInstance
+	GetMesh()->SetAnimClass(CharacterControlData->AnimBlueprintClass);
+
+	// 현재 세팅
+	CurrentCharacterControlType = ControlType;
+}
