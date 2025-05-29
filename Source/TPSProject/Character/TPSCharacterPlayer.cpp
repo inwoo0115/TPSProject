@@ -109,10 +109,19 @@ void ATPSCharacterPlayer::BeginPlay()
 	Super::BeginPlay();
 
 	//Input system mapping
-	APlayerController* PlayerController = CastChecked<APlayerController>(GetController());
-	if (auto SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer()))
+	if (IsLocallyControlled())
 	{
-		SubSystem->AddMappingContext(InputMappingContext, 0);
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		if (PlayerController)
+		{
+			if (auto* LocalPlayer = PlayerController->GetLocalPlayer())
+			{
+				if (auto* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer))
+				{
+					SubSystem->AddMappingContext(InputMappingContext, 0);
+				}
+			}
+		}
 	}
 }
 

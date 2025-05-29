@@ -4,6 +4,7 @@
 #include "GameInstance/TPSOnlineSubsystem.h"
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
+#include "Kismet/GameplayStatics.h"
 
 void UTPSOnlineSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -65,28 +66,61 @@ void UTPSOnlineSubsystem::FindSession()
 	SessionInterface->FindSessions(0, SessionSearch.ToSharedRef());
 }
 
-void UTPSOnlineSubsystem::JoinSession()
+void UTPSOnlineSubsystem::JoinSession(int32 SessionIndex)
 {
-	if (!SessionInterface.IsValid()) return;
+	if (!SessionInterface.IsValid() || !SessionSearch.IsValid()) return;
+
+	if (SessionIndex < SessionSearch->SearchResults.Num())
+	{
+		// session index에 해당 하는 세션 참여
+		SessionInterface->JoinSession(0, NAME_GameSession, SessionSearch->SearchResults[SessionIndex]);
+	}
+}
+
+const TArray<FOnlineSessionSearchResult>& UTPSOnlineSubsystem::GetSearchResults() const
+{
+	return SessionSearch->SearchResults;
 }
 
 void UTPSOnlineSubsystem::OnCreateSessionComplete(FName SessionName, bool bWasSuccessful)
 {
 	if (bWasSuccessful)
 	{
-		// 멀티플레이 레벨 전환
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("Failed to create session."));
+		// 멀티 플레이 맵 리슨 서버 모드로 호출
+		UGameplayStatics::OpenLevel(GetWorld(), "DemoMultiLevel", true, "listen");
 	}
 }
 
 void UTPSOnlineSubsystem::OnFindSessionsComplete(bool bWasSuccessful)
 {
-	// SessionSearch->SearchResults로 세션 결과 저장
+	if (!bWasSuccessful || !SessionSearch.IsValid()) return;
+
+
+	// SessionSearch->SearchResults로 검색된 세션 가져오기
+	for (int32 i = 0; i < SessionSearch->SearchResults.Num(); i++)
+	{
+		FString ServerName;
+		SessionSearch->SearchResults[i].Session.SessionSettings.Get(FName("SERVER_NAME_KEY"), ServerName);
+
+		// 디버그 용 로그 DEBUG
+		UE_LOG(LogTemp, Log, TEXT("Session %d: %s"), i, *ServerName);
+	}
+
+	// 델리게이트로 위젯에 알림
+	OnSessionSearchComplete.Broadcast();
 }
 
 void UTPSOnlineSubsystem::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
+	// IP 주소/포트를 담을 문자열
+	FString ConnectString;
+
+	if (SessionInterface->GetResolvedConnectString(SessionName, ConnectString))
+	{
+		APlayerController* PC = GetGameInstance()->GetFirstLocalPlayerController();
+		if (PC)
+		{
+			PC->ClientTravel(ConnectString, ETravelType::TRAVEL_Absolute);
+		}
+	}
 }

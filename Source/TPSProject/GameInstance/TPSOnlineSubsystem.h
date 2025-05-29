@@ -12,6 +12,10 @@
 /**
  * 
  */
+
+ // 세션 검색 완료 알림용
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnSessionSearchCompleteDelegate);
+
 UCLASS()
 class TPSPROJECT_API UTPSOnlineSubsystem : public UGameInstanceSubsystem
 {
@@ -24,12 +28,25 @@ public:
 
 	void FindSession();
 
-	void JoinSession();
+	void JoinSession(int32 SessionIndex);
+
+	const TArray<FOnlineSessionSearchResult>& GetSearchResults() const;
 
 	//void StartSession();
 	
 	//void DestroySession();
 
+	// 세션 찾기용 조건 객체
+	TSharedPtr<FOnlineSessionSearch> SessionSearch;
+
+	// 세션 생성용 설정
+	TSharedPtr<FOnlineSessionSettings> SessionSettings;
+
+	// 세션 인터페이스
+	IOnlineSessionPtr SessionInterface;
+
+	// 세션 검색 완료 델리게이트
+	FOnSessionSearchCompleteDelegate OnSessionSearchComplete;
 protected:
 
 	// Callback for member delegate
@@ -41,14 +58,5 @@ protected:
 
 	//void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 	//void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
-
-	// 세션 찾기용 조건 객체
-	TSharedPtr<FOnlineSessionSearch> SessionSearch;
-
-	// 세션 생성용 설정
-	TSharedPtr<FOnlineSessionSettings> SessionSettings;
-
-	// 세션 인터페이스
-	IOnlineSessionPtr SessionInterface;
 
 };
