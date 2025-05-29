@@ -147,7 +147,7 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Ultimate);
 	EnhancedInputComponent->BindAction(DroneAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Drone);
 	EnhancedInputComponent->BindAction(InfoAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Info);
-	EnhancedInputComponent->BindAction(EscAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Esc);
+	EnhancedInputComponent->BindAction(EscAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Esc);
 }
 
 void ATPSCharacterPlayer::Tick(float DeltaSecounds)
@@ -256,7 +256,7 @@ void ATPSCharacterPlayer::Esc(const FInputActionValue& Value)
 		{
 			if (UISubsystem->GetCurrentUI() == EUIType::None)
 			{
-				// pause À§Á¬ È£Ãâ
+				UISubsystem->ShowUI(EUIType::Pause);
 			}
 			else
 			{

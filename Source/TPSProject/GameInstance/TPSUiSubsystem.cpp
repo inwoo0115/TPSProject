@@ -21,6 +21,11 @@ void UTPSUiSubsystem::Initialize(FSubsystemCollectionBase& Collection)
     TSoftClassPtr<UUserWidget> SoftClass_Online(FSoftClassPath(TEXT("/Game/TPSProject/Widget/WB_OnlineMenu.WB_OnlineMenu_C")));
     // map 추가
     LoadWidget(EUIType::Online, SoftClass_Online);
+
+    // 경로 저장
+    TSoftClassPtr<UUserWidget> SoftClass_Pause(FSoftClassPath(TEXT("/Game/TPSProject/Widget/WB_Pause.WB_Pause_C")));
+    // map 추가
+    LoadWidget(EUIType::Pause, SoftClass_Pause);
 }
 
 void UTPSUiSubsystem::ShowUI(EUIType Type)

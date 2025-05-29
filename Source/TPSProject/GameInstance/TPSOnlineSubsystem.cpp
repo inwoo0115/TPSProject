@@ -56,7 +56,7 @@ void UTPSOnlineSubsystem::FindSession()
 	SessionSearch->bIsLanQuery = true;
 
 	// 검색 수
-	SessionSearch->MaxSearchResults = 100;
+	SessionSearch->MaxSearchResults = 20;
 
 	// 세션 검색 필터
 	SessionSearch->QuerySettings.Set(FName(TEXT("Presence")), true, EOnlineComparisonOp::Equals);
@@ -112,6 +112,11 @@ void UTPSOnlineSubsystem::OnFindSessionsComplete(bool bWasSuccessful)
 
 void UTPSOnlineSubsystem::OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result)
 {
+	if (Result != EOnJoinSessionCompleteResult::Success)
+	{
+		return ;
+	}
+
 	// IP 주소/포트를 담을 문자열
 	FString ConnectString;
 
