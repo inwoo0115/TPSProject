@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "Interaction/TPSInteractionObjectBase.h"
-#include "TPSOnlineInteractionObjectBase.generated.h"
+#include "TPSOnlineInteractionObject.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API ATPSOnlineInteractionObjectBase : public ATPSInteractionObjectBase
+class TPSPROJECT_API ATPSOnlineInteractionObject : public ATPSInteractionObjectBase
 {
 	GENERATED_BODY()
-
 public:
-	ATPSOnlineInteractionObjectBase();
+	ATPSOnlineInteractionObject();
 
 	// 상호 작용 오브젝트 별 interaction 가상 함수
 	virtual void Interact(APlayerController* PC) override;

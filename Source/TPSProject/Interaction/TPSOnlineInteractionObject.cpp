@@ -1,11 +1,12 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Interaction/TPSOnlineInteractionObjectBase.h"
-#include "TPSOnlineInteractionObjectBase.h"
+#include "Interaction/TPSOnlineInteractionObject.h"
+#include "TPSOnlineInteractionObject.h"
 #include "GameInstance/TPSUiSubsystem.h"
 
-ATPSOnlineInteractionObjectBase::ATPSOnlineInteractionObjectBase()
+
+ATPSOnlineInteractionObject::ATPSOnlineInteractionObject()
 {
 	StaticMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("OnlineMesh"));
 	StaticMesh->SetupAttachment(RootComponent);
@@ -18,7 +19,7 @@ ATPSOnlineInteractionObjectBase::ATPSOnlineInteractionObjectBase()
 	}
 }
 
-void ATPSOnlineInteractionObjectBase::Interact(APlayerController* PC)
+void ATPSOnlineInteractionObject::Interact(APlayerController* PC)
 {
 	auto* UISubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
 	if (UISubsystem)

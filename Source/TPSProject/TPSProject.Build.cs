@@ -12,7 +12,7 @@ public class TPSProject : ModuleRules
 		PublicIncludePaths.Add("TPSProject");
 
 		// 케이블 컴포넌트 경로 추가
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "CableComponent", "UMG", "OnlineSubsystem"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "CableComponent", "UMG", "OnlineSubsystem", "OnlineSubsystemUtils"});
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
