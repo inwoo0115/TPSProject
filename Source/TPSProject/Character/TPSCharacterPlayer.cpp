@@ -8,6 +8,7 @@
 #include "Player/TPSPlayerController.h"	
 #include "Interface/TPSInteractableInterface.h"
 #include "GameInstance/TPSUiSubsystem.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
@@ -188,10 +189,27 @@ void ATPSCharacterPlayer::Look(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Jump()
 {
+	if (IsLocallyControlled())
+	{
+		Super::Jump();
+	}
 }
 
 void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 {
+	if (IsLocallyControlled())
+	{
+		if (IsRun)
+		{
+			IsRun = false;
+			GetCharacterMovement()->MaxWalkSpeed -= 300.0;
+		}
+		else
+		{
+			IsRun = true;
+			GetCharacterMovement()->MaxWalkSpeed += 300.0;
+		}
+	}
 }
 
 void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)

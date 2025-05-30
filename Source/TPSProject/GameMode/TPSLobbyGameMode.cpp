@@ -22,8 +22,3 @@ ATPSLobbyGameMode::ATPSLobbyGameMode()
 	}
 }
 
-void ATPSLobbyGameMode::PostLogin(APlayerController* NewPlayer)
-{
-	Super::PostLogin(NewPlayer);
-
-}

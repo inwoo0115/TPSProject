@@ -26,7 +26,7 @@ ATPSCharacterBase::ATPSCharacterBase()
 
 	//무브먼트 설정
 	GetCharacterMovement()->RotationRate = FRotator(0.0f, 360.0f, 0.0f);
-	GetCharacterMovement()->JumpZVelocity = 600.0f;
+	GetCharacterMovement()->JumpZVelocity = 400.0f;
 	GetCharacterMovement()->bEnablePhysicsInteraction = false;
 
 	//이단 점프 설정

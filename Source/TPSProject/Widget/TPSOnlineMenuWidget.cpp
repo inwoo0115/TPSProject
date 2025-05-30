@@ -55,6 +55,9 @@ void UTPSOnlineMenuWidget::NativeConstruct()
 
 void UTPSOnlineMenuWidget::OnHostButtonClicked()
 {
+	// 빈문자열로 초기화
+	ServerName->SetText(FText::FromString(""));
+
 	ServerListPanel->SetVisibility(ESlateVisibility::Hidden);
 	ServerNamePanel->SetVisibility(ESlateVisibility::Visible);
 	CreateServerButton->SetVisibility(ESlateVisibility::Visible);
@@ -66,12 +69,11 @@ void UTPSOnlineMenuWidget::OnJoinButtonClicked()
 	ServerNamePanel->SetVisibility(ESlateVisibility::Hidden);
 	CreateServerButton->SetVisibility(ESlateVisibility::Hidden);
 
-	// 빈문자열로 초기화
-	ServerName->SetText(FText::FromString(""));
-
 	auto OnlineSubsystem = GetGameInstance()->GetSubsystem<UTPSOnlineSubsystem>();
 	if (OnlineSubsystem)
 	{
+		// 기존 내용 정리
+		ServerList->ClearChildren();
 		OnlineSubsystem->FindSession();
 	}
 }
@@ -89,9 +91,6 @@ void UTPSOnlineMenuWidget::OnCreateServerButtonClicked()
 
 void UTPSOnlineMenuWidget::OnSessionSearchFinished()
 {
-	// 기존 내용 정리
-	ServerList->ClearChildren();
-
 	// OnlineSubsystem에서 session List 가져오기
 	auto OnlineSubsystem = GetGameInstance()->GetSubsystem<UTPSOnlineSubsystem>();
 	if (OnlineSubsystem)

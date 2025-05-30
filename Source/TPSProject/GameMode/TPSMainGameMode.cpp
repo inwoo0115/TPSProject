@@ -21,8 +21,3 @@ ATPSMainGameMode::ATPSMainGameMode()
 		PlayerControllerClass = DefaultControllerRef.Class;
 	}
 }
-
-void ATPSMainGameMode::PostLogin(APlayerController* NewPlayer)
-{
-	Super::PostLogin(NewPlayer);
-}

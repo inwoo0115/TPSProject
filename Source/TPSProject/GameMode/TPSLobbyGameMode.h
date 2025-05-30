@@ -17,7 +17,4 @@ class TPSPROJECT_API ATPSLobbyGameMode : public AGameModeBase
 public:
 	ATPSLobbyGameMode();
 
-	void PostLogin(APlayerController* NewPlayer) override;
-
-	
 };

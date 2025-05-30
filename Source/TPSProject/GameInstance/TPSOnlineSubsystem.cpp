@@ -49,7 +49,9 @@ void UTPSOnlineSubsystem::CreateSession(FString ServerName)
 
 void UTPSOnlineSubsystem::FindSession()
 {
-	if (!SessionInterface.IsValid()) return;
+	if (!SessionInterface.IsValid() || bIsSearching) return;
+
+	bIsSearching = true;
 
 	SessionSearch = MakeShared<FOnlineSessionSearch>();
 
@@ -99,6 +101,7 @@ void UTPSOnlineSubsystem::OnFindSessionsComplete(bool bWasSuccessful)
 {
 	if (!bWasSuccessful || !SessionSearch.IsValid()) return;
 
+	bIsSearching = false;
 
 	// SessionSearch->SearchResults로 검색된 세션 가져오기
 	for (int32 i = 0; i < SessionSearch->SearchResults.Num(); i++)

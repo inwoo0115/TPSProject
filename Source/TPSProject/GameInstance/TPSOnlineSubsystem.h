@@ -56,6 +56,9 @@ protected:
 
 	void OnJoinSessionComplete(FName SessionName, EOnJoinSessionCompleteResult::Type Result);
 
+	bool bIsSearching = false;
+
+
 	//void OnStartSessionComplete(FName SessionName, bool bWasSuccessful);
 	//void OnDestroySessionComplete(FName SessionName, bool bWasSuccessful);
 

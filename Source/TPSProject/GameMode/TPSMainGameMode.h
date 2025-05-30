@@ -17,5 +17,4 @@ class TPSPROJECT_API ATPSMainGameMode : public AGameModeBase
 public:
 	ATPSMainGameMode();
 
-	void PostLogin(APlayerController* NewPlayer) override;
 };
