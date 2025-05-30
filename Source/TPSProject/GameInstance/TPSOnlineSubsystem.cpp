@@ -108,9 +108,6 @@ void UTPSOnlineSubsystem::OnFindSessionsComplete(bool bWasSuccessful)
 	{
 		FString ServerName;
 		SessionSearch->SearchResults[i].Session.SessionSettings.Get(FName("SERVER_NAME_KEY"), ServerName);
-
-		// 디버그 용 로그 DEBUG
-		UE_LOG(LogTemp, Log, TEXT("Session %d: %s"), i, *ServerName);
 	}
 
 	// 델리게이트로 위젯에 알림
