@@ -25,10 +25,17 @@ public:
 	void SetCharacterControlData(ECharacterControlType ControlType);
 
 protected:
+
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))
 	TMap<ECharacterControlType, class UTPSCharacterControlData*> CharacterControlManager;
 
+	UPROPERTY(ReplicatedUsing = OnRep_ControlType)
 	ECharacterControlType CurrentCharacterControlType = ECharacterControlType::Combat;
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION()
+	void OnRep_ControlType();
 
 	// ÄÄÆ÷³ÍÆ®
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))

@@ -4,9 +4,7 @@
 #include "Player/TPSPlayerController.h"
 #include "Blueprint/UserWidget.h"
 #include "GameInstance/TPSUiSubsystem.h"
-#include "EnhancedInputComponent.h"
-#include "InputMappingContext.h"
-#include "EnhancedInputSubsystems.h"
+#include "Character/TPSCharacterBase.h"
 
 ATPSPlayerController::ATPSPlayerController()
 {
@@ -36,11 +34,14 @@ void ATPSPlayerController::BeginPlay()
 
 	SetInputMode(GameInput);
 
-	// 컨트롤러 생성 후 UI widget 등록
-	auto UiSubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
-	if (UiSubsystem)
+	if (IsLocalController())
 	{
-		UiSubsystem->RefreshWidgetsForNewController(this);
+		// 컨트롤러 생성 후 UI widget 등록
+		auto UiSubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
+		if (UiSubsystem)
+		{
+			UiSubsystem->RefreshWidgetsForNewController(this);
+		}
 	}
 }
 
@@ -48,22 +49,25 @@ void ATPSPlayerController::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
-	for (auto& Elem : InteractionUIManager)
+	if (IsLocalController())
 	{
-		FInteractionUIInfo& UIInfo = Elem.Value;
-
-		if (UIInfo.Widget)
+		for (auto& Elem : InteractionUIManager)
 		{
-			//Target actor가 있으면 위치 조정
-			if (UIInfo.TargetActor)
-			{
-				FVector WorldLocation = UIInfo.TargetActor->GetActorLocation();
-				FVector2D ScreenPosition;
+			FInteractionUIInfo& UIInfo = Elem.Value;
 
-				if (ProjectWorldLocationToScreen(WorldLocation, ScreenPosition))
+			if (UIInfo.Widget)
+			{
+				//Target actor가 있으면 위치 조정
+				if (UIInfo.TargetActor)
 				{
-					// 화면 해상도 기준 위치 변경 옵션 : true
-					UIInfo.Widget->SetPositionInViewport(ScreenPosition, true);
+					FVector WorldLocation = UIInfo.TargetActor->GetActorLocation();
+					FVector2D ScreenPosition;
+
+					if (ProjectWorldLocationToScreen(WorldLocation, ScreenPosition))
+					{
+						// 화면 해상도 기준 위치 변경 옵션 : true
+						UIInfo.Widget->SetPositionInViewport(ScreenPosition, true);
+					}
 				}
 			}
 		}
@@ -78,6 +82,22 @@ void ATPSPlayerController::SetCanInteract(EInteractionUIType UIType, bool NewInt
 bool ATPSPlayerController::GetCanInteract(EInteractionUIType UIType)
 {
 	return InteractionUIManager.Find(UIType)->bCanInteract;
+}
+
+void ATPSPlayerController::OnPossess(APawn* InPawn)
+{
+	Super::OnPossess(InPawn);
+
+	if (!InPawn)
+	{
+		return;
+	}
+	
+	ATPSCharacterBase* PlayerCharacter = Cast<ATPSCharacterBase>(InPawn);
+	if (PlayerCharacter)
+	{
+		PlayerCharacter->SetCharacterControlData(ECharacterControlType::NonCombat);
+	}
 }
 
 void ATPSPlayerController::ShowInteractionUI(EInteractionUIType UIType, AActor* TargetActor)

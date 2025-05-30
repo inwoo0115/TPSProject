@@ -26,12 +26,4 @@ void ATPSLobbyGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
 
-	// Pawn을 확정적으로 가져오기 위해 다시 실행
-	RestartPlayer(NewPlayer);
-
-	// Character Control Setting
-	if (ATPSCharacterPlayer* PlayerCharacter = Cast<ATPSCharacterPlayer>(NewPlayer->GetPawn()))
-	{
-		PlayerCharacter->SetCharacterControlData(ECharacterControlType::NonCombat);
-	}
 }

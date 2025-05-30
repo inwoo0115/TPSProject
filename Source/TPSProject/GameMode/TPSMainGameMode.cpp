@@ -15,7 +15,7 @@ ATPSMainGameMode::ATPSMainGameMode()
 	}
 
 	// Default Controller Class 설정
-	static ConstructorHelpers::FClassFinder<APlayerController> DefaultControllerRef(TEXT("/Script/TPSProject.TPSPlayerController"));
+	static ConstructorHelpers::FClassFinder<APlayerController> DefaultControllerRef(TEXT("/Script/TPSProject.TPSMultiPlayerController"));
 	if (DefaultControllerRef.Class)
 	{
 		PlayerControllerClass = DefaultControllerRef.Class;
@@ -25,12 +25,4 @@ ATPSMainGameMode::ATPSMainGameMode()
 void ATPSMainGameMode::PostLogin(APlayerController* NewPlayer)
 {
 	Super::PostLogin(NewPlayer);
-
-	// Pawn을 확정적으로 가져오기 위해 다시 실행
-	RestartPlayer(NewPlayer);
-
-	if (ATPSCharacterPlayer* PlayerCharacter = Cast<ATPSCharacterPlayer>(NewPlayer->GetPawn()))
-	{
-		PlayerCharacter->SetCharacterControlData(ECharacterControlType::Combat);
-	}
 }

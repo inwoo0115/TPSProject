@@ -123,6 +123,7 @@ void ATPSCharacterPlayer::BeginPlay()
 			}
 		}
 	}
+	SetCharacterControlData(CurrentCharacterControlType);
 }
 
 void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -258,10 +259,11 @@ void ATPSCharacterPlayer::Esc(const FInputActionValue& Value)
 			{
 				UISubsystem->ShowUI(EUIType::Pause);
 			}
-			else
-			{
-				UISubsystem->HideCurrentUI();
-			}
+			// TODO: 일단 ui키면 입력을 받지 않아서 의미가 없음 수정 예정
+			//else
+			//{
+			//	UISubsystem->HideCurrentUI();
+			//}
 		}
 	}
 }

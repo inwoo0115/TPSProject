@@ -44,6 +44,8 @@ public:
 
 	bool GetCanInteract(EInteractionUIType UIType);
 
+	virtual void OnPossess(APawn* InPawn) override;
+
 	TMap<EInteractionUIType, FInteractionUIInfo> InteractionUIManager;
 
 protected:

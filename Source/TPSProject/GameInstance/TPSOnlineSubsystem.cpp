@@ -5,6 +5,7 @@
 #include "OnlineSubsystem.h"
 #include "OnlineSessionSettings.h"
 #include "Kismet/GameplayStatics.h"
+#include "TPSUiSubsystem.h"
 
 void UTPSOnlineSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -88,6 +89,9 @@ void UTPSOnlineSubsystem::OnCreateSessionComplete(FName SessionName, bool bWasSu
 	{
 		// 멀티 플레이 맵 리슨 서버 모드로 호출
 		UGameplayStatics::OpenLevel(GetWorld(), "DemoMultiLevel", true, "listen");
+
+		// 위젯 상태 초기화
+		GetGameInstance()->GetSubsystem<UTPSUiSubsystem>()->HideCurrentUI();
 	}
 }
 
@@ -125,7 +129,11 @@ void UTPSOnlineSubsystem::OnJoinSessionComplete(FName SessionName, EOnJoinSessio
 		APlayerController* PC = GetGameInstance()->GetFirstLocalPlayerController();
 		if (PC)
 		{
+			// 해당 서버에 접속
 			PC->ClientTravel(ConnectString, ETravelType::TRAVEL_Absolute);
+
+			// 위젯 상태 초기화
+			GetGameInstance()->GetSubsystem<UTPSUiSubsystem>()->HideCurrentUI();
 		}
 	}
 }

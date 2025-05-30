@@ -7,6 +7,8 @@
 #include "TPSCharacterControlData.h"
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "Net/UnrealNetwork.h"
+
 
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
@@ -55,6 +57,9 @@ ATPSCharacterBase::ATPSCharacterBase()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	// 리플리케이션 설정
+	bReplicates = true;
 }
 
 void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlType)
@@ -85,4 +90,16 @@ void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlTyp
 
 	// 현재 세팅
 	CurrentCharacterControlType = ControlType;
+}
+
+void ATPSCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPSCharacterBase, CurrentCharacterControlType);
+}
+
+void ATPSCharacterBase::OnRep_ControlType()
+{
+	SetCharacterControlData(CurrentCharacterControlType);
 }
