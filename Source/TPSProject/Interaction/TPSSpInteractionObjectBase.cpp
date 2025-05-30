@@ -15,7 +15,7 @@ ATPSSpInteractionObjectBase::ATPSSpInteractionObjectBase()
 	InteractionBox = CreateDefaultSubobject<UBoxComponent>(TEXT("SpInteractionBox"));
 	RootComponent = InteractionBox;
 	InteractionBox->SetBoxExtent(FVector(100.f, 100.f, 100.f)); // 박스 크기 설정
-	InteractionBox->SetCollisionProfileName(TEXT("Trigger"));
+	InteractionBox->SetCollisionProfileName(TEXT("InteractionProfile"));
 }
 
 // Called when the game starts or when spawned

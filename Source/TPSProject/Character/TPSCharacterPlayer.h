@@ -27,6 +27,9 @@ public:
 
 	virtual void Tick(float DeltaSecounds);
 protected:
+	// SpInteraction UI
+	void CheckSpInteractionUI();
+
 	// 입력 액션
 	void Move(const FInputActionValue& Value);
 
@@ -117,4 +120,8 @@ protected:
 	bool IsThrow = true;
 
 	bool IsAim = false;
+
+
+	// Spinteraction 타켓 액터
+	TObjectPtr<class ATPSSpInteractionObjectBase> SpInteractionTargetActor;
 };

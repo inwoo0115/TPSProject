@@ -9,6 +9,8 @@
 #include "Interface/TPSInteractableInterface.h"
 #include "GameInstance/TPSUiSubsystem.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Interaction/TPSSpInteractionObjectBase.h"
+#include "CharacterComponent/TPSRopeActionComponent.h"
 
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
@@ -155,7 +157,55 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 void ATPSCharacterPlayer::Tick(float DeltaSecounds)
 {
 	Super::Tick(DeltaSecounds);
+
+	if (IsLocallyControlled())
+	{
+		CheckSpInteractionUI();
+	}
 }
+
+void ATPSCharacterPlayer::CheckSpInteractionUI()
+{
+	// SpInteraction Object가 있는 지 확인하기 위한 Profile Trace
+	FVector3d StartLocation = GetActorLocation();
+	FVector3d DirectionVector = FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X);
+	FHitResult HitResult;
+	bool bHit = GetWorld()->SweepSingleByProfile(
+		HitResult,
+		StartLocation + DirectionVector * 50,
+		StartLocation + DirectionVector * 2500,
+		FQuat::Identity,
+		TEXT("InteractionProfile"),
+		FCollisionShape::MakeSphere(200.0f)
+	);
+
+	// object가 있을 경우 UI 띄우기
+	if (bHit)
+	{
+		auto* SpInteractionObject = Cast<ATPSSpInteractionObjectBase>(HitResult.GetActor());
+		if (SpInteractionObject)
+		{
+			// RopeActionComponent 설정
+			//RopeActionComponent->SetIsGrappling(true);
+			//RopeActionComponent->SetRopeLocation(SpInteractionObject->GetActorLocation());
+			// 물체와 플레이어 잇는 케이블 활성화
+			//RopeActionComponent->RegisterComponent();
+			//RopeActionComponent->SetAttachEndTo(SpInteractionObject, TEXT("StaticMesh"));
+			SpInteractionObject->TraceBeginOverlap(GetController());
+			SpInteractionTargetActor = SpInteractionObject;
+		}
+	}
+	// 없을 경우 UI 제거
+	else
+	{
+		if (SpInteractionTargetActor)
+		{
+			SpInteractionTargetActor->TraceEndOverlap(GetController());
+			SpInteractionTargetActor = nullptr;
+		}
+	}
+}
+
 
 void ATPSCharacterPlayer::Move(const FInputActionValue& Value)
 {

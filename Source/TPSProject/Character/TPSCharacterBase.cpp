@@ -8,6 +8,7 @@
 #include "Camera/CameraComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "CharacterComponent/TPSRopeActionComponent.h"
 
 
 // Sets default values
@@ -57,6 +58,9 @@ ATPSCharacterBase::ATPSCharacterBase()
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
+
+	//RopeActionComponent 설정
+	RopeActionComponent = CreateDefaultSubobject<UTPSRopeActionComponent>(TEXT("RopeComponent"));
 
 	// 리플리케이션 설정
 	bReplicates = true;

@@ -19,12 +19,6 @@ public:
 
 	// 상호 작용 오브젝트 별 interaction 가상 함수
 	virtual void Interact(APlayerController* PC) override;
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-	UPROPERTY(VisibleAnywhere)
-	TObjectPtr<UBoxComponent> InteractionBox;
 
 	// 오버랩 이벤트 함수
 	UFUNCTION()
@@ -35,4 +29,10 @@ protected:
 	UFUNCTION()
 	void OnBoxEndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBoxComponent> InteractionBox;
 };

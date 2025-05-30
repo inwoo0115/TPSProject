@@ -16,11 +16,11 @@ UTPSRopeActionComponent::UTPSRopeActionComponent()
 	}
 
 	//머터리얼 설정
-	//static ConstructorHelpers::FObjectFinder<UMaterial> CableMaterial(TEXT("/Game/UtopianCity/Materials/M_HoloMatPainting01.M_HoloMatPainting01"));
-	//if (CableMaterial.Object)
-	//{
-	//	SetMaterial(0, CableMaterial.Object);
-	//}
+	static ConstructorHelpers::FObjectFinder<UMaterial> CableMaterial(TEXT("/Engine/EngineMaterials/WorldGridMaterial.WorldGridMaterial"));
+	if (CableMaterial.Object)
+	{
+		SetMaterial(0, CableMaterial.Object);
+	}
 
 	// 케이블 설정 초기화
 	RopeLocation = FVector(0.0f, 0.0f, 0.0f);
