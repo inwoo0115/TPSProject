@@ -27,7 +27,7 @@ public:
 
 	// Setter
 	UFUNCTION(BlueprintCallable, Category = "RopeComponent")
-	FORCEINLINE void SetRopeLocation(const FVector& NewLocation);
+	void SetRopeLocation(const FVector& NewLocation);
 
 
 	UFUNCTION(BlueprintCallable, Category = "RopeComponent")
@@ -35,9 +35,10 @@ public:
 
 	// Getter
 	UFUNCTION(BlueprintCallable, Category = "RopeComponent")
-	FORCEINLINE bool GetIsGrappling();
+	bool GetIsGrappling();
 
 protected:
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
 	TObjectPtr<class ACharacter> Owner;
 
@@ -55,5 +56,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rope")
 	FVector CurrentAcceleration;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Rope")
 	bool IsGrappling = false;
+
 };

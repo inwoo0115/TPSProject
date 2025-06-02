@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interaction/TPSSpInteractionObjectBase.h"
 #include "CharacterComponent/TPSRopeActionComponent.h"
+#include "Net/UnrealNetwork.h"
 
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
@@ -144,7 +145,7 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Attack);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::AimIn);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AimOut);
-	EnhancedInputComponent->BindAction(SpActionAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::SpAction);
+	EnhancedInputComponent->BindAction(SpActionAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::SpAction);
 	EnhancedInputComponent->BindAction(SpAttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::SpAttack);
 	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Reload);
 	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Interact);
@@ -158,50 +159,56 @@ void ATPSCharacterPlayer::Tick(float DeltaSecounds)
 {
 	Super::Tick(DeltaSecounds);
 
-	if (IsLocallyControlled())
-	{
-		CheckSpInteractionUI();
-	}
+	CheckSpInteraction();
 }
 
-void ATPSCharacterPlayer::CheckSpInteractionUI()
+void ATPSCharacterPlayer::CheckSpInteraction()
 {
-	// SpInteraction Object가 있는 지 확인하기 위한 Profile Trace
-	FVector3d StartLocation = GetActorLocation();
-	FVector3d DirectionVector = FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X);
-	FHitResult HitResult;
-	bool bHit = GetWorld()->SweepSingleByProfile(
-		HitResult,
-		StartLocation + DirectionVector * 50,
-		StartLocation + DirectionVector * 2500,
-		FQuat::Identity,
-		TEXT("InteractionProfile"),
-		FCollisionShape::MakeSphere(200.0f)
-	);
-
-	// object가 있을 경우 UI 띄우기
-	if (bHit)
+	// 상호작용 가능한 오브젝트가 있을 경우 서버에서 업데이트
+	if (HasAuthority())
 	{
-		auto* SpInteractionObject = Cast<ATPSSpInteractionObjectBase>(HitResult.GetActor());
-		if (SpInteractionObject)
+		// SpInteraction Object가 있는 지 확인하기 위한 Profile Trace
+		FVector3d StartLocation = GetActorLocation();
+		FVector3d DirectionVector = FRotationMatrix(GetControlRotation()).GetUnitAxis(EAxis::X);
+		FHitResult HitResult;
+		bool bHit = GetWorld()->SweepSingleByProfile(
+			HitResult,
+			StartLocation + DirectionVector * 50,
+			StartLocation + DirectionVector * 2500,
+			FQuat::Identity,
+			TEXT("InteractionProfile"),
+			FCollisionShape::MakeSphere(200.0f)
+		);
+
+		if (bHit)
 		{
-			// RopeActionComponent 설정
-			//RopeActionComponent->SetIsGrappling(true);
-			//RopeActionComponent->SetRopeLocation(SpInteractionObject->GetActorLocation());
-			// 물체와 플레이어 잇는 케이블 활성화
-			//RopeActionComponent->RegisterComponent();
-			//RopeActionComponent->SetAttachEndTo(SpInteractionObject, TEXT("StaticMesh"));
-			SpInteractionObject->TraceBeginOverlap(GetController());
-			SpInteractionTargetActor = SpInteractionObject;
+			auto* SpInteractionObject = Cast<ATPSSpInteractionObjectBase>(HitResult.GetActor());
+			if (SpInteractionObject)
+			{
+				SpInteractionTargetActor = SpInteractionObject;
+			}
+		}
+
+		else
+		{
+			if (SpInteractionTargetActor)
+			{
+				SpInteractionTargetActor = nullptr;
+			}
 		}
 	}
-	// 없을 경우 UI 제거
-	else
+
+	if (IsLocallyControlled())
 	{
 		if (SpInteractionTargetActor)
 		{
+			// object가 있을 경우 UI 띄우기
+			SpInteractionTargetActor->TraceBeginOverlap(GetController());
+		}
+		else
+		{
+			// 없을 경우 UI 제거
 			SpInteractionTargetActor->TraceEndOverlap(GetController());
-			SpInteractionTargetActor = nullptr;
 		}
 	}
 }
@@ -276,6 +283,10 @@ void ATPSCharacterPlayer::AimOut(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 {
+	if (IsLocallyControlled())
+	{
+		ServerRPCSpAction();
+	}
 }
 
 void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
@@ -338,4 +349,30 @@ void ATPSCharacterPlayer::Esc(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Info(const FInputActionValue& Value)
 {
+}
+
+void ATPSCharacterPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+	DOREPLIFETIME(ATPSCharacterPlayer, SpInteractionTargetActor);
+}
+
+void ATPSCharacterPlayer::ServerRPCSpAction_Implementation()
+{
+	if (RopeActionComponent->GetIsGrappling())
+	{
+		// RopeActionComponent 설정
+		RopeActionComponent->SetIsGrappling(false);
+		RopeActionComponent->UnregisterComponent();
+	}
+	else if (SpInteractionTargetActor)
+	{
+
+		// RopeActionComponent 설정
+		RopeActionComponent->SetIsGrappling(true);
+		RopeActionComponent->SetRopeLocation(SpInteractionTargetActor->GetActorLocation());
+		// 물체와 플레이어 잇는 케이블 활성화
+		RopeActionComponent->RegisterComponent();
+		RopeActionComponent->SetAttachEndTo(SpInteractionTargetActor, TEXT("StaticMesh"));
+	}
 }

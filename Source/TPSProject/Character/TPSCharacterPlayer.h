@@ -27,8 +27,8 @@ public:
 
 	virtual void Tick(float DeltaSecounds);
 protected:
-	// SpInteraction UI
-	void CheckSpInteractionUI();
+	// SpInteraction Actor Check
+	void CheckSpInteraction();
 
 	// 입력 액션
 	void Move(const FInputActionValue& Value);
@@ -110,6 +110,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = InputContext, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputMappingContext> InputMappingContext;
 
+	// RPC
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UFUNCTION(Server, Reliable)
+	void ServerRPCSpAction();
+
 	// 플래그
 	bool IsRun = false;
 
@@ -123,5 +129,6 @@ protected:
 
 
 	// Spinteraction 타켓 액터
+	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSSpInteractionObjectBase> SpInteractionTargetActor;
 };

@@ -64,6 +64,7 @@ ATPSCharacterBase::ATPSCharacterBase()
 
 	// 리플리케이션 설정
 	bReplicates = true;
+	SetReplicateMovement(true);
 }
 
 void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlType)

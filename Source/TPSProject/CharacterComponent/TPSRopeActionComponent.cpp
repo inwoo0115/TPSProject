@@ -5,6 +5,7 @@
 #include "TPSRopeActionComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/Character.h"
+#include "Net/UnrealNetwork.h"
 
 UTPSRopeActionComponent::UTPSRopeActionComponent()
 {
@@ -30,6 +31,9 @@ UTPSRopeActionComponent::UTPSRopeActionComponent()
 	EndLocation = FVector(0.0f, 0.0f, 0.0f);
 	SetVisibility(true);
 	CableWidth = 3.0f;
+
+	// 府敲府纳捞记 技泼
+	SetIsReplicatedByDefault(true);
 }
 
 void UTPSRopeActionComponent::UpdateTension()
@@ -104,6 +108,7 @@ void UTPSRopeActionComponent::BeginPlay()
 	UnregisterComponent();
 }
 
+
 void UTPSRopeActionComponent::SetRopeLocation(const FVector& NewLocation)
 {
 	RopeLocation = NewLocation;
@@ -113,6 +118,7 @@ void UTPSRopeActionComponent::SetIsGrappling(const bool NewIsGrappling)
 {
 	IsGrappling = NewIsGrappling;
 }
+
 
 bool UTPSRopeActionComponent::GetIsGrappling()
 {
