@@ -76,7 +76,21 @@ void UTPSRopeActionComponent::UpdateTension()
 
 		// 장력 + 탄성력 적용
 		AddForce = (TotalForceScalar + ElasticForceScalar) * RopeDirectionVector;
-		Movement->AddForce(AddForce);
+
+		FVector VelocityDelta = (FVector(AddForce) / Movement->Mass) * GetWorld()->GetDeltaSeconds();
+
+		//Movement->Velocity += VelocityDelta;
+		if (Owner->HasAuthority())
+		{
+			// 서버만 실제 Velocity 반영
+			Movement->Velocity += VelocityDelta;
+		}
+		else if (Owner->IsLocallyControlled()) 
+		{
+			// 클라이언트는 예측 적용
+			Movement->Velocity += VelocityDelta * 0.9f; // 살짝 낮게 예측
+		}
+
 	}
 }
 

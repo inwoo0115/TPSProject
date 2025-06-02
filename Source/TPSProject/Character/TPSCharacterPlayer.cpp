@@ -283,9 +283,26 @@ void ATPSCharacterPlayer::AimOut(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled())
+	if (IsLocallyControlled() && !HasAuthority())
 	{
 		ServerRPCSpAction();
+	}
+
+	if (RopeActionComponent->GetIsGrappling())
+	{
+		// RopeActionComponent 설정
+		RopeActionComponent->SetIsGrappling(false);
+		RopeActionComponent->UnregisterComponent();
+	}
+	else if (SpInteractionTargetActor)
+	{
+
+		// RopeActionComponent 설정
+		RopeActionComponent->SetIsGrappling(true);
+		RopeActionComponent->SetRopeLocation(SpInteractionTargetActor->GetActorLocation());
+		// 물체와 플레이어 잇는 케이블 활성화
+		RopeActionComponent->RegisterComponent();
+		RopeActionComponent->SetAttachEndTo(SpInteractionTargetActor, TEXT("StaticMesh"));
 	}
 }
 

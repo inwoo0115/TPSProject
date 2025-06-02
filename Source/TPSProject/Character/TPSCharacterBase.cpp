@@ -30,6 +30,14 @@ ATPSCharacterBase::ATPSCharacterBase()
 	GetCharacterMovement()->JumpZVelocity = 400.0f;
 	GetCharacterMovement()->bEnablePhysicsInteraction = false;
 
+	//네트워크 설정 조정
+	GetCharacterMovement()->NetworkMinTimeBetweenClientAckGoodMoves = 0.05f;
+	NetUpdateFrequency = 150.f;
+	MinNetUpdateFrequency = 40.0f;
+	GetCharacterMovement()->NetworkSmoothingMode = ENetworkSmoothingMode::Exponential; // 또는 Exponential
+	GetCharacterMovement()->NetworkMaxSmoothUpdateDistance = 300.f;
+	GetCharacterMovement()->NetworkNoSmoothUpdateDistance = 1000.f;
+
 	//이단 점프 설정
 	JumpMaxCount = 2;
 
