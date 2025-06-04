@@ -296,7 +296,6 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 	}
 	else if (SpInteractionTargetActor)
 	{
-
 		// RopeActionComponent ¼³Á¤
 		RopeActionComponent->SetIsGrappling(true);
 		RopeActionComponent->SetRopeLocation(SpInteractionTargetActor->GetActorLocation());
@@ -371,6 +370,7 @@ void ATPSCharacterPlayer::Info(const FInputActionValue& Value)
 void ATPSCharacterPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
 	DOREPLIFETIME(ATPSCharacterPlayer, SpInteractionTargetActor);
 }
 
