@@ -3,6 +3,7 @@
 
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "TPSGameplayEventSystem.h"
 
 // Sets default values for this component's properties
 UTPSWeaponComponent::UTPSWeaponComponent()
@@ -25,16 +26,8 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
 {
 }
 
-void UTPSWeaponComponent::Fire()
+void UTPSWeaponComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
 {
+	EventSystem = InputEventSystem;
 }
-
-void UTPSWeaponComponent::Aim()
-{
-}
-
-void UTPSWeaponComponent::Reload()
-{
-}
-
 

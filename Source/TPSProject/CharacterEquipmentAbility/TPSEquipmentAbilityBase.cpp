@@ -7,6 +7,6 @@ void UTPSEquipmentAbilityBase::InitializeAbility(UActorComponent* InitializeComp
 {
 }
 
-void UTPSEquipmentAbilityBase::ApplyAbility(UActorComponent* ApplyComponent)
+void UTPSEquipmentAbilityBase::ApplyAbility()
 {
 }

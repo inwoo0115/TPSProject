@@ -16,6 +16,5 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 
 public:
 	virtual void InitializeAbility(UActorComponent* InitializeComponent);
-	virtual void ApplyAbility(UActorComponent* ApplyComponent);
-	
+	virtual void ApplyAbility();
 };

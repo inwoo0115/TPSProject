@@ -5,8 +5,11 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "TPSGameplayEventSystem.h"
 #include "TPSWeaponComponent.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponAbilityEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPSPROJECT_API UTPSWeaponComponent : public UActorComponent
@@ -14,6 +17,12 @@ class TPSPROJECT_API UTPSWeaponComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
+	// 공격 키 해제 어빌리티 이벤트
+	FWeaponAbilityEvent OnStopFire;
+
+	// 총알 충돌 시 어빌리티 이벤트
+	FWeaponAbilityEvent OnBulletHit;
+
 	// Sets default values for this component's properties
 	UTPSWeaponComponent();
 
@@ -21,19 +30,15 @@ public:
 	
 	void EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass);
 
-	void Fire();
-	
-	void Aim();
+	// 이벤트 시스템 등록
+	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
-	void Reload();
+	UPROPERTY()
+	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
 protected:
 
 	UPROPERTY()
 	TObjectPtr<class ATPSWeaponBase> EquippedWeapon;
 
-	UPROPERTY()
-	TObjectPtr<class UTPSWeaponData> EquippedWeaponData;
-
-	int32 CurrentAmmo;
 };

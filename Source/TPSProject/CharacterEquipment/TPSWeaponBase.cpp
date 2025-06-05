@@ -2,26 +2,35 @@
 
 
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 
-// Sets default values
-ATPSWeaponBase::ATPSWeaponBase()
+
+void ATPSWeaponBase::AddAbility(UTPSEquipmentAbilityBase* NewAbility)
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
-
+	if (NewAbility)
+	{
+		AbilitySlot.Add(NewAbility);
+	}
 }
 
-// Called when the game starts or when spawned
-void ATPSWeaponBase::BeginPlay()
+void ATPSWeaponBase::ClearAbilitySlot()
 {
-	Super::BeginPlay();
-	
+	AbilitySlot.Empty();
 }
 
-// Called every frame
-void ATPSWeaponBase::Tick(float DeltaTime)
+void ATPSWeaponBase::InitializeAbilities()
 {
-	Super::Tick(DeltaTime);
+	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
+	{
+		if (Ability)
+		{
+			Ability->InitializeAbility(OwnerComponent);
+		}
+	}
+}
 
+void ATPSWeaponBase::InitializeComponent(UActorComponent* InitializeComponent)
+{
+	OwnerComponent = InitializeComponent;
 }
 
