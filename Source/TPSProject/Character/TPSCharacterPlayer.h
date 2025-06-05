@@ -127,7 +127,6 @@ protected:
 
 	bool IsAim = false;
 
-
 	// Spinteraction 타켓 액터
 	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSSpInteractionObjectBase> SpInteractionTargetActor;

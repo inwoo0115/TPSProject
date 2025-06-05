@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "CharacterComponent/TPSRopeActionComponent.h"
+#include "CharacterComponent/TPSWeaponComponent.h"
 
 
 // Sets default values
@@ -30,7 +31,7 @@ ATPSCharacterBase::ATPSCharacterBase()
 	GetCharacterMovement()->JumpZVelocity = 400.0f;
 	GetCharacterMovement()->bEnablePhysicsInteraction = false;
 
-	//네트워크 설정 조정
+	//네트워크 보정 설정
 	GetCharacterMovement()->NetworkMinTimeBetweenClientAckGoodMoves = 0.05f;
 	NetUpdateFrequency = 150.f;
 	MinNetUpdateFrequency = 40.0f;
@@ -60,19 +61,31 @@ ATPSCharacterBase::ATPSCharacterBase()
 		CharacterControlManager.Add(ECharacterControlType::Combat, CombatControlDataRef.Object);
 	}
 
-	//Camera, Spring Arm 설정
+	// Camera, Spring Arm 설정
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
 	SpringArm->SetupAttachment(RootComponent);
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 
-	//RopeActionComponent 설정
+	// RopeActionComponent 설정
 	RopeActionComponent = CreateDefaultSubobject<UTPSRopeActionComponent>(TEXT("RopeComponent"));
+
+	// WeaponComponent 설정
+	WeaponComponent = CreateDefaultSubobject<UTPSWeaponComponent>(TEXT("WeaponComponent"));
+
+	// Event System 설정
+	EventSystem = NewObject<UTPSGameplayEventSystem>();
 
 	// 리플리케이션 설정
 	bReplicates = true;
 	SetReplicateMovement(true);
+}
+
+void ATPSCharacterBase::BeginPlay()
+{
+	// 컴포넌트 초기화
+	WeaponComponent->Initialize(EventSystem);
 }
 
 void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlType)

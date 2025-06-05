@@ -8,7 +8,6 @@
 #include "TPSGameplayEventSystem.h"
 #include "TPSWeaponComponent.generated.h"
 
-
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponAbilityEvent);
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -23,22 +22,23 @@ public:
 	// 총알 충돌 시 어빌리티 이벤트
 	FWeaponAbilityEvent OnBulletHit;
 
-	// Sets default values for this component's properties
-	UTPSWeaponComponent();
-
-	void BeginPlay() override;
-	
+	// 장비 장착
 	void EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass);
 
 	// 이벤트 시스템 등록
 	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
+	//void StartFire();
+	//
+	//void EndFire();
+
+	//void Reload();
+
+	//void Aim();
+
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
-protected:
-
 	UPROPERTY()
 	TObjectPtr<class ATPSWeaponBase> EquippedWeapon;
-
 };

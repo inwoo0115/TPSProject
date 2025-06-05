@@ -5,25 +5,19 @@
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "TPSGameplayEventSystem.h"
 
-// Sets default values for this component's properties
-UTPSWeaponComponent::UTPSWeaponComponent()
-{
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
-}
-
-void UTPSWeaponComponent::BeginPlay()
-{
-	Super::BeginPlay();
-	
-
-}
-
 void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
 {
+	if (EquippedWeapon)
+	{
+		EquippedWeapon->Destroy();
+	}
+
+	UWorld* World = GetWorld();
+	if (World && WeaponClass)
+	{
+		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
+		// 컴포넌트 오너의 메쉬 설정 TODO
+	}
 }
 
 void UTPSWeaponComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)

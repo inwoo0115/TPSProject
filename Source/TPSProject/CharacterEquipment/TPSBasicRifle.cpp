@@ -3,6 +3,7 @@
 
 #include "CharacterEquipment/TPSBasicRifle.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
+#include "Projectile/TPSProjectileListData.h"
 
 ATPSBasicRifle::ATPSBasicRifle()
 {
@@ -10,5 +11,11 @@ ATPSBasicRifle::ATPSBasicRifle()
 	if (AbilityDataRef.Object)
 	{
 		AbilityData = AbilityDataRef.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UTPSProjectileListData> ListDataRef(TEXT("/Game/TPSProject/ProjectileList/BasicRifleProjectiles.BasicRifleProjectiles"));
+	if (ListDataRef.Object)
+	{
+		Projectiles = ListDataRef.Object;
 	}
 }

@@ -22,6 +22,8 @@ public:
 	// Sets default values for this character's properties
 	ATPSCharacterBase();
 
+	virtual void BeginPlay() override;
+
 	void SetCharacterControlData(ECharacterControlType ControlType);
 
 protected:
@@ -46,4 +48,10 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cable")
 	TObjectPtr<class UTPSRopeActionComponent> RopeActionComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weapon")
+	TObjectPtr<class UTPSWeaponComponent> WeaponComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "EventSystem")
+	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 };
