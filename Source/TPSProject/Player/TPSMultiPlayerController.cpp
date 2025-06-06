@@ -10,6 +10,8 @@ void ATPSMultiPlayerController::OnPossess(APawn* InPawn)
 
 	if (!InPawn)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Possessed Pawn: "));
+
 		return;
 	}
 

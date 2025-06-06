@@ -84,6 +84,8 @@ ATPSCharacterBase::ATPSCharacterBase()
 
 void ATPSCharacterBase::BeginPlay()
 {
+	Super::BeginPlay();
+
 	// 컴포넌트 초기화
 	WeaponComponent->Initialize(EventSystem);
 }

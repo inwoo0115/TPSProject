@@ -15,7 +15,7 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
 	UWorld* World = GetWorld();
 	if (World && WeaponClass)
 	{
-		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
+		//EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
 		// 컴포넌트 오너의 메쉬 설정 TODO
 	}
 }

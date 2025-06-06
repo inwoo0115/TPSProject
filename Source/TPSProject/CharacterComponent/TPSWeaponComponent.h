@@ -29,7 +29,7 @@ public:
 	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
 	//void StartFire();
-	//
+
 	//void EndFire();
 
 	//void Reload();
