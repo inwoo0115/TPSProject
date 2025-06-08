@@ -9,10 +9,9 @@
 void UTPSRifleDamageBoost::InitializeAbility(UActorComponent* InitializeComponent)
 {
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
-	if (InitializeComponent)
+	if (WeaponComponent)
 	{
-		//WeaponComponent->EventSystem->BroadCastOnStatChanged(TEXT("Damage"), 120.0f);
-		//WeaponComponent->EquippedWeapon->Damage = 120.0f;
+		WeaponComponent->EquippedWeapon->Damage += 20.0f;
 		CachedComponent = WeaponComponent;
 	}
 }

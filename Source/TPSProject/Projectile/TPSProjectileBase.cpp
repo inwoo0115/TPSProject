@@ -30,8 +30,6 @@ void ATPSProjectileBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Collision->OnComponentHit.AddDynamic(this, &ATPSProjectileBase::OnHit);
-
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);
 }

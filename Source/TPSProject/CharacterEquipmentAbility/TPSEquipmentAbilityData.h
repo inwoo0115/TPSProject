@@ -7,6 +7,17 @@
 #include "TPSEquipmentAbilityBase.h"
 #include "TPSEquipmentAbilityData.generated.h"
 
+UENUM(BlueprintType)
+enum class EAbilityType : uint8
+{
+	Group1Ability1 UMETA(DisplayName = "Group1Ability1"),
+	Group1Ability2 UMETA(DisplayName = "Group1Ability2"),
+	Group2Ability1 UMETA(DisplayName = "Group2Ability1"),
+	Group2Ability2 UMETA(DisplayName = "Group2Ability2"),
+	Group3Ability1 UMETA(DisplayName = "Group3Ability1"),
+	Group3Ability2 UMETA(DisplayName = "Group3Ability2")
+};
+
 /**
  * 
  */
@@ -17,5 +28,5 @@ class TPSPROJECT_API UTPSEquipmentAbilityData : public UDataAsset
 	
 public:
 	UPROPERTY(EditAnywhere, Category = EquipmentAbility)
-	TArray<TSubclassOf<UTPSEquipmentAbilityBase>> EquipmentAbilitys;
+	TMap<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>> EquipmentAbilities;
 };

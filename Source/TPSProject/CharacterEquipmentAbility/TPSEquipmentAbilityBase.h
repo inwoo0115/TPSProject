@@ -15,6 +15,9 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 	GENERATED_BODY()
 
 public:
+	UFUNCTION()
 	virtual void InitializeAbility(UActorComponent* InitializeComponent);
+
+	UFUNCTION()
 	virtual void ApplyAbility();
 };

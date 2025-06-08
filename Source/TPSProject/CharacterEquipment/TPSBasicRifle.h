@@ -21,15 +21,7 @@ public:
 
 	void Reload() override;
 
-protected:
-	// 무기 기본값
-	float Damage = 10.0f;
-	
-	float AttackRatio = 0.3f;
-	
-	int32 MaxAmmo = 30;
-
-	int32 CurrentAmmo = 30;
+	FTimerHandle FireCooldownHandle;
 
 	// 무기 추가 설정
 	bool HasLazerMode = false;

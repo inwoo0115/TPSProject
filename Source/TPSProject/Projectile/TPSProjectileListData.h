@@ -7,6 +7,14 @@
 #include "TPSProjectileBase.h"
 #include "TPSProjectileListData.generated.h"
 
+UENUM(BlueprintType)
+enum class EProjectileType : uint8
+{
+	RifleBullet UMETA(DisplayName = "Rifle Bullet"),
+	RifleLaser UMETA(DisplayName = "Rifle Laser")
+};
+
+
 /**
  * 
  */
@@ -17,5 +25,5 @@ class TPSPROJECT_API UTPSProjectileListData : public UDataAsset
 	
 public:
 	UPROPERTY(EditAnywhere, Category = ProjectileList)
-	TArray<TSubclassOf<ATPSProjectileBase>> ProjectileList;
+	TMap<EProjectileType, TSubclassOf<ATPSProjectileBase>> ProjectileList;
 };

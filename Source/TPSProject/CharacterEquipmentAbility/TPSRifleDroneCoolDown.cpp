@@ -16,4 +16,16 @@ void UTPSRifleDroneCoolDown::InitializeAbility(UActorComponent* InitializeCompon
 
 void UTPSRifleDroneCoolDown::ApplyAbility()
 {
+	//CachedComponent->EventSystem
+	//drone cool down
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,                         // Key: -1이면 매번 새 메시지
+			5.0f,                       // Duration in seconds
+			FColor::Green,              // 텍스트 색상
+			TEXT("Drone Cool Down Apply") // 메시지 내용
+		);
+	}
 }

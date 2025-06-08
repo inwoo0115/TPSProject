@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
+
 #include "TPSWeaponBase.generated.h"
 
 
@@ -14,6 +16,8 @@ class TPSPROJECT_API ATPSWeaponBase : public AActor
 	GENERATED_BODY()
 	
 public:
+	ATPSWeaponBase();
+
 	// 무기 기능 구현 함수 
 	virtual void Fire();
 
@@ -28,10 +32,10 @@ public:
 	virtual void InitializeAbilities();
 
 	// 무기 장착 시 오너 컴포넌트 등록
-	virtual void InitializeComponent(UActorComponent* InitializeComponent);
+	virtual void InitializeComponent(UActorComponent* NewComponent);
 
 	// 데이터 에셋에서 특성 초기화
-	virtual void InitializeAbilitiesFromDataAsset();
+	virtual void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 
 	// 특성 데이터 에셋
 	UPROPERTY()
@@ -41,20 +45,16 @@ public:
 	UPROPERTY()
 	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
 
-protected:
-
-	// 오너 컴포넌트
-	UPROPERTY()
-	TObjectPtr<class UActorComponent> OwnerComponent;
-
 	// 무기 발사체 클래스
 	UPROPERTY()
-	TObjectPtr<class UTPSProjectileListData> Projectiles;
+	TObjectPtr<class UTPSProjectileListData> ProjectileData;
 
 	// 무기 기본값
 	float Damage;
 
 	float AttackRatio;
+
+	float ReloadTime;
 
 	int32 MaxAmmo;
 
@@ -63,4 +63,13 @@ protected:
 	bool bCanFire = true;
 
 	bool bIsReloading = false;
+
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	UActorComponent* GetOwnerComponent() const;
+
+protected:
+
+	// 오너 컴포넌트
+	UPROPERTY()
+	TObjectPtr<class UActorComponent> OwnerComponent;
 };

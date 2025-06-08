@@ -4,7 +4,15 @@
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
+#include "Projectile/TPSProjectileListData.h"
+#include "Projectile/TPSProjectileBase.h"
 
+
+ATPSWeaponBase::ATPSWeaponBase()
+{
+	// 루트 컴포넌트 생성 
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+}
 
 void ATPSWeaponBase::ClearAbilitySlot()
 {
@@ -15,29 +23,46 @@ void ATPSWeaponBase::InitializeAbilities()
 {
 	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
 	{
-		if (Ability)
+		if (Ability && OwnerComponent)
 		{
 			Ability->InitializeAbility(OwnerComponent);
 		}
 	}
 }
 
-void ATPSWeaponBase::InitializeComponent(UActorComponent* InitializeComponent)
+void ATPSWeaponBase::InitializeComponent(UActorComponent* NewComponent)
 {
-	OwnerComponent = InitializeComponent;
+	OwnerComponent = NewComponent;
 }
 
-void ATPSWeaponBase::InitializeAbilitiesFromDataAsset()
+void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
 	if (!AbilityData) return;
-
-	// TODO : 일단 다 가져오는데 나중에 특정 Ability만 가져오도록 수정 필요
-	for (const TSubclassOf<UTPSEquipmentAbilityBase>& AbilityClass : AbilityData->EquipmentAbilitys)
+	// Ability1
+	if (AbilityData->EquipmentAbilities.Contains(Ability1))
 	{
-		if (AbilityClass)
+		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityData->EquipmentAbilities[Ability1]);
+		if (NewAbility1)
 		{
-			UTPSEquipmentAbilityBase* NewAbility = NewObject<UTPSEquipmentAbilityBase>();
-			AbilitySlot.Add(NewAbility);
+			AbilitySlot.Add(NewAbility1);
+		}
+	}
+	// Ability2
+	if (AbilityData->EquipmentAbilities.Contains(Ability2))
+	{
+		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityData->EquipmentAbilities[Ability2]);
+		if (NewAbility2)
+		{
+			AbilitySlot.Add(NewAbility2);
+		}
+	}
+	// Ability3
+	if (AbilityData->EquipmentAbilities.Contains(Ability3))
+	{
+		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityData->EquipmentAbilities[Ability3]);
+		if (NewAbility3)
+		{
+			AbilitySlot.Add(NewAbility3);
 		}
 	}
 }
@@ -52,4 +77,9 @@ void ATPSWeaponBase::Release()
 
 void ATPSWeaponBase::Reload()
 {
+}
+
+UActorComponent* ATPSWeaponBase::GetOwnerComponent() const
+{
+	return OwnerComponent;
 }
