@@ -11,6 +11,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Interaction/TPSSpInteractionObjectBase.h"
 #include "CharacterComponent/TPSRopeActionComponent.h"
+#include "CharacterComponent/TPSWeaponComponent.h"
 #include "Net/UnrealNetwork.h"
 
 ATPSCharacterPlayer::ATPSCharacterPlayer()
@@ -143,6 +144,7 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Look);
 	EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Run);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Attack);
+	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AttackEnd);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::AimIn);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AimOut);
 	EnhancedInputComponent->BindAction(SpActionAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::SpAction);
@@ -271,6 +273,12 @@ void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 {
+	WeaponComponent->FireWeapon();
+}
+
+void ATPSCharacterPlayer::AttackEnd(const FInputActionValue& Value)
+{
+	WeaponComponent->ReleaseWeapon();
 }
 
 void ATPSCharacterPlayer::AimIn(const FInputActionValue& Value)
@@ -337,6 +345,7 @@ void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)
 {
+	WeaponComponent->ReloadWeapon();
 }
 
 void ATPSCharacterPlayer::Ultimate(const FInputActionValue& Value)

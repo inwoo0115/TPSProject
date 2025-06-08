@@ -10,7 +10,7 @@
 #include "Net/UnrealNetwork.h"
 #include "CharacterComponent/TPSRopeActionComponent.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
-
+#include "GameInstance/TPSGameInstance.h"
 
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
@@ -88,6 +88,13 @@ void ATPSCharacterBase::BeginPlay()
 
 	// 컴포넌트 초기화
 	WeaponComponent->Initialize(EventSystem);
+
+	// TODO : Weapon임시 장착
+	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
+	if (TPSGameInstance)
+	{
+		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass);
+	}
 }
 
 void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlType)

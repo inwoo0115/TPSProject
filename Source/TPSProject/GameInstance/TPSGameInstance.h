@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 #include "TPSGameInstance.generated.h"
 
 /**
@@ -14,4 +15,12 @@ class TPSPROJECT_API UTPSGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
 	
+public:
+	virtual void Init() override;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<ATPSWeaponBase> WeaponClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
+	UMaterialInterface* WeaponMaterial;
 };

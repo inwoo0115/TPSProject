@@ -43,6 +43,8 @@ protected:
 
 	void Attack(const FInputActionValue& Value);
 
+	void AttackEnd(const FInputActionValue& Value);
+
 	void AimIn(const FInputActionValue& Value);
 
 	void AimOut(const FInputActionValue& Value);

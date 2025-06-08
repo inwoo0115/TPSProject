@@ -17,6 +17,10 @@ class TPSPROJECT_API ATPSBasicRifle : public ATPSWeaponBase
 public:
 	ATPSBasicRifle();
 
+	void Fire() override;
+
+	void Reload() override;
+
 protected:
 	// 무기 기본값
 	float Damage = 10.0f;

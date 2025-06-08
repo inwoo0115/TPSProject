@@ -18,4 +18,15 @@ ATPSBasicRifle::ATPSBasicRifle()
 	{
 		Projectiles = ListDataRef.Object;
 	}
+
+	// 데이터 에셋에서 특성 초기화
+	InitializeAbilitiesFromDataAsset();
+}
+
+void ATPSBasicRifle::Fire()
+{
+}
+
+void ATPSBasicRifle::Reload()
+{
 }

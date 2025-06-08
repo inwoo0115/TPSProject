@@ -13,10 +13,13 @@ class TPSPROJECT_API ATPSWeaponBase : public AActor
 {
 	GENERATED_BODY()
 	
-public:	
+public:
+	// 무기 기능 구현 함수 
+	virtual void Fire();
 
-	// 특성 배열에 추가
-	virtual void AddAbility(UTPSEquipmentAbilityBase* NewAbility);
+	virtual void Release();
+
+	virtual void Reload();
 
 	// 특성 배열 초기화
 	virtual void ClearAbilitySlot();
@@ -26,6 +29,9 @@ public:
 
 	// 무기 장착 시 오너 컴포넌트 등록
 	virtual void InitializeComponent(UActorComponent* InitializeComponent);
+
+	// 데이터 에셋에서 특성 초기화
+	virtual void InitializeAbilitiesFromDataAsset();
 
 	// 특성 데이터 에셋
 	UPROPERTY()
@@ -54,4 +60,7 @@ protected:
 
 	int32 CurrentAmmo;
 
+	bool bCanFire = true;
+
+	bool bIsReloading = false;
 };

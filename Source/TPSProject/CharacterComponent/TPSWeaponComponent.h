@@ -28,13 +28,14 @@ public:
 	// 이벤트 시스템 등록
 	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
-	//void StartFire();
+	// 무기 트리거(발사)
+	void FireWeapon();
 
-	//void EndFire();
+	// 무기 트리거 중지
+	void ReleaseWeapon();
 
-	//void Reload();
-
-	//void Aim();
+	// 재장전
+	void ReloadWeapon();
 
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;

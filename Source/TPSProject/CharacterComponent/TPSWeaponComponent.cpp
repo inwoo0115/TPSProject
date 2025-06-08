@@ -4,6 +4,7 @@
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "TPSGameplayEventSystem.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
 {
@@ -15,7 +16,7 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
 	UWorld* World = GetWorld();
 	if (World && WeaponClass)
 	{
-		//EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
+		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
 		// 컴포넌트 오너의 메쉬 설정 TODO
 	}
 }
@@ -23,5 +24,20 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
 void UTPSWeaponComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
 {
 	EventSystem = InputEventSystem;
+}
+
+void UTPSWeaponComponent::FireWeapon()
+{
+	EquippedWeapon->Fire();
+}
+
+void UTPSWeaponComponent::ReleaseWeapon()
+{
+	EquippedWeapon->Release();
+}
+
+void UTPSWeaponComponent::ReloadWeapon()
+{
+	EquippedWeapon->Reload();
 }
 
