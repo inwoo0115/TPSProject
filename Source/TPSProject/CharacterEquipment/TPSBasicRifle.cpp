@@ -44,14 +44,6 @@ void ATPSBasicRifle::Fire()
 	CurrentAmmo--;
 	bCanFire = false;
 
-	// ÃÑ¾Ë ¹ß»ç
-	//FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-	//FRotator SpawnRotation = GetActorRotation();
-
-	//FActorSpawnParameters SpawnParams;
-	//SpawnParams.Owner = this;
-	//SpawnParams.Instigator = GetInstigator();
-
 	auto Character = Cast<ACharacter>(OwnerComponent->GetOwner());
 	if (Character)
 	{
