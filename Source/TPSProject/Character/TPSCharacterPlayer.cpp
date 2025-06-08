@@ -13,6 +13,8 @@
 #include "CharacterComponent/TPSRopeActionComponent.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "Net/UnrealNetwork.h"
+#include "Components/TimelineComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
@@ -100,35 +102,24 @@ ATPSCharacterPlayer::ATPSCharacterPlayer()
 	{
 		UltimateAction = UltimateActionRef.Object;
 	}
-
-	// Input Mapping Context 가져오기
-	static ConstructorHelpers::FObjectFinder<UInputMappingContext> IMCRef(TEXT("/Script/EnhancedInput.InputMappingContext'/Game/TPSProject/Input/IMC_TPSCharacter.IMC_TPSCharacter'"));
-	if (IMCRef.Object)
-	{
-		InputMappingContext = IMCRef.Object;
-	}
 }
 
 void ATPSCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
-	//Input system mapping
-	if (IsLocallyControlled())
-	{
-		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-		if (PlayerController)
-		{
-			if (auto* LocalPlayer = PlayerController->GetLocalPlayer())
-			{
-				if (auto* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer))
-				{
-					SubSystem->AddMappingContext(InputMappingContext, 0);
-				}
-			}
-		}
-	}
+	// 컨트롤 데이터 기반 초기화
 	SetCharacterControlData(CurrentCharacterControlType);
+
+	// Timeline 초기화
+	AimCurveFloat = NewObject<UCurveFloat>(this, TEXT("AimCurveFloat"));
+	FRichCurve& RichCurve = AimCurveFloat->FloatCurve;
+	RichCurve.AddKey(0.0f, 300.0f); // 시작 시점
+	RichCurve.AddKey(0.1f, 40.0f); // 끝 시점
+	OnTimelineFloatCallback.BindUFunction(this, FName("AimUpdate"));
+	AimTimeline.AddInterpFloat(AimCurveFloat, OnTimelineFloatCallback);
+	AimTimeline.SetLooping(false);
+	AimTimeline.SetPlayRate(1.0f);
 }
 
 void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -138,11 +129,10 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	auto EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(PlayerInputComponent);
 
 	// Binding
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Jump);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ATPSCharacterPlayer::Jump);
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Move);
-	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::MoveComplete);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Look);
-	EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Run);
+	EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &ATPSCharacterPlayer::Run);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Attack);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AttackEnd);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::AimIn);
@@ -161,7 +151,11 @@ void ATPSCharacterPlayer::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	// 특수 상호작용 오브젝트가 있는지 확인
 	CheckSpInteraction();
+
+	// Timeline 업데이트
+	AimTimeline.TickTimeline(DeltaSeconds);
 }
 
 void ATPSCharacterPlayer::CheckSpInteraction()
@@ -233,10 +227,6 @@ void ATPSCharacterPlayer::Move(const FInputActionValue& Value)
 	AddMovementInput(RightVector, Movement.Y);
 }
 
-void ATPSCharacterPlayer::MoveComplete(const FInputActionValue& Value)
-{
-}
-
 void ATPSCharacterPlayer::Look(const FInputActionValue& Value)
 {
 	FVector2D Movement = Value.Get<FVector2D>();
@@ -250,6 +240,11 @@ void ATPSCharacterPlayer::Jump()
 {
 	if (IsLocallyControlled())
 	{
+		if (RopeActionComponent->GetIsGrappling())
+		{
+			// RopeActionComponent가 활성화되어 있을 때는 점프하지 않음
+			return;
+		}
 		Super::Jump();
 	}
 }
@@ -258,16 +253,7 @@ void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 {
 	if (IsLocallyControlled())
 	{
-		if (IsRun)
-		{
-			IsRun = false;
-			GetCharacterMovement()->MaxWalkSpeed -= 300.0;
-		}
-		else
-		{
-			IsRun = true;
-			GetCharacterMovement()->MaxWalkSpeed += 300.0;
-		}
+		ServerRPCRunAction();
 	}
 }
 
@@ -283,10 +269,20 @@ void ATPSCharacterPlayer::AttackEnd(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::AimIn(const FInputActionValue& Value)
 {
+	if (AimCurveFloat)
+	{
+		AimTimeline.Play(); // Timeline 시작
+	}
+	IsAim = true;
 }
 
 void ATPSCharacterPlayer::AimOut(const FInputActionValue& Value)
 {
+	if (AimCurveFloat)
+	{
+		AimTimeline.Reverse(); // Timeline 역재생
+	}
+	IsAim = false;
 }
 
 void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
@@ -296,7 +292,7 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 		ServerRPCSpAction();
 	}
 
-	// 오차 보정을 위해 클라이언트도 같이 계산
+	// 오차 보정을 위해 클라이언트도 같이 계산 + 호스트 클라이언트 실행
 	if (RopeActionComponent->GetIsGrappling())
 	{
 		// RopeActionComponent 설정
@@ -375,6 +371,7 @@ void ATPSCharacterPlayer::Esc(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Info(const FInputActionValue& Value)
 {
+	// Character 정보 UI 띄우기
 }
 
 void ATPSCharacterPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
@@ -382,6 +379,7 @@ void ATPSCharacterPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	DOREPLIFETIME(ATPSCharacterPlayer, SpInteractionTargetActor);
+	DOREPLIFETIME(ATPSCharacterPlayer, IsRun);
 }
 
 void ATPSCharacterPlayer::ServerRPCSpAction_Implementation()
@@ -402,4 +400,36 @@ void ATPSCharacterPlayer::ServerRPCSpAction_Implementation()
 		RopeActionComponent->RegisterComponent();
 		RopeActionComponent->SetAttachEndTo(SpInteractionTargetActor, TEXT("StaticMesh"));
 	}
+}
+
+void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
+{
+	if (IsRun)
+	{
+		IsRun = false;
+		GetCharacterMovement()->MaxWalkSpeed -= 300.0f;
+	}
+	else
+	{
+		IsRun = true;
+		GetCharacterMovement()->MaxWalkSpeed += 300.0f;
+
+	}
+}
+
+void ATPSCharacterPlayer::OnRepIsRun()
+{
+	if (IsRun)
+	{
+		GetCharacterMovement()->MaxWalkSpeed += 300.0f;
+	}
+	else
+	{
+		GetCharacterMovement()->MaxWalkSpeed -= 300.0f;
+	}
+}
+
+void ATPSCharacterPlayer::AimUpdate(float Value)
+{
+	SpringArm->TargetArmLength = Value; // Timeline에서 설정한 값으로 카메라 거리 조정
 }

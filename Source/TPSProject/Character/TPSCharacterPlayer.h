@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "Character/TPSCharacterBase.h"
 #include "InputActionValue.h"
-#include "InputMappingContext.h"
+#include "Components/TimelineComponent.h"
 #include "TPSCharacterPlayer.generated.h"
 
 /**
@@ -32,8 +32,6 @@ protected:
 
 	// 입력 액션
 	void Move(const FInputActionValue& Value);
-
-	void MoveComplete(const FInputActionValue& Value);
 
 	void Look(const FInputActionValue& Value);
 
@@ -108,17 +106,20 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	TObjectPtr<class UInputAction> InteractAction;
 
-	//매핑 컨택스트
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = InputContext, meta = (AllowPrivateAccess = "true"))
-	TObjectPtr<class UInputMappingContext> InputMappingContext;
-
 	// RPC
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(Server, Reliable)
 	void ServerRPCSpAction();
 
+	UFUNCTION(Server, Reliable)
+	void ServerRPCRunAction();
+
+	UFUNCTION()
+	void OnRepIsRun();
+
 	// 플래그
+	UPROPERTY(ReplicatedUsing = OnRepIsRun)
 	bool IsRun = false;
 
 	bool IsAttack = false;
@@ -132,4 +133,15 @@ protected:
 	// Spinteraction 타켓 액터
 	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSSpInteractionObjectBase> SpInteractionTargetActor;
+
+	// Aim Timeline
+	FTimeline AimTimeline;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Timeline)
+	TObjectPtr<class UCurveFloat> AimCurveFloat;
+
+	FOnTimelineFloat OnTimelineFloatCallback{};
+
+	UFUNCTION()
+	void AimUpdate(float Value);
 };

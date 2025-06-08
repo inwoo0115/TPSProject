@@ -11,6 +11,9 @@
 #include "CharacterComponent/TPSRopeActionComponent.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "GameInstance/TPSGameInstance.h"
+#include "EnhancedInputComponent.h"
+#include "InputMappingContext.h"
+#include "EnhancedInputSubsystems.h"
 
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
@@ -122,6 +125,21 @@ void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlTyp
 
 	// AnimInstance
 	GetMesh()->SetAnimClass(CharacterControlData->AnimBlueprintClass);
+
+	// Input System mapping
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		// 로컬 플레이어에 해당하면 변경
+		if (auto* LocalPlayer = PlayerController->GetLocalPlayer())
+		{
+			if (auto* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(LocalPlayer))
+			{
+				SubSystem->ClearAllMappings();
+				SubSystem->AddMappingContext(CharacterControlData->InputMappingContext, 0);
+			}
+		}
+	}
 
 	// 현재 세팅
 	CurrentCharacterControlType = ControlType;

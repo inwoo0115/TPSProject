@@ -24,6 +24,10 @@ public:
 	UPROPERTY(EditAnywhere, Category = Pawn)
 	TSubclassOf<UAnimInstance> AnimBlueprintClass;
 
+	//매핑 컨택스트
+	UPROPERTY(EditAnywhere, Category = InputMappingContext)
+	TObjectPtr<class UInputMappingContext> InputMappingContext;
+
 	UPROPERTY(EditAnywhere, Category = CharacterMovement)
 	uint8 bOrientRotationToMovement : 1;
 
