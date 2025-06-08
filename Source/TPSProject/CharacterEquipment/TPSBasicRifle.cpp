@@ -27,9 +27,11 @@ ATPSBasicRifle::ATPSBasicRifle()
 
 	ReloadTime = 1.5f;
 
-	MaxAmmo = 10;
+	MaxAmmo = 30;
 
-	CurrentAmmo = 10;
+	CurrentAmmo = 30;
+
+	UltiGaugeRatio = 0.1f;
 }
 
 void ATPSBasicRifle::Fire()

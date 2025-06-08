@@ -1,16 +1,15 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipmentAbility/TPSRifleDamageBoost.h"
-#include "CharacterEquipment/TPSBasicRifle.h"
+#include "CharacterEquipmentAbility/TPSRifleUltiGaugeBoost.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 
-void UTPSRifleDamageBoost::InitializeAbility(UActorComponent* InitializeComponent)
+void UTPSRifleUltiGaugeBoost::InitializeAbility(UActorComponent* InitializeComponent)
 {
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
 	if (WeaponComponent)
 	{
-		WeaponComponent->EquippedWeapon->Damage += 10.0f;
+		WeaponComponent->EquippedWeapon->UltiGaugeRatio += 0.1f;
 		CachedComponent = WeaponComponent;
 	}
 }

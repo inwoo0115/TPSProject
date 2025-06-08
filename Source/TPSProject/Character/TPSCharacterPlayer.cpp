@@ -157,9 +157,9 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(EscAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Esc);
 }
 
-void ATPSCharacterPlayer::Tick(float DeltaSecounds)
+void ATPSCharacterPlayer::Tick(float DeltaSeconds)
 {
-	Super::Tick(DeltaSecounds);
+	Super::Tick(DeltaSeconds);
 
 	CheckSpInteraction();
 }
@@ -296,6 +296,7 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 		ServerRPCSpAction();
 	}
 
+	// 오차 보정을 위해 클라이언트도 같이 계산
 	if (RopeActionComponent->GetIsGrappling())
 	{
 		// RopeActionComponent 설정

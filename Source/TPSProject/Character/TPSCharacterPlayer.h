@@ -25,7 +25,7 @@ public:
 
 	bool GetIsAim() const { return IsAim; };
 
-	virtual void Tick(float DeltaSecounds);
+	virtual void Tick(float DeltaSeconds);
 protected:
 	// SpInteraction Actor Check
 	void CheckSpInteraction();

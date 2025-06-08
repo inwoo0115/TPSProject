@@ -24,5 +24,5 @@ public:
 	FTimerHandle FireCooldownHandle;
 
 	// 무기 추가 설정
-	bool HasLazerMode = false;
+	bool HasLaserMode = false;
 };

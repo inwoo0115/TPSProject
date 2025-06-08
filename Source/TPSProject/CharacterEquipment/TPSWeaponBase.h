@@ -56,6 +56,8 @@ public:
 
 	float ReloadTime;
 
+	float UltiGaugeRatio;
+
 	int32 MaxAmmo;
 
 	int32 CurrentAmmo;
