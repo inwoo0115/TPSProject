@@ -13,6 +13,7 @@ void UTPSRifleAddLaserBullet::InitializeAbility(UActorComponent* InitializeCompo
 		auto Weapon = Cast<ATPSBasicRifle>(WeaponComponent->EquippedWeapon);
 		if (Weapon)
 		{
+			WeaponComponent->OnBulletHit.AddDynamic(this, &UTPSRifleAddLaserBullet::ApplyAbility);
 			Weapon->HasLaserMode = true;
 		}
 		CachedComponent = WeaponComponent;
@@ -21,4 +22,16 @@ void UTPSRifleAddLaserBullet::InitializeAbility(UActorComponent* InitializeCompo
 
 void UTPSRifleAddLaserBullet::ApplyAbility()
 {
+	//CachedComponent->EventSystem
+	//drone cool down
+
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,                         // Key: -1이면 매번 새 메시지
+			5.0f,                       // Duration in seconds
+			FColor::Green,              // 텍스트 색상
+			TEXT("Laser Bullet apply") // 메시지 내용
+		);
+	}
 }

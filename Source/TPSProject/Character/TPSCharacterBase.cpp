@@ -14,6 +14,7 @@
 #include "EnhancedInputComponent.h"
 #include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
+#include "Animation/TPSAnimMontageData.h"
 
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
@@ -51,6 +52,13 @@ ATPSCharacterBase::ATPSCharacterBase()
 	//Mesh 위치 설정
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
 
+	// AnimMontage Date 설정
+	static ConstructorHelpers::FObjectFinder<UTPSAnimMontageData> AnimMontageDataRef(TEXT("/Game/TPSProject/AnimMontageData/TPSAnimMontageData.TPSAnimMontageData"));
+	if (AnimMontageDataRef.Object)
+	{
+		AnimMontageData = AnimMontageDataRef.Object;
+	}
+
 	//Character Control Manager 설정
 	static ConstructorHelpers::FObjectFinder<UTPSCharacterControlData> NonCombatControlDataRef(TEXT("/Game/TPSProject/CharacterControl/TPSNonCombatControl.TPSNonCombatControl"));
 	if (NonCombatControlDataRef.Object)
@@ -77,9 +85,6 @@ ATPSCharacterBase::ATPSCharacterBase()
 	// WeaponComponent 설정
 	WeaponComponent = CreateDefaultSubobject<UTPSWeaponComponent>(TEXT("WeaponComponent"));
 
-	// Event System 설정
-	EventSystem = NewObject<UTPSGameplayEventSystem>();
-
 	// 리플리케이션 설정
 	bReplicates = true;
 	SetReplicateMovement(true);
@@ -88,6 +93,9 @@ ATPSCharacterBase::ATPSCharacterBase()
 void ATPSCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	// Event System 설정
+	EventSystem = NewObject<UTPSGameplayEventSystem>();
 
 	// 컴포넌트 초기화
 	WeaponComponent->Initialize(EventSystem);

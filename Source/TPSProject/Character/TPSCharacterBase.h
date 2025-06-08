@@ -26,6 +26,10 @@ public:
 
 	void SetCharacterControlData(ECharacterControlType ControlType);
 
+	// AnimMontage 데이터 에셋
+	UPROPERTY(EditAnywhere, Category = AnimMontage)
+	TObjectPtr<class UTPSAnimMontageData> AnimMontageData;
+
 protected:
 
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))

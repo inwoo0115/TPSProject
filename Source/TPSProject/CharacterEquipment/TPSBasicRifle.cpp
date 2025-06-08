@@ -40,27 +40,55 @@ void ATPSBasicRifle::Fire()
 	{
 		return;
 	}
-	UE_LOG(LogTemp, Warning, TEXT("<Ability Update> Damage: %f, Max Ammo: %d"), Damage, MaxAmmo);
-	if (CurrentAmmo <= 0)
-	{
-		Reload();
-		return;
-	}
 
 	CurrentAmmo--;
 	bCanFire = false;
 
 	// 총알 발사
-	FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
-	FRotator SpawnRotation = GetActorRotation();
+	//FVector SpawnLocation = GetActorLocation() + GetActorForwardVector() * 100.f;
+	//FRotator SpawnRotation = GetActorRotation();
 
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-	SpawnParams.Instigator = GetInstigator();
+	//FActorSpawnParameters SpawnParams;
+	//SpawnParams.Owner = this;
+	//SpawnParams.Instigator = GetInstigator();
 
-	// 첫 번째 총알 클래스로 생성
-	GetWorld()->SpawnActor<ATPSProjectileBase>(ProjectileData->ProjectileList[EProjectileType::RifleBullet], SpawnLocation, SpawnRotation, SpawnParams);
+	auto Character = Cast<ACharacter>(OwnerComponent->GetOwner());
+	if (Character)
+	{
+		// 카메라 기준 라인트레이스
+		FVector CameraLocation;
+		FRotator CameraRotation;
+		Character->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 
+		FVector TraceStart = CameraLocation + CameraRotation.Vector() * 100.0f;
+		FVector TraceEnd = TraceStart + CameraRotation.Vector() * 10000.0f;
+
+		FHitResult HitResult;
+		FCollisionQueryParams TraceParams;
+		TraceParams.AddIgnoredActor(this);
+		TraceParams.AddIgnoredActor(GetOwner());
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
+		FVector TargetPoint = bHit ? HitResult.ImpactPoint : TraceEnd;
+
+		// 총구 위치에서 타겟 방향 계산
+		FVector MuzzleLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
+		FVector ShotDirection = (TargetPoint - MuzzleLocation).GetSafeNormal();
+		FRotator ShotRotation = ShotDirection.Rotation();
+
+		// 총알 스폰
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		// 첫 번째 총알 클래스로 생성
+		GetWorld()->SpawnActor<ATPSProjectileBase>(
+			ProjectileData->ProjectileList[EProjectileType::RifleBullet],
+			MuzzleLocation,
+			ShotRotation,
+			SpawnParams
+		);
+	}
 
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()
 		{
