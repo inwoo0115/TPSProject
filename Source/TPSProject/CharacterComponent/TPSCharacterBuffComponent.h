@@ -4,22 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TPSCharacterStatComponent.generated.h"
+#include "TPSCharacterBuffComponent.generated.h"
+
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class TPSPROJECT_API UTPSCharacterStatComponent : public UActorComponent
+class TPSPROJECT_API UTPSCharacterBuffComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
 public:	
-	UTPSCharacterStatComponent();
+	UTPSCharacterBuffComponent();
 
 	// 이벤트 시스템 등록
 	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
 protected:
-	void GetDamageByField(FName FieldName, float &OutDamage);
+	void GetBuffByField(FName FieldName, float& OutDamage);
 
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;

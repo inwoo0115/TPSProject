@@ -7,3 +7,12 @@ void UTPSGameplayEventSystem::BroadCastOnStatChanged(FName FieldName, float NewS
 {
 	OnStatChanged.Broadcast(FieldName, NewStat);
 }
+
+float UTPSGameplayEventSystem::BroadCastOnDamageCalculation(FName FieldName)
+{
+	float OutDamage;
+
+	OnRequestDamageCalculation.Broadcast(FieldName, OutDamage);
+
+	return OutDamage;
+}

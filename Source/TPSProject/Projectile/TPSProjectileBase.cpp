@@ -52,3 +52,8 @@ void ATPSProjectileBase::Tick(float DeltaTime)
 
 }
 
+void ATPSProjectileBase::SetDamage(float NewDamage)
+{
+	Damage = NewDamage;
+}
+

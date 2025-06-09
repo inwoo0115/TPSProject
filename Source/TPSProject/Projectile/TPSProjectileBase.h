@@ -28,6 +28,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void SetDamage(float NewDamage);
+
 protected:
 	// 콜리전 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "Collision")
@@ -40,4 +42,7 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float LifeTime = 3.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float Damage = 10.0f;
 };

@@ -5,6 +5,7 @@
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
 #include "Projectile/TPSProjectileListData.h"
 #include "GameFramework/Character.h"
+#include "CharacterComponent/TPSWeaponComponent.h"
 
 ATPSBasicRifle::ATPSBasicRifle()
 {
@@ -36,7 +37,7 @@ ATPSBasicRifle::ATPSBasicRifle()
 
 void ATPSBasicRifle::Fire()
 {
-	if (!bCanFire || bIsReloading)
+	if (!bCanFire || bIsReloading || CurrentAmmo <= 0)
 	{
 		return;
 	}
@@ -80,6 +81,16 @@ void ATPSBasicRifle::Fire()
 			ShotRotation,
 			SpawnParams
 		);
+
+		// 총알 구조체가 만들어지면 데미지 설정
+		if (Projectile)
+		{
+			auto WeaponComponent = Cast<UTPSWeaponComponent>(GetOwnerComponent());
+			if (WeaponComponent)
+			{
+				Projectile->SetDamage(WeaponComponent->EventSystem->BroadCastOnDamageCalculation(FName(TEXT("Weapon"))));
+			}
+		}
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()

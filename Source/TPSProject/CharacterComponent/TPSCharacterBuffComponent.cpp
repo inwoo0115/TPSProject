@@ -1,11 +1,11 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterComponent/TPSCharacterStatComponent.h"
+#include "CharacterComponent/TPSCharacterBuffComponent.h"
 #include "TPSGameplayEventSystem.h"
 
 // Sets default values for this component's properties
-UTPSCharacterStatComponent::UTPSCharacterStatComponent()
+UTPSCharacterBuffComponent::UTPSCharacterBuffComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -14,13 +14,12 @@ UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 	// ...
 }
 
-void UTPSCharacterStatComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
+void UTPSCharacterBuffComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
 {
 	EventSystem = InputEventSystem;
 }
 
-void UTPSCharacterStatComponent::GetDamageByField(FName FieldName, float& OutDamage)
+void UTPSCharacterBuffComponent::GetBuffByField(FName FieldName, float& OutDamage)
 {
-	// FieldName 으로 맵에서 데미지 가져옴
-	// OutDamage *= DamageRatio;
+	// 맵에서 현재 버프 수치 계산
 }
