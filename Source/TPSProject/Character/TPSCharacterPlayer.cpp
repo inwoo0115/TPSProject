@@ -259,7 +259,14 @@ void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 {
+	if (IsLocallyControlled())
+	{
+		ServerRPCAttackAction();
+	}
+	// 발사체 생성
 	WeaponComponent->FireWeapon();
+	// 발사 이펙트
+	WeaponComponent->EffectWeapon();
 }
 
 void ATPSCharacterPlayer::AttackEnd(const FInputActionValue& Value)
@@ -415,6 +422,11 @@ void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
 		GetCharacterMovement()->MaxWalkSpeed += 300.0f;
 
 	}
+}
+
+void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
+{
+	WeaponComponent->FireWeapon();
 }
 
 void ATPSCharacterPlayer::OnRepIsRun()

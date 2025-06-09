@@ -115,6 +115,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerRPCRunAction();
 
+	UFUNCTION(Server, Reliable)
+	void ServerRPCAttackAction();
+
 	UFUNCTION()
 	void OnRepIsRun();
 

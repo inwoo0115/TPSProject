@@ -23,6 +23,9 @@ ATPSProjectileBase::ATPSProjectileBase()
 	Movement->MaxSpeed = 2000.f;
 	Movement->bRotationFollowsVelocity = true;
 	Movement->ProjectileGravityScale = 0.0f;
+
+	// 리플리케이션 설정
+	this->SetReplicates(true);
 }
 
 // Called when the game starts or when spawned

@@ -74,12 +74,18 @@ void ATPSBasicRifle::Fire()
 		SpawnParams.Instigator = GetInstigator();
 
 		// 첫 번째 총알 클래스로 생성
-		GetWorld()->SpawnActor<ATPSProjectileBase>(
+		auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
 			ProjectileData->ProjectileList[EProjectileType::RifleBullet],
 			MuzzleLocation,
 			ShotRotation,
 			SpawnParams
 		);
+
+		// 로컬에서 생성되었을 경우 빠르게 제거
+		if (!HasAuthority())
+		{
+			Projectile->SetLifeSpan(0.5f);
+		}
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()
@@ -104,4 +110,9 @@ void ATPSBasicRifle::Reload()
 			CurrentAmmo = MaxAmmo;
 			bIsReloading = false;
 		}), ReloadTime, false);
+}
+
+void ATPSBasicRifle::Effect()
+{
+	// 클라이언트에서만 이펙트 생성
 }

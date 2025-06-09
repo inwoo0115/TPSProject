@@ -21,6 +21,8 @@ public:
 
 	void Reload() override;
 
+	void Effect() override;
+
 	FTimerHandle FireCooldownHandle;
 
 	// 무기 추가 설정

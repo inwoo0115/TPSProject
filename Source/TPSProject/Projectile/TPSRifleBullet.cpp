@@ -46,10 +46,18 @@ void ATPSRifleBullet::BeginPlay()
 
 void ATPSRifleBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	auto OwnerWeapon = Cast<ATPSWeaponBase>(GetOwner());
-	auto OwnerWeaponComponent = Cast<UTPSWeaponComponent>(OwnerWeapon->GetOwnerComponent());
-
-	OwnerWeaponComponent->OnBulletHit.Broadcast();
+	if (HasAuthority())
+	{
+		auto OwnerWeapon = Cast<ATPSWeaponBase>(GetOwner());
+		if (OwnerWeapon)
+		{
+			auto OwnerWeaponComponent = Cast<UTPSWeaponComponent>(OwnerWeapon->GetOwnerComponent());
+			if (OwnerWeaponComponent)
+			{
+				OwnerWeaponComponent->OnBulletHit.Broadcast();
+			}
+		}
+	}
 
 	// Ãæµ¹ ½Ã ÆÄ±«
 	Destroy();

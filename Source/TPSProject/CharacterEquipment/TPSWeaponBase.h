@@ -25,6 +25,8 @@ public:
 
 	virtual void Reload();
 
+	virtual void Effect();
+
 	// 특성 배열 초기화
 	virtual void ClearAbilitySlot();
 

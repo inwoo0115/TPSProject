@@ -79,6 +79,10 @@ void ATPSWeaponBase::Reload()
 {
 }
 
+void ATPSWeaponBase::Effect()
+{
+}
+
 UActorComponent* ATPSWeaponBase::GetOwnerComponent() const
 {
 	return OwnerComponent;

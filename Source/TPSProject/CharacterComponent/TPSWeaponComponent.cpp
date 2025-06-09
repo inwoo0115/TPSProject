@@ -62,3 +62,8 @@ void UTPSWeaponComponent::ReloadWeapon()
 	EquippedWeapon->Reload();
 }
 
+void UTPSWeaponComponent::EffectWeapon()
+{
+	EquippedWeapon->Effect();
+}
+

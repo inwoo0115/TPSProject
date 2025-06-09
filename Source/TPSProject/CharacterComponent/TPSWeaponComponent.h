@@ -37,6 +37,9 @@ public:
 	// 재장전
 	void ReloadWeapon();
 
+	// 이펙트
+	void EffectWeapon();
+
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
