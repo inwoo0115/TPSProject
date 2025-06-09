@@ -454,6 +454,9 @@ void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
 	{
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
 	}
+
+	// 발사체 생성
+	WeaponComponent->FireWeapon();
 }
 
 void ATPSCharacterPlayer::OnRepIsRun()

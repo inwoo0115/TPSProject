@@ -80,12 +80,6 @@ void ATPSBasicRifle::Fire()
 			ShotRotation,
 			SpawnParams
 		);
-
-		// 로컬에서 생성되었을 경우 빠르게 제거
-		if (!HasAuthority())
-		{
-			Projectile->SetLifeSpan(0.5f);
-		}
 	}
 
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()

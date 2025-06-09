@@ -42,6 +42,7 @@ void ATPSRifleBullet::BeginPlay()
 
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);
+
 }
 
 void ATPSRifleBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
