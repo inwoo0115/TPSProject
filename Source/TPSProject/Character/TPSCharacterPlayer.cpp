@@ -3,8 +3,7 @@
 
 #include "Character/TPSCharacterPlayer.h"
 #include "EnhancedInputComponent.h"
-#include "InputMappingContext.h"
-#include "EnhancedInputSubsystems.h"
+#include "Animation/TPSAnimMontageData.h"
 #include "Player/TPSPlayerController.h"	
 #include "Interface/TPSInteractableInterface.h"
 #include "GameInstance/TPSUiSubsystem.h"
@@ -259,14 +258,22 @@ void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled())
+	if (IsLocallyControlled() && WeaponComponent->EquippedWeapon->bCanFire)
 	{
-		ServerRPCAttackAction();
+		// 로컬 클라이언트일 경우 서버 RPC 전송
+		if (!HasAuthority())
+		{
+			ServerRPCAttackAction();
+		}
+
+		//애님 몽타주 재생
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
+
+		// 발사체 생성
+		WeaponComponent->FireWeapon();
+		// 발사 이펙트
+		WeaponComponent->EffectWeapon();
 	}
-	// 발사체 생성
-	WeaponComponent->FireWeapon();
-	// 발사 이펙트
-	WeaponComponent->EffectWeapon();
 }
 
 void ATPSCharacterPlayer::AttackEnd(const FInputActionValue& Value)
@@ -319,6 +326,11 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
 {
+	if (IsLocallyControlled())
+	{
+		// Server RPC
+		// MultiCast로 애님 몽타주 재생
+	}
 }
 
 void ATPSCharacterPlayer::Interact(const FInputActionValue& Value)
@@ -427,6 +439,21 @@ void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
 void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
 {
 	WeaponComponent->FireWeapon();
+	MulticastRPCAttackAction();
+
+	if (!IsLocallyControlled())
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
+	}
+}
+
+void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
+{
+	// 컨트롤 하지 않는 클라이언트 몽타주 재생
+	if (!IsLocallyControlled())
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
+	}
 }
 
 void ATPSCharacterPlayer::OnRepIsRun()

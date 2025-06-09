@@ -4,7 +4,6 @@
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "TPSGameplayEventSystem.h"
-#include "CharacterEquipment/TPSWeaponBase.h"
 #include "GameFramework/Character.h"
 
 void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass)
