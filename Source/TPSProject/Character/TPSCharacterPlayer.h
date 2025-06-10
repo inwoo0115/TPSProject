@@ -6,13 +6,16 @@
 #include "Character/TPSCharacterBase.h"
 #include "InputActionValue.h"
 #include "Components/TimelineComponent.h"
+#include "Interface/TPSPlayableAnimationInterface.h"
 #include "TPSCharacterPlayer.generated.h"
+
+
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API ATPSCharacterPlayer : public ATPSCharacterBase
+class TPSPROJECT_API ATPSCharacterPlayer : public ATPSCharacterBase, public ITPSPlayableAnimationInterface
 {
 	GENERATED_BODY()
 	
@@ -40,8 +43,6 @@ protected:
 	void Run(const FInputActionValue& Value);
 
 	void Attack(const FInputActionValue& Value);
-
-	void AttackEnd(const FInputActionValue& Value);
 
 	void AimIn(const FInputActionValue& Value);
 
@@ -150,4 +151,9 @@ protected:
 
 	UFUNCTION()
 	void AimUpdate(float Value);
+
+	// Montage Base Action
+	void StartAttack() override;
+
+	void StartSpAttack() override;
 };

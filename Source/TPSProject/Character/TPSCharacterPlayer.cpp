@@ -11,6 +11,9 @@
 #include "Interaction/TPSSpInteractionObjectBase.h"
 #include "CharacterComponent/TPSRopeActionComponent.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterComponent/TPSDroneSkillComponent.h"
+#include "CharacterComponent/TPSSpAttackSkillComponent.h"
+#include "CharacterComponent/TPSUltimateComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -133,7 +136,6 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Look);
 	EnhancedInputComponent->BindAction(RunAction, ETriggerEvent::Started, this, &ATPSCharacterPlayer::Run);
 	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Attack);
-	EnhancedInputComponent->BindAction(AttackAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AttackEnd);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::AimIn);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AimOut);
 	EnhancedInputComponent->BindAction(SpActionAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::SpAction);
@@ -270,15 +272,10 @@ void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
 
 		// 발사체 생성
-		WeaponComponent->FireWeapon();
+		// WeaponComponent->FireWeapon();
 		// 발사 이펙트
-		WeaponComponent->EffectWeapon();
+		// WeaponComponent->EffectWeapon();
 	}
-}
-
-void ATPSCharacterPlayer::AttackEnd(const FInputActionValue& Value)
-{
-	WeaponComponent->ReleaseWeapon();
 }
 
 void ATPSCharacterPlayer::AimIn(const FInputActionValue& Value)
@@ -438,7 +435,7 @@ void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
 
 void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
 {
-	WeaponComponent->FireWeapon();
+	// WeaponComponent->FireWeapon();
 	MulticastRPCAttackAction();
 
 	if (!IsLocallyControlled())
@@ -456,7 +453,7 @@ void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
 	}
 
 	// 발사체 생성
-	WeaponComponent->FireWeapon();
+	// WeaponComponent->FireWeapon();
 }
 
 void ATPSCharacterPlayer::OnRepIsRun()
@@ -475,4 +472,14 @@ void ATPSCharacterPlayer::AimUpdate(float Value)
 {
 	// Timeline에서 설정한 값으로 카메라 거리 조정
 	SpringArm->TargetArmLength = Value; 
+}
+
+void ATPSCharacterPlayer::StartAttack()
+{
+	WeaponComponent->FireWeapon();
+}
+
+void ATPSCharacterPlayer::StartSpAttack()
+{
+	SpAttackComponent->CastSkill();
 }

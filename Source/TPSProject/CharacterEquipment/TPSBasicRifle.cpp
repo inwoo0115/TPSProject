@@ -65,7 +65,7 @@ void ATPSBasicRifle::Fire()
 		FVector TargetPoint = bHit ? HitResult.ImpactPoint : TraceEnd;
 
 		// 총구 위치에서 타겟 방향 계산
-		FVector MuzzleLocation = GetActorLocation() + GetActorForwardVector() * 100.0f;
+		FVector MuzzleLocation = GetActorLocation() + GetActorForwardVector() * 50.0f;
 		FVector ShotDirection = (TargetPoint - MuzzleLocation).GetSafeNormal();
 		FRotator ShotRotation = ShotDirection.Rotation();
 
@@ -93,6 +93,7 @@ void ATPSBasicRifle::Fire()
 		}
 	}
 
+	// Attack Delay
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()
 		{
 			if (CurrentAmmo > 0)

@@ -19,8 +19,8 @@ ATPSRifleBullet::ATPSRifleBullet()
 	RootComponent = Collision;
 
 	// 기본 발사체 컴포넌트 설정
-	Movement->InitialSpeed = 2000.f;
-	Movement->MaxSpeed = 2000.f;
+	Movement->InitialSpeed = 10000.f;
+	Movement->MaxSpeed = 10000.f;
 	Movement->bRotationFollowsVelocity = true;
 	Movement->ProjectileGravityScale = 0.0f;
 
