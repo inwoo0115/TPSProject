@@ -19,6 +19,8 @@ public:
 	ATPSWeaponBase();
 
 	// 무기 기능 구현 함수 
+	virtual void Launch();
+
 	virtual void Fire();
 
 	virtual void Release();

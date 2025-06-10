@@ -2,6 +2,7 @@
 
 
 #include "Interaction/TPSArmoryInteractionObject.h"
+#include "GameInstance/TPSUiSubsystem.h"
 
 ATPSArmoryInteractionObject::ATPSArmoryInteractionObject()
 {
@@ -18,5 +19,9 @@ ATPSArmoryInteractionObject::ATPSArmoryInteractionObject()
 
 void ATPSArmoryInteractionObject::Interact(APlayerController* PC)
 {
-	UE_LOG(LogTemp, Log, TEXT("Interact success"));
+	auto* UISubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
+	if (UISubsystem)
+	{
+		UISubsystem->ShowUI(EUIType::Ability);
+	}
 }

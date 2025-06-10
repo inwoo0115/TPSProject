@@ -18,6 +18,8 @@ public:
 	ATPSBasicRifle();
 
 	void Fire() override;
+	
+	void Launch() override;
 
 	void Reload() override;
 

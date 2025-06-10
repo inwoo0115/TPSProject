@@ -67,6 +67,10 @@ void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAb
 	}
 }
 
+void ATPSWeaponBase::Launch()
+{
+}
+
 void ATPSWeaponBase::Fire()
 {
 }

@@ -120,7 +120,7 @@ void ATPSCharacterBase::BeginPlay()
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
 	if (TPSGameInstance)
 	{
-		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass);
+		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 	}
 }
 
@@ -167,6 +167,16 @@ void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlTyp
 
 	// 현재 세팅
 	CurrentCharacterControlType = ControlType;
+}
+
+FVector ATPSCharacterBase::GetCameraLocation() const
+{
+	return Camera->GetComponentLocation();
+}
+
+FRotator ATPSCharacterBase::GetCameraRotation() const
+{
+	return Camera->GetComponentRotation();
 }
 
 void ATPSCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -4,7 +4,7 @@
 #include "CharacterEquipment/TPSBasicRifle.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
 #include "Projectile/TPSProjectileListData.h"
-#include "GameFramework/Character.h"
+#include "Character/TPSCharacterBase.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 
 ATPSBasicRifle::ATPSBasicRifle()
@@ -37,21 +37,20 @@ ATPSBasicRifle::ATPSBasicRifle()
 
 void ATPSBasicRifle::Fire()
 {
-	if (!bCanFire || bIsReloading || CurrentAmmo <= 0)
+	if (bIsReloading || CurrentAmmo <= 0)
 	{
 		return;
 	}
 
 	CurrentAmmo--;
-	bCanFire = false;
 
-	auto Character = Cast<ACharacter>(OwnerComponent->GetOwner());
+
+	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 	if (Character)
 	{
 		// 카메라 기준 라인트레이스
-		FVector CameraLocation;
-		FRotator CameraRotation;
-		Character->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+		FVector CameraLocation = Character->GetCameraLocation();
+		FRotator CameraRotation = Character->GetCameraRotation();
 
 		FVector TraceStart = CameraLocation + CameraRotation.Vector() * 100.0f;
 		FVector TraceEnd = TraceStart + CameraRotation.Vector() * 10000.0f;
@@ -92,6 +91,11 @@ void ATPSBasicRifle::Fire()
 			}
 		}
 	}
+}
+
+void ATPSBasicRifle::Launch()
+{
+	bCanFire = false;
 
 	// Attack Delay
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()

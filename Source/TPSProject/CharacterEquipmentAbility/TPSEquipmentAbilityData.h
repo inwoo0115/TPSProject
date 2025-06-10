@@ -10,6 +10,7 @@
 UENUM(BlueprintType)
 enum class EAbilityType : uint8
 {
+	None		   UMETA(DisplayName = "None"),
 	Group1Ability1 UMETA(DisplayName = "Group1Ability1"),
 	Group1Ability2 UMETA(DisplayName = "Group1Ability2"),
 	Group2Ability1 UMETA(DisplayName = "Group2Ability1"),

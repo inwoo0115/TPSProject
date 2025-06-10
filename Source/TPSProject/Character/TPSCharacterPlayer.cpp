@@ -260,21 +260,20 @@ void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled() && WeaponComponent->EquippedWeapon->bCanFire)
+	if (IsLocallyControlled() && WeaponComponent->GetCanLaunchWeapon())
 	{
+		WeaponComponent->LaunchWeapon();
 		// 로컬 클라이언트일 경우 서버 RPC 전송
 		if (!HasAuthority())
 		{
 			ServerRPCAttackAction();
 		}
-
+		else
+		{
+			MulticastRPCAttackAction();
+		}
 		//애님 몽타주 재생
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
-
-		// 발사체 생성
-		// WeaponComponent->FireWeapon();
-		// 발사 이펙트
-		// WeaponComponent->EffectWeapon();
 	}
 }
 
@@ -435,7 +434,6 @@ void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
 
 void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
 {
-	// WeaponComponent->FireWeapon();
 	MulticastRPCAttackAction();
 
 	if (!IsLocallyControlled())
@@ -451,9 +449,6 @@ void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
 	{
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
 	}
-
-	// 발사체 생성
-	// WeaponComponent->FireWeapon();
 }
 
 void ATPSCharacterPlayer::OnRepIsRun()
@@ -477,6 +472,10 @@ void ATPSCharacterPlayer::AimUpdate(float Value)
 void ATPSCharacterPlayer::StartAttack()
 {
 	WeaponComponent->FireWeapon();
+	if (IsLocallyControlled())
+	{
+		WeaponComponent->EffectWeapon();
+	}
 }
 
 void ATPSCharacterPlayer::StartSpAttack()
