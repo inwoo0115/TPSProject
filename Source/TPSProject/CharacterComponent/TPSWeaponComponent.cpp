@@ -10,6 +10,11 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 {
 	if (EquippedWeapon)
 	{
+		// 델리게이트 초기화
+		OnStopFire.Clear();
+		OnBulletHit.Clear();
+
+		// 기존 무기 설정 제거
 		EquippedWeapon->Destroy();
 	}
 

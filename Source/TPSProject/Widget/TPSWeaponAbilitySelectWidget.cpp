@@ -52,7 +52,6 @@ void UTPSWeaponAbilitySelectWidget::OnEquipment01ConfrimClicked()
 			);
 		}
 	}
-	ResetToggleButton();
 }
 
 void UTPSWeaponAbilitySelectWidget::OnEquipment02ConfrimClicked()
@@ -91,5 +90,4 @@ void UTPSWeaponAbilitySelectWidget::OnEquipment02ConfrimClicked()
 				);
 		}
 	}
-	ResetToggleButton();
 }

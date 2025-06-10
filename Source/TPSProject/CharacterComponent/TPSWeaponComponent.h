@@ -28,7 +28,6 @@ public:
 	// 이벤트 시스템 등록
 	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
-
 	// 무기 트리거(발사)
 	void FireWeapon();
 
