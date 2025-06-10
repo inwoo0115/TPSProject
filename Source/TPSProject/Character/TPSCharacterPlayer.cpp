@@ -18,6 +18,10 @@
 #include "Components/TimelineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
+
+
+
+
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
 	//Input 설정
@@ -241,11 +245,6 @@ void ATPSCharacterPlayer::Jump()
 {
 	if (IsLocallyControlled())
 	{
-		if (RopeActionComponent->GetIsGrappling())
-		{
-			// RopeActionComponent가 활성화되어 있을 때는 점프하지 않음
-			return;
-		}
 		Super::Jump();
 	}
 }
@@ -311,6 +310,9 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 	}
 	else if (SpInteractionTargetActor)
 	{
+		//애님 몽타주 재생
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::RopeAction]);
+
 		// RopeActionComponent 설정
 		RopeActionComponent->SetIsGrappling(true);
 		RopeActionComponent->SetRopeLocation(SpInteractionTargetActor->GetActorLocation());
@@ -357,7 +359,12 @@ void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)
 {
-	WeaponComponent->ReloadWeapon();
+	if (IsLocallyControlled() && WeaponComponent->GetCanReloadWeapon())
+	{
+		//애님 몽타주 재생
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
+		WeaponComponent->ReloadWeapon();
+	}
 }
 
 void ATPSCharacterPlayer::Ultimate(const FInputActionValue& Value)

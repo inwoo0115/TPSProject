@@ -11,7 +11,8 @@ enum class EMontageType : uint8
 {
 	Attack UMETA(DisplayName = "Attack"),
 	RopeAction UMETA(DisplayName = "RopeAction"),
-	SpAttack UMETA(DisplayName = "SpAttack")
+	SpAttack UMETA(DisplayName = "SpAttack"),
+	Reload UMETA(DisplayName = "Reload")
 };
 
 /**

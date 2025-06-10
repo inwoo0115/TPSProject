@@ -46,6 +46,9 @@ public:
 	// 무기 사용 가능
 	bool GetCanLaunchWeapon();
 
+	// 장전 가능
+	bool GetCanReloadWeapon();
+
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 

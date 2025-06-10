@@ -44,7 +44,6 @@ void ATPSBasicRifle::Fire()
 
 	CurrentAmmo--;
 
-
 	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 	if (Character)
 	{
@@ -115,6 +114,7 @@ void ATPSBasicRifle::Reload()
 	}
 
 	bIsReloading = true;
+	bCanFire = false;
 
 
 	FTimerHandle ReloadTimerHandle;

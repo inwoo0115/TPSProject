@@ -81,3 +81,10 @@ bool UTPSWeaponComponent::GetCanLaunchWeapon()
 	return EquippedWeapon->bCanFire;
 }
 
+bool UTPSWeaponComponent::GetCanReloadWeapon()
+{
+	return !EquippedWeapon->bIsReloading && !(EquippedWeapon->CurrentAmmo == EquippedWeapon->MaxAmmo);
+}
+
+
+

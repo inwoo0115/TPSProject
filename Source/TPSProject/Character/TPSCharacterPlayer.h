@@ -9,8 +9,6 @@
 #include "Interface/TPSPlayableAnimationInterface.h"
 #include "TPSCharacterPlayer.generated.h"
 
-
-
 /**
  * 
  */
