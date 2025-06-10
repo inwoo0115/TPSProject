@@ -110,7 +110,7 @@ void ATPSCharacterPlayer::BeginPlay()
 	// 컨트롤 데이터 기반 초기화
 	SetCharacterControlData(CurrentCharacterControlType);
 
-	// Timeline 초기화
+	// AimTimeline 초기화
 	AimCurveFloat = NewObject<UCurveFloat>(this, TEXT("AimCurveFloat"));
 	FRichCurve& RichCurve = AimCurveFloat->FloatCurve;
 	RichCurve.AddKey(0.0f, 300.0f); // 시작 시점
@@ -473,5 +473,6 @@ void ATPSCharacterPlayer::OnRepIsRun()
 
 void ATPSCharacterPlayer::AimUpdate(float Value)
 {
-	SpringArm->TargetArmLength = Value; // Timeline에서 설정한 값으로 카메라 거리 조정
+	// Timeline에서 설정한 값으로 카메라 거리 조정
+	SpringArm->TargetArmLength = Value; 
 }

@@ -4,8 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "TPSGameplayEventSystem.h"
 #include "TPSCharacterBuffComponent.generated.h"
 
+UENUM(BlueprintType)
+enum class EBuffType : uint8
+{
+	All UMETA(DisplayName = "All"),
+	Drone UMETA(DisplayName = "Drone"),
+	SpAttack UMETA(DisplayName = "SpAttack"),
+	Attack UMETA(DisplayName = "Attack"),
+	Ulti UMETA(DisplayName = "Ulti"),
+};
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )

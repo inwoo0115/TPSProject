@@ -10,9 +10,11 @@
 #include "Net/UnrealNetwork.h"
 #include "CharacterComponent/TPSRopeActionComponent.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterComponent/TPSDroneSkillComponent.h"
+#include "CharacterComponent/TPSSpAttackSkillComponent.h"
+#include "CharacterComponent/TPSUltimateComponent.h"
+#include "CharacterComponent/TPSCharacterStatComponent.h"
 #include "GameInstance/TPSGameInstance.h"
-#include "EnhancedInputComponent.h"
-#include "InputMappingContext.h"
 #include "EnhancedInputSubsystems.h"
 #include "Animation/TPSAnimMontageData.h"
 
@@ -85,6 +87,16 @@ ATPSCharacterBase::ATPSCharacterBase()
 	// WeaponComponent 설정
 	WeaponComponent = CreateDefaultSubobject<UTPSWeaponComponent>(TEXT("WeaponComponent"));
 
+	// StatComponent 설정
+	StatComponent = CreateDefaultSubobject<UTPSCharacterStatComponent>(TEXT("StatComponent"));
+
+	// SkillComponent 설정
+	DroneComponent = CreateDefaultSubobject<UTPSDroneSkillComponent>(TEXT("DroneComponent"));
+	SpAttackComponent = CreateDefaultSubobject<UTPSSpAttackSkillComponent>(TEXT("SpAttackComponent"));
+
+	// UltimateComponent 설정
+	UltimateComponent = CreateDefaultSubobject<UTPSUltimateComponent>(TEXT("UltimateComponent"));
+
 	// 리플리케이션 설정
 	bReplicates = true;
 	SetReplicateMovement(true);
@@ -99,8 +111,12 @@ void ATPSCharacterBase::BeginPlay()
 
 	// 컴포넌트 초기화
 	WeaponComponent->Initialize(EventSystem);
+	StatComponent->Initialize(EventSystem);
+	DroneComponent->Initialize(EventSystem);
+	SpAttackComponent->Initialize(EventSystem);
+	UltimateComponent->Initialize(EventSystem);
 
-	// TODO : Weapon임시 장착
+	// TODO : Weapon임시 장착 (나중에 게임 인스턴스에서 한번에 불러올것)
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
 	if (TPSGameInstance)
 	{

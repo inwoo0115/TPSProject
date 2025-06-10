@@ -11,7 +11,10 @@ UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	CurrentHp = 200;
+	MaxHp = 200;
+	Damage = 100;
+	Defense = 100;
 }
 
 void UTPSCharacterStatComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
@@ -22,5 +25,5 @@ void UTPSCharacterStatComponent::Initialize(UTPSGameplayEventSystem* InputEventS
 void UTPSCharacterStatComponent::GetDamageByField(FName FieldName, float& OutDamage)
 {
 	// FieldName 으로 맵에서 데미지 가져옴
-	// OutDamage *= DamageRatio;
+	OutDamage *= Damage;
 }

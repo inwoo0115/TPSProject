@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "TPSGameplayEventSystem.h"
 #include "TPSCharacterStatComponent.generated.h"
 
 
@@ -23,5 +24,17 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
-		
+
+	// Ä³¸¯ÅÍ ½ºÅÈ
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	float CurrentHp;
+	
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	float MaxHp;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	float Damage;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	float Defense;
 };

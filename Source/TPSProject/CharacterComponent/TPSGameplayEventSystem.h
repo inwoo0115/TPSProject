@@ -18,10 +18,8 @@ class TPSPROJECT_API UTPSGameplayEventSystem : public UObject
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY()
 	FOnFieldChanged OnStatChanged;
 
-	UPROPERTY()
 	FOnRequestDamageCalculation OnRequestDamageCalculation;
 
 	// Stat 변경 시 호출 이벤트

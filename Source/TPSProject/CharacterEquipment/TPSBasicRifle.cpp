@@ -95,7 +95,10 @@ void ATPSBasicRifle::Fire()
 
 	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()
 		{
-			bCanFire = true;
+			if (CurrentAmmo > 0)
+			{
+				bCanFire = true;
+			}
 		}), AttackRatio, false);
 }
 
@@ -114,6 +117,7 @@ void ATPSBasicRifle::Reload()
 		{
 			CurrentAmmo = MaxAmmo;
 			bIsReloading = false;
+			bCanFire = true;
 		}), ReloadTime, false);
 }
 
