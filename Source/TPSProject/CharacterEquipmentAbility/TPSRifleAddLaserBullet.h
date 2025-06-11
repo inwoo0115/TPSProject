@@ -18,7 +18,6 @@ public:
 	UTPSRifleAddLaserBullet();
 
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
-	virtual void ApplyAbility() override;
 
 protected:
 	TObjectPtr<class UTPSWeaponComponent> CachedComponent;

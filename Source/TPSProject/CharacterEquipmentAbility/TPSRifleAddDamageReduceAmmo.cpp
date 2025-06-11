@@ -16,6 +16,7 @@ void UTPSRifleAddDamageReduceAmmo::InitializeAbility(UActorComponent* Initialize
 	if (WeaponComponent)
 	{
 		WeaponComponent->EquippedWeapon->MaxAmmo -= 10;
+		WeaponComponent->EquippedWeapon->CurrentAmmo -= 10;
 		WeaponComponent->EquippedWeapon->Damage += 20.0f;
 		CachedComponent = WeaponComponent;
 	}

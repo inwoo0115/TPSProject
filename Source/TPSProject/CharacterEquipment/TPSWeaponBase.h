@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
+#include "Projectile/TPSProjectileListData.h"
 
 #include "TPSWeaponBase.generated.h"
 
@@ -66,9 +67,13 @@ public:
 
 	int32 CurrentAmmo;
 
+	int32 RequireAmmo;
+
 	bool bCanFire = true;
 
 	bool bIsReloading = false;
+
+	EProjectileType CurrentBullet;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	UActorComponent* GetOwnerComponent() const;

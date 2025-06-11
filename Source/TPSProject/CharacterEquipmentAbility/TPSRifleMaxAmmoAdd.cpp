@@ -16,6 +16,7 @@ void UTPSRifleMaxAmmoAdd::InitializeAbility(UActorComponent* InitializeComponent
 	if (WeaponComponent)
 	{
 		WeaponComponent->EquippedWeapon->MaxAmmo += 50;
+		WeaponComponent->EquippedWeapon->CurrentAmmo += 50;
 		CachedComponent = WeaponComponent;
 	}
 }

@@ -4,6 +4,7 @@
 #include "CharacterEquipmentAbility/TPSRifleAddLaserBullet.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "CharacterEquipment/TPSBasicRifle.h"
+#include "Projectile/TPSProjectileListData.h"
 
 UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
 {
@@ -16,28 +17,10 @@ void UTPSRifleAddLaserBullet::InitializeAbility(UActorComponent* InitializeCompo
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
 	if (WeaponComponent)
 	{
-		auto Weapon = Cast<ATPSBasicRifle>(WeaponComponent->EquippedWeapon);
-		if (Weapon)
-		{
-			WeaponComponent->OnBulletHit.AddDynamic(this, &UTPSRifleAddLaserBullet::ApplyAbility);
-			Weapon->HasLaserMode = true;
-		}
+		WeaponComponent->EquippedWeapon->AttackRatio = 0.9f;
+		WeaponComponent->EquippedWeapon->CurrentBullet = EProjectileType::RifleLaser;
+		WeaponComponent->EquippedWeapon->Damage += 50.0f;
+		WeaponComponent->EquippedWeapon->RequireAmmo = 10;
 		CachedComponent = WeaponComponent;
-	}
-}
-
-void UTPSRifleAddLaserBullet::ApplyAbility()
-{
-	//CachedComponent->EventSystem
-	//drone cool down
-
-	if (GEngine)
-	{
-		GEngine->AddOnScreenDebugMessage(
-			-1,                         // Key: -1이면 매번 새 메시지
-			5.0f,                       // Duration in seconds
-			FColor::Green,              // 텍스트 색상
-			TEXT("Laser Bullet apply") // 메시지 내용
-		);
 	}
 }

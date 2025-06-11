@@ -79,7 +79,8 @@ void UTPSMainWeaponSettingWidget::InitializeWidget()
 			// 현재 선택된 특성 표시
 			for (UTPSEquipmentAbilityBase* Ability : Weapon->AbilitySlot)
 			{
-				if (Pair.Value->GetClass() == Ability->GetClass())
+				// 객체 자체 비교는 좀 그렇긴 함 TODO: 추후에 데이터로 관리
+				if (AbilityCDO->GetClass() == Ability->GetClass())
 				{
 					ToggleRowSelection(Buttons[Index], (Index / 2) + 1);
 				}

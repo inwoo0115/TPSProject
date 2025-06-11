@@ -38,19 +38,23 @@ ATPSBasicRifle::ATPSBasicRifle()
 
 	CurrentAmmo = 30;
 
+	RequireAmmo = 1;
+
 	UltiGaugeRatio = 0.1f;
 
 	EquipmentName = FText::FromString(TEXT("Basic Rifle"));
+
+	CurrentBullet = EProjectileType::RifleBullet;
 }
 
 void ATPSBasicRifle::Fire()
 {
-	if (bIsReloading || CurrentAmmo <= 0)
+	if (bIsReloading || CurrentAmmo < RequireAmmo)
 	{
 		return;
 	}
 
-	CurrentAmmo--;
+	CurrentAmmo -= RequireAmmo;
 
 	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 	if (Character)
@@ -82,7 +86,7 @@ void ATPSBasicRifle::Fire()
 
 		// 첫 번째 총알 클래스로 생성
 		auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
-			ProjectileData->ProjectileList[EProjectileType::RifleBullet],
+			ProjectileData->ProjectileList[CurrentBullet],
 			MuzzleLocation,
 			ShotRotation,
 			SpawnParams
