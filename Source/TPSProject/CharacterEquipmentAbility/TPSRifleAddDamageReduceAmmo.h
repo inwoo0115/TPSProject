@@ -15,6 +15,8 @@ class TPSPROJECT_API UTPSRifleAddDamageReduceAmmo : public UTPSEquipmentAbilityB
 	GENERATED_BODY()
 	
 public:
+	UTPSRifleAddDamageReduceAmmo();
+
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
 
 protected:

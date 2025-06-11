@@ -5,6 +5,12 @@
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "CharacterEquipment/TPSBasicRifle.h"
 
+UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
+{
+	AbilityName = FText::FromString(TEXT("LaserMode"));
+	AbilityDescription = FText::FromString(TEXT("Change to Laser Bullet when Attack"));
+}
+
 void UTPSRifleAddLaserBullet::InitializeAbility(UActorComponent* InitializeComponent)
 {
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);

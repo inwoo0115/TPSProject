@@ -20,4 +20,8 @@ public:
 
 	UFUNCTION()
 	virtual void ApplyAbility();
+
+	FText AbilityName;
+
+	FText AbilityDescription;
 };

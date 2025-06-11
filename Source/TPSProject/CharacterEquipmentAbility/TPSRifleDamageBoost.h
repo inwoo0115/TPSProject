@@ -15,6 +15,8 @@ class TPSPROJECT_API UTPSRifleDamageBoost : public UTPSEquipmentAbilityBase
 	GENERATED_BODY()
 	
 public:
+	UTPSRifleDamageBoost();
+
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
 
 protected:

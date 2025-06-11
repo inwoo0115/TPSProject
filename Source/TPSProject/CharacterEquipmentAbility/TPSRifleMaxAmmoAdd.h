@@ -15,6 +15,8 @@ class TPSPROJECT_API UTPSRifleMaxAmmoAdd : public UTPSEquipmentAbilityBase
 	GENERATED_BODY()
 
 public:
+	UTPSRifleMaxAmmoAdd();
+
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
 
 protected:

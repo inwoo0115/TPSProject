@@ -4,6 +4,12 @@
 #include "CharacterEquipmentAbility/TPSRifleAddDamageReduceAmmo.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 
+UTPSRifleAddDamageReduceAmmo::UTPSRifleAddDamageReduceAmmo()
+{
+	AbilityName = FText::FromString(TEXT("Selection and Concentration"));
+	AbilityDescription = FText::FromString(TEXT("Damage Boost 30% and Lose 10 Ammo"));
+}
+
 void UTPSRifleAddDamageReduceAmmo::InitializeAbility(UActorComponent* InitializeComponent)
 {
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);

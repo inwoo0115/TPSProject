@@ -4,6 +4,12 @@
 #include "CharacterEquipmentAbility/TPSRifleUltiGaugeBoost.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 
+UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()
+{
+	AbilityName = FText::FromString(TEXT("U.R.F Mode"));
+	AbilityDescription = FText::FromString(TEXT("Get Additional Ultimate Gauege"));
+}
+
 void UTPSRifleUltiGaugeBoost::InitializeAbility(UActorComponent* InitializeComponent)
 {
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);

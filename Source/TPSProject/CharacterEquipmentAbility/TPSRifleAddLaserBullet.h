@@ -15,6 +15,8 @@ class TPSPROJECT_API UTPSRifleAddLaserBullet : public UTPSEquipmentAbilityBase
 	GENERATED_BODY()
 
 public:
+	UTPSRifleAddLaserBullet();
+
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
 	virtual void ApplyAbility() override;
 

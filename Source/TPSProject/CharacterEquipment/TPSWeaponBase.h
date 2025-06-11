@@ -73,6 +73,12 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	UActorComponent* GetOwnerComponent() const;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	TSoftObjectPtr<UTexture2D> EquipmentIcon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
+	FText EquipmentName;
+
 protected:
 
 	// 오너 컴포넌트

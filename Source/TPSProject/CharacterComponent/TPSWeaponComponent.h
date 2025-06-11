@@ -49,6 +49,8 @@ public:
 	// 장전 가능
 	bool GetCanReloadWeapon();
 
+	const ATPSWeaponBase* GetWeapon() const { return EquippedWeapon; }
+
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 

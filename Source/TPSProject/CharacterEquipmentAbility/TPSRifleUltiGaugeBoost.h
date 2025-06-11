@@ -15,6 +15,8 @@ class TPSPROJECT_API UTPSRifleUltiGaugeBoost : public UTPSEquipmentAbilityBase
 	GENERATED_BODY()
 
 public:
+	UTPSRifleUltiGaugeBoost();
+
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
 
 protected:

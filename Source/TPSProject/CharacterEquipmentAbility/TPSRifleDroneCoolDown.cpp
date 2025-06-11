@@ -4,6 +4,12 @@
 #include "CharacterEquipmentAbility/TPSRifleDroneCoolDown.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 
+UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
+{
+	AbilityName = FText::FromString(TEXT("More Droner"));
+	AbilityDescription = FText::FromString(TEXT("Cooldown Drone Skill when attack"));
+}
+
 void UTPSRifleDroneCoolDown::InitializeAbility(UActorComponent* InitializeComponent)
 {
 	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);

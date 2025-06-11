@@ -22,6 +22,6 @@ void ATPSArmoryInteractionObject::Interact(APlayerController* PC)
 	auto* UISubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
 	if (UISubsystem)
 	{
-		UISubsystem->ShowUI(EUIType::Ability);
+		UISubsystem->ShowUI(EUIType::Equipment);
 	}
 }

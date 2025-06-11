@@ -15,7 +15,8 @@ enum class EUIType : uint8
 	Pause	UMETA(DisplayName = "Pause"),
 	Info	UMETA(DisplayName = "Info"),
 	Online	UMETA(DisplayName = "Online"),
-	Ability UMETA(DisplayName = "Ability")
+	Ability UMETA(DisplayName = "Ability"),
+	Equipment UMETA(DisplayName = "Equipment")
 };
 
 USTRUCT()

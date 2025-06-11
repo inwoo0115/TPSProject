@@ -15,6 +15,8 @@ class TPSPROJECT_API UTPSRifleDroneCoolDown : public UTPSEquipmentAbilityBase
 	GENERATED_BODY()
 
 public:
+	UTPSRifleDroneCoolDown();
+
 	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
 	virtual void ApplyAbility() override;
 

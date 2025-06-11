@@ -9,17 +9,23 @@
 
 ATPSBasicRifle::ATPSBasicRifle()
 {
+	// 사용가능한 어빌리티 목록
 	static ConstructorHelpers::FObjectFinder<UTPSEquipmentAbilityData> AbilityDataRef(TEXT("/Game/TPSProject/EquipmentAbility/BasicRifleAbility.BasicRifleAbility"));
 	if (AbilityDataRef.Object)
 	{
 		AbilityData = AbilityDataRef.Object;
 	}
 
+	// 사용가능한 발사체 목록
 	static ConstructorHelpers::FObjectFinder<UTPSProjectileListData> ListDataRef(TEXT("/Game/TPSProject/ProjectileList/BasicRifleProjectiles.BasicRifleProjectiles"));
 	if (ListDataRef.Object)
 	{
 		ProjectileData = ListDataRef.Object;
 	}
+
+	// 무기 아이콘 소프트 레퍼런스
+	EquipmentIcon = TSoftObjectPtr<UTexture2D>(FSoftObjectPath(TEXT("/Game/TPSProject/Widget/Texture/T_BasicRifleIcon.T_BasicRifleIcon")));
+
 
 	// 무기 기본값
 	Damage = 10.0f;
@@ -33,6 +39,8 @@ ATPSBasicRifle::ATPSBasicRifle()
 	CurrentAmmo = 30;
 
 	UltiGaugeRatio = 0.1f;
+
+	EquipmentName = FText::FromString(TEXT("Basic Rifle"));
 }
 
 void ATPSBasicRifle::Fire()
