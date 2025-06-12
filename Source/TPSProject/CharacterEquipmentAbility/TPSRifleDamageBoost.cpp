@@ -11,12 +11,9 @@ UTPSRifleDamageBoost::UTPSRifleDamageBoost()
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 20%"));
 }
 
-void UTPSRifleDamageBoost::InitializeAbility(UActorComponent* InitializeComponent)
+void UTPSRifleDamageBoost::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
-	if (WeaponComponent)
-	{
-		WeaponComponent->EquippedWeapon->Damage += 10.0f;
-		CachedComponent = WeaponComponent;
-	}
+	Super::InitializeAbility(InitEventSystem, WeaponContext);
+
+	WeaponContext.Damage += 10.0f;
 }

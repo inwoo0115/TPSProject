@@ -6,17 +6,16 @@
 #include "GameFramework/Actor.h"
 #include "TPSProjectileBase.generated.h"
 
+
 UCLASS()
 class TPSPROJECT_API ATPSProjectileBase : public AActor
 {
 	GENERATED_BODY()
 	
 public:	
-	// Sets default values for this actor's properties
 	ATPSProjectileBase();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 
@@ -25,7 +24,6 @@ protected:
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetDamage(float NewDamage);

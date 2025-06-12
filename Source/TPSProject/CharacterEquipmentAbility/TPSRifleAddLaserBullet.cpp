@@ -12,15 +12,12 @@ UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
 	AbilityDescription = FText::FromString(TEXT("Change to Laser Bullet when Attack"));
 }
 
-void UTPSRifleAddLaserBullet::InitializeAbility(UActorComponent* InitializeComponent)
+void UTPSRifleAddLaserBullet::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
-	if (WeaponComponent)
-	{
-		WeaponComponent->EquippedWeapon->AttackRatio = 0.9f;
-		WeaponComponent->EquippedWeapon->CurrentBullet = EProjectileType::RifleLaser;
-		WeaponComponent->EquippedWeapon->Damage += 50.0f;
-		WeaponComponent->EquippedWeapon->RequireAmmo = 10;
-		CachedComponent = WeaponComponent;
-	}
+	Super::InitializeAbility(InitEventSystem, WeaponContext);
+
+	WeaponContext.AttackRatio = 0.9f;
+	WeaponContext.CurrentBullet = EProjectileType::RifleLaser;
+	WeaponContext.Damage += 50.0f;
+	WeaponContext.RequireAmmo = 10;
 }

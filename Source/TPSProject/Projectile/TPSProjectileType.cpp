@@ -1,4 +1,4 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipment/TPSSkillEquipmentBase.h"
+#include "Projectile/TPSProjectileType.h"

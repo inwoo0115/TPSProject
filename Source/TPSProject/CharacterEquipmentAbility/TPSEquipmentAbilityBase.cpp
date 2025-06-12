@@ -2,9 +2,11 @@
 
 
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
-void UTPSEquipmentAbilityBase::InitializeAbility(UActorComponent* InitializeComponent)
+void UTPSEquipmentAbilityBase::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
+	EventSystem = InitEventSystem;
 }
 
 void UTPSEquipmentAbilityBase::ApplyAbility()

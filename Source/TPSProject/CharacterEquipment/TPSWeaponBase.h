@@ -4,11 +4,54 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
-#include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
-#include "Projectile/TPSProjectileListData.h"
-
+#include "CharacterEquipmentAbility/TPSAbilityType.h"
+#include "Projectile/TPSProjectileType.h"
+#include "CharacterComponent/TPSGameplayEventSystem.h"
 #include "TPSWeaponBase.generated.h"
+
+USTRUCT(BlueprintType)
+struct FWeaponContext
+{
+	GENERATED_BODY()
+
+	// 무기 특성 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
+
+	// 무기 발사체 클래스 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> AbilityList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float Damage;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackRatio;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float ReloadTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float UltiGaugeRatio;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 MaxAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 CurrentAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int32 RequireAmmo;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSoftObjectPtr<UTexture2D> WeaponIcon;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FText WeaponName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EProjectileType CurrentBullet;
+};
 
 
 UCLASS()
@@ -30,63 +73,55 @@ public:
 
 	virtual void Effect();
 
-	// 특성 배열 초기화
-	virtual void ClearAbilitySlot();
+	// Getter
+	bool CanReload();
+
+	bool CanFire();
+
+	// 무기 정보 초기화
+	void SetWeaponContextFromData();
 
 	// 컴포넌트에 특성 적용
-	virtual void InitializeAbilities();
+	void InitializeAbilities();
 
-	// 무기 장착 시 오너 컴포넌트 등록
-	virtual void InitializeComponent(UActorComponent* NewComponent);
+	// 무기 의존성 주입
+	void InitializeComponentAndEventSystem(UActorComponent* InitComponent, UTPSGameplayEventSystem* InitEventSystem);
 
 	// 데이터 에셋에서 특성 초기화
-	virtual void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
-
-	// 특성 데이터 에셋
-	UPROPERTY()
-	TObjectPtr<class UTPSEquipmentAbilityData> AbilityData;
+	void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 
 	// 사용가능한 전체 특성 배열
 	UPROPERTY()
 	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
 
-	// 무기 발사체 클래스
+	// 무기 정보 데이터 에셋
 	UPROPERTY()
-	TObjectPtr<class UTPSProjectileListData> ProjectileData;
-
-	// 무기 기본값
-	float Damage;
-
-	float AttackRatio;
-
-	float ReloadTime;
-
-	float UltiGaugeRatio;
-
-	int32 MaxAmmo;
-
-	int32 CurrentAmmo;
-
-	int32 RequireAmmo;
+	TObjectPtr<class UTPSWeaponData> WeaponData;
 
 	bool bCanFire = true;
 
 	bool bIsReloading = false;
 
-	EProjectileType CurrentBullet;
+	//EProjectileType CurrentBullet;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	UActorComponent* GetOwnerComponent() const;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	TSoftObjectPtr<UTexture2D> EquipmentIcon;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly)
-	FText EquipmentName;
+	UFUNCTION(BlueprintCallable, Category = "Weapon")
+	FWeaponContext GetWeaponContext() const;
 
 protected:
+	// 사격 딜레이 타이머
+	FTimerHandle FireCooldownHandle;
 
 	// 오너 컴포넌트
 	UPROPERTY()
 	TObjectPtr<class UActorComponent> OwnerComponent;
+
+	// 이벤트 시스템 오브젝트
+	UPROPERTY()
+	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
+
+	UPROPERTY()
+	FWeaponContext WeaponContext;
 };

@@ -25,7 +25,7 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
 
 		// 무기 초기화
-		EquippedWeapon->InitializeComponent(this);
+		EquippedWeapon->InitializeComponentAndEventSystem(this, EventSystem);
 		EquippedWeapon->InitializeAbilitiesFromDataAsset(Ability1, Ability2, Ability3);
 		EquippedWeapon->InitializeAbilities();
 
@@ -78,12 +78,12 @@ void UTPSWeaponComponent::EffectWeapon()
 
 bool UTPSWeaponComponent::GetCanLaunchWeapon()
 {
-	return EquippedWeapon->bCanFire;
+	return EquippedWeapon->CanFire();
 }
 
 bool UTPSWeaponComponent::GetCanReloadWeapon()
 {
-	return !EquippedWeapon->bIsReloading && !(EquippedWeapon->CurrentAmmo == EquippedWeapon->MaxAmmo);
+	return EquippedWeapon->CanReload();
 }
 
 

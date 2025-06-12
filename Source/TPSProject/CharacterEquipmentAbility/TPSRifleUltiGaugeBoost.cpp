@@ -10,12 +10,9 @@ UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()
 	AbilityDescription = FText::FromString(TEXT("Get Additional Ultimate Gauege"));
 }
 
-void UTPSRifleUltiGaugeBoost::InitializeAbility(UActorComponent* InitializeComponent)
+void UTPSRifleUltiGaugeBoost::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
-	if (WeaponComponent)
-	{
-		WeaponComponent->EquippedWeapon->UltiGaugeRatio += 0.1f;
-		CachedComponent = WeaponComponent;
-	}
+	Super::InitializeAbility(InitEventSystem, WeaponContext);
+
+	WeaponContext.UltiGaugeRatio += 0.1f;
 }

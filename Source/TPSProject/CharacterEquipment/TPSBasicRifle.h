@@ -17,14 +17,4 @@ class TPSPROJECT_API ATPSBasicRifle : public ATPSWeaponBase
 public:
 	ATPSBasicRifle();
 
-	void Fire() override;
-	
-	void Launch() override;
-
-	void Reload() override;
-
-	void Effect() override;
-
-	FTimerHandle FireCooldownHandle;
-
 };

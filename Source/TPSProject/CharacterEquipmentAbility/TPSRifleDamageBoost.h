@@ -17,8 +17,6 @@ class TPSPROJECT_API UTPSRifleDamageBoost : public UTPSEquipmentAbilityBase
 public:
 	UTPSRifleDamageBoost();
 
-	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
+	virtual void InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
 
-protected:
-	TObjectPtr<class UTPSWeaponComponent> CachedComponent;
 };

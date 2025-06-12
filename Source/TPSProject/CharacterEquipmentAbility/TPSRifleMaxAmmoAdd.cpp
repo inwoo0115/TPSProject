@@ -10,13 +10,10 @@ UTPSRifleMaxAmmoAdd::UTPSRifleMaxAmmoAdd()
 	AbilityDescription = FText::FromString(TEXT("Add 50 Ammo"));
 }
 
-void UTPSRifleMaxAmmoAdd::InitializeAbility(UActorComponent* InitializeComponent)
+void UTPSRifleMaxAmmoAdd::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	UTPSWeaponComponent* WeaponComponent = Cast<UTPSWeaponComponent>(InitializeComponent);
-	if (WeaponComponent)
-	{
-		WeaponComponent->EquippedWeapon->MaxAmmo += 50;
-		WeaponComponent->EquippedWeapon->CurrentAmmo += 50;
-		CachedComponent = WeaponComponent;
-	}
+	Super::InitializeAbility(InitEventSystem, WeaponContext);
+
+	WeaponContext.MaxAmmo += 50;
+	WeaponContext.CurrentAmmo += 50;
 }

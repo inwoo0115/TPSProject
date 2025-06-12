@@ -5,14 +5,9 @@
 #include "CoreMinimal.h"
 #include "Engine/DataAsset.h"
 #include "TPSProjectileBase.h"
+#include "TPSProjectileType.h"
 #include "TPSProjectileListData.generated.h"
 
-UENUM(BlueprintType)
-enum class EProjectileType : uint8
-{
-	RifleBullet UMETA(DisplayName = "Rifle Bullet"),
-	RifleLaser UMETA(DisplayName = "Rifle Laser")
-};
 
 
 /**

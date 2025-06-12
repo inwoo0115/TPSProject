@@ -6,6 +6,7 @@
 #include "Character/TPSCharacterBase.h"
 #include "GameInstance/TPSGameInstance.h"
 #include "Components/Image.h"
+#include "CharacterEquipmentAbility/TPSAbilityType.h"
 
 
 
@@ -26,16 +27,17 @@ void UTPSMainWeaponSettingWidget::InitializeWidget()
 	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
 	if (Pawn && Pawn->WeaponComponent->GetWeapon())
 	{
-		const ATPSWeaponBase* Weapon = Pawn->WeaponComponent->GetWeapon();
+		const ATPSWeaponBase* CurrentWeapon = Pawn->WeaponComponent->GetWeapon();
+		const FWeaponContext Weapon = CurrentWeapon->GetWeaponContext();
 
 		// 이미지 장비 텍스쳐 할당
-		Weapon->EquipmentIcon.LoadSynchronous();
-		UTexture2D* IconTexture = Weapon->EquipmentIcon.Get();
+		Weapon.WeaponIcon.LoadSynchronous();
+		UTexture2D* IconTexture = Weapon.WeaponIcon.Get();
 		if (IconTexture)
 			EquipmentIcon->SetBrushFromTexture(IconTexture);
 
 		//// 장비 이름 할당
-		EquipmentName->SetText(Weapon->EquipmentName);
+		EquipmentName->SetText(Weapon.WeaponName);
 
 
 		// 버튼 & 텍스트 배열 구성
@@ -52,7 +54,7 @@ void UTPSMainWeaponSettingWidget::InitializeWidget()
 		};
 
 		int32 Index = 0;
-		for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : Weapon->AbilityData->EquipmentAbilities)
+		for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : Weapon.AbilityList)
 		{
 			if (!Pair.Value) continue;
 
@@ -77,7 +79,7 @@ void UTPSMainWeaponSettingWidget::InitializeWidget()
 				ButtonToAbilityMap.Add(Buttons[Index], Pair.Key);
 			}
 			// 현재 선택된 특성 표시
-			for (UTPSEquipmentAbilityBase* Ability : Weapon->AbilitySlot)
+			for (UTPSEquipmentAbilityBase* Ability : CurrentWeapon->AbilitySlot)
 			{
 				// 객체 자체 비교는 좀 그렇긴 함 TODO: 추후에 데이터로 관리
 				if (AbilityCDO->GetClass() == Ability->GetClass())

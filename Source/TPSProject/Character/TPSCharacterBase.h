@@ -41,14 +41,14 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Stat")
 	TObjectPtr<class UTPSCharacterStatComponent> StatComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Drone")
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Drone")
 	TObjectPtr<class UTPSDroneSkillComponent> DroneComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SpAttack")
 	TObjectPtr<class UTPSSpAttackSkillComponent> SpAttackComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ultimate")
-	TObjectPtr<class UTPSUltimateComponent> UltimateComponent;
+	TObjectPtr<class UTPSUltimateComponent> UltimateComponent;*/
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "EventSystem")
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;

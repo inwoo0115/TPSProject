@@ -17,8 +17,5 @@ class TPSPROJECT_API UTPSRifleMaxAmmoAdd : public UTPSEquipmentAbilityBase
 public:
 	UTPSRifleMaxAmmoAdd();
 
-	virtual void InitializeAbility(UActorComponent* InitializeComponent) override;
-
-protected:
-	TObjectPtr<class UTPSWeaponComponent> CachedComponent;
+	virtual void InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
 };

@@ -262,6 +262,9 @@ void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 	if (IsLocallyControlled() && WeaponComponent->GetCanLaunchWeapon())
 	{
 		WeaponComponent->LaunchWeapon();
+		// 로컬에서 공격
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
+
 		// 로컬 클라이언트일 경우 서버 RPC 전송
 		if (!HasAuthority())
 		{
@@ -271,8 +274,6 @@ void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 		{
 			MulticastRPCAttackAction();
 		}
-		//애님 몽타주 재생
-		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
 	}
 }
 
@@ -362,8 +363,8 @@ void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)
 	if (IsLocallyControlled() && WeaponComponent->GetCanReloadWeapon())
 	{
 		//애님 몽타주 재생
-		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
 		WeaponComponent->ReloadWeapon();
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
 	}
 }
 
@@ -487,5 +488,5 @@ void ATPSCharacterPlayer::StartAttack()
 
 void ATPSCharacterPlayer::StartSpAttack()
 {
-	SpAttackComponent->CastSkill();
+	//SpAttackComponent->CastSkill();
 }

@@ -3,9 +3,11 @@
 
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
-#include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
-#include "Projectile/TPSProjectileListData.h"
+#include "Character/TPSCharacterBase.h"
 #include "Projectile/TPSProjectileBase.h"
+#include "TPSWeaponData.h"
+#include "CharacterComponent/TPSGameplayEventSystem.h"
+#include "CharacterComponent/TPSWeaponComponent.h"
 
 
 ATPSWeaponBase::ATPSWeaponBase()
@@ -14,52 +16,47 @@ ATPSWeaponBase::ATPSWeaponBase()
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 }
 
-void ATPSWeaponBase::ClearAbilitySlot()
-{
-	AbilitySlot.Empty();
-}
-
 void ATPSWeaponBase::InitializeAbilities()
 {
 	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
 	{
 		if (Ability && OwnerComponent)
 		{
-			Ability->InitializeAbility(OwnerComponent);
+			Ability->InitializeAbility(EventSystem, WeaponContext);
 		}
 	}
 }
 
-void ATPSWeaponBase::InitializeComponent(UActorComponent* NewComponent)
+void ATPSWeaponBase::InitializeComponentAndEventSystem(UActorComponent* InitComponent, UTPSGameplayEventSystem* InitEventSystem)
 {
-	OwnerComponent = NewComponent;
+	OwnerComponent = InitComponent;
+	EventSystem = InitEventSystem;
 }
 
 void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
-	if (!AbilityData) return;
 	// Ability1
-	if (AbilityData->EquipmentAbilities.Contains(Ability1))
+	if (WeaponContext.AbilityList.Contains(Ability1))
 	{
-		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityData->EquipmentAbilities[Ability1]);
+		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, WeaponContext.AbilityList[Ability1]);
 		if (NewAbility1)
 		{
 			AbilitySlot.Add(NewAbility1);
 		}
 	}
 	// Ability2
-	if (AbilityData->EquipmentAbilities.Contains(Ability2))
+	if (WeaponContext.AbilityList.Contains(Ability2))
 	{
-		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityData->EquipmentAbilities[Ability2]);
+		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, WeaponContext.AbilityList[Ability2]);
 		if (NewAbility2)
 		{
 			AbilitySlot.Add(NewAbility2);
 		}
 	}
 	// Ability3
-	if (AbilityData->EquipmentAbilities.Contains(Ability3))
+	if (WeaponContext.AbilityList.Contains(Ability3))
 	{
-		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityData->EquipmentAbilities[Ability3]);
+		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, WeaponContext.AbilityList[Ability3]);
 		if (NewAbility3)
 		{
 			AbilitySlot.Add(NewAbility3);
@@ -69,10 +66,73 @@ void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAb
 
 void ATPSWeaponBase::Launch()
 {
+	bCanFire = false;
+
+	// Attack Delay
+	GetWorld()->GetTimerManager().SetTimer(FireCooldownHandle, FTimerDelegate::CreateLambda([this]()
+		{
+			if (WeaponContext.CurrentAmmo > 0)
+			{
+				bCanFire = true;
+			}
+		}), WeaponContext.AttackRatio, false);
 }
 
 void ATPSWeaponBase::Fire()
 {
+	if (bIsReloading || WeaponContext.CurrentAmmo < WeaponContext.RequireAmmo)
+	{
+		return;
+	}
+
+	WeaponContext.CurrentAmmo -= WeaponContext.RequireAmmo;
+
+	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+	if (Character)
+	{
+		// 카메라 기준 라인트레이스
+		FVector CameraLocation = Character->GetCameraLocation();
+		FRotator CameraRotation = Character->GetCameraRotation();
+
+		FVector TraceStart = CameraLocation + CameraRotation.Vector() * 100.0f;
+		FVector TraceEnd = TraceStart + CameraRotation.Vector() * 10000.0f;
+
+		FHitResult HitResult;
+		FCollisionQueryParams TraceParams;
+		TraceParams.AddIgnoredActor(this);
+		TraceParams.AddIgnoredActor(GetOwner());
+
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
+		FVector TargetPoint = bHit ? HitResult.ImpactPoint : TraceEnd;
+
+		// 총구 위치에서 타겟 방향 계산
+		FVector MuzzleLocation = GetActorLocation() + GetActorForwardVector() * 50.0f;
+		FVector ShotDirection = (TargetPoint - MuzzleLocation).GetSafeNormal();
+		FRotator ShotRotation = ShotDirection.Rotation();
+
+		// 총알 스폰
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = GetInstigator();
+
+		// 첫 번째 총알 클래스로 생성
+		auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
+			WeaponContext.ProjectileList[WeaponContext.CurrentBullet],
+			MuzzleLocation,
+			ShotRotation,
+			SpawnParams
+		);
+
+		// 총알 구조체가 만들어지면 데미지 설정
+		if (Projectile)
+		{
+			auto WeaponComponent = Cast<UTPSWeaponComponent>(GetOwnerComponent());
+			if (WeaponComponent)
+			{
+				Projectile->SetDamage(WeaponComponent->EventSystem->BroadCastOnDamageCalculation(FName(TEXT("Weapon"))));
+			}
+		}
+	}
 }
 
 void ATPSWeaponBase::Release()
@@ -81,13 +141,74 @@ void ATPSWeaponBase::Release()
 
 void ATPSWeaponBase::Reload()
 {
+	if (bIsReloading || WeaponContext.CurrentAmmo == WeaponContext.MaxAmmo)
+	{
+		return;
+	}
+	bCanFire = false;
+	bIsReloading = true;
+
+	FTimerHandle ReloadTimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(ReloadTimerHandle, FTimerDelegate::CreateLambda([this]()
+		{
+			WeaponContext.CurrentAmmo = WeaponContext.MaxAmmo;
+			bIsReloading = false;
+			bCanFire = true;
+		}), WeaponContext.ReloadTime, false);
 }
 
 void ATPSWeaponBase::Effect()
 {
+	// 클라이언트에서 이펙트 생성
+	// 오브젝트 풀링 해야 할까...?
+}
+
+bool ATPSWeaponBase::CanReload()
+{
+	return !bIsReloading && !(WeaponContext.CurrentAmmo == WeaponContext.MaxAmmo);
+}
+
+bool ATPSWeaponBase::CanFire()
+{
+	return bCanFire;
+}
+
+void ATPSWeaponBase::SetWeaponContextFromData()
+{
+	if (WeaponData)
+	{
+		WeaponContext.ProjectileList = WeaponData->ProjectileList;
+
+		WeaponContext.AbilityList = WeaponData->AbilityList;
+
+		WeaponContext.Damage = WeaponData->Damage;
+
+		WeaponContext.AttackRatio = WeaponData->AttackRatio;
+		
+		WeaponContext.ReloadTime = WeaponData->ReloadTime;
+		
+		WeaponContext.UltiGaugeRatio = WeaponData->UltiGaugeRatio;
+		
+		WeaponContext.MaxAmmo = WeaponData->MaxAmmo;
+		
+		WeaponContext.CurrentAmmo = WeaponData->MaxAmmo;
+
+		WeaponContext.RequireAmmo = WeaponData->RequireAmmo;
+
+		WeaponContext.WeaponIcon = WeaponData->WeaponIcon;
+
+		WeaponContext.WeaponName = WeaponData->WeaponName;
+
+		WeaponContext.CurrentBullet = WeaponData->CurrentBullet;
+	}
 }
 
 UActorComponent* ATPSWeaponBase::GetOwnerComponent() const
 {
 	return OwnerComponent;
+}
+
+FWeaponContext ATPSWeaponBase::GetWeaponContext() const
+{
+	return WeaponContext;
 }

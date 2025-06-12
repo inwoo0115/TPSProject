@@ -16,7 +16,7 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 
 public:
 	UFUNCTION()
-	virtual void InitializeAbility(UActorComponent* InitializeComponent);
+	virtual void InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext);
 
 	UFUNCTION()
 	virtual void ApplyAbility();
@@ -24,4 +24,7 @@ public:
 	FText AbilityName;
 
 	FText AbilityDescription;
+
+protected:
+	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 };
