@@ -2,9 +2,8 @@
 
 
 #include "CharacterEquipmentAbility/TPSRifleAddLaserBullet.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
-#include "CharacterEquipment/TPSBasicRifle.h"
-#include "Projectile/TPSProjectileListData.h"
+#include "Projectile/TPSProjectileType.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
 {
@@ -12,9 +11,9 @@ UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
 	AbilityDescription = FText::FromString(TEXT("Change to Laser Bullet when Attack"));
 }
 
-void UTPSRifleAddLaserBullet::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleAddLaserBullet::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	Super::InitializeAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
 
 	WeaponContext.AttackRatio = 0.9f;
 	WeaponContext.CurrentBullet = EProjectileType::RifleLaser;

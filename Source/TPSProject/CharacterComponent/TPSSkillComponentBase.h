@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "TPSGameplayEventSystem.h"
-#include "CharacterEquipment/TPSSkillEquipmentBase.h"
 #include "TPSSkillComponentBase.generated.h"
 
 
@@ -19,6 +18,4 @@ public:
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
-	UPROPERTY()
-	TObjectPtr<class ATPSSkillEquipmentBase> Equipment;
 };

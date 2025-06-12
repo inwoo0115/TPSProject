@@ -17,5 +17,5 @@ class TPSPROJECT_API UTPSRifleAddLaserBullet : public UTPSEquipmentAbilityBase
 public:
 	UTPSRifleAddLaserBullet();
 
-	virtual void InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
+	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
 };

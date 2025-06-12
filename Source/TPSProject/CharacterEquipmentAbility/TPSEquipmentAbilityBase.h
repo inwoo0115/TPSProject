@@ -16,7 +16,12 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 
 public:
 	UFUNCTION()
-	virtual void InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext);
+	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext);
+
+	//virtual void InitializeGrenadeAbility(UTPSGameplayEventSystem* InitEventSystem, FSkillContext& SkillContext);
+
+	//virtual void InitializeDroneAbility(UTPSGameplayEventSystem* InitEventSystem, FSkillContext& SkillContext);
+
 
 	UFUNCTION()
 	virtual void ApplyAbility();

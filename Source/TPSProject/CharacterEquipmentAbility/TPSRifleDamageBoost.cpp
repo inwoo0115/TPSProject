@@ -2,8 +2,7 @@
 
 
 #include "CharacterEquipmentAbility/TPSRifleDamageBoost.h"
-#include "CharacterEquipment/TPSBasicRifle.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleDamageBoost::UTPSRifleDamageBoost()
 {
@@ -11,9 +10,9 @@ UTPSRifleDamageBoost::UTPSRifleDamageBoost()
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 20%"));
 }
 
-void UTPSRifleDamageBoost::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleDamageBoost::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	Super::InitializeAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
 
 	WeaponContext.Damage += 10.0f;
 }

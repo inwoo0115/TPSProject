@@ -122,6 +122,9 @@ protected:
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
+	// 무기 정보 구조체
 	UPROPERTY()
 	FWeaponContext WeaponContext;
+
+
 };

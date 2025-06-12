@@ -2,5 +2,4 @@
 
 
 #include "CharacterComponent/TPSSkillComponentBase.h"
-#include "CharacterEquipment/TPSSkillEquipmentBase.h"
 #include "TPSGameplayEventSystem.h"

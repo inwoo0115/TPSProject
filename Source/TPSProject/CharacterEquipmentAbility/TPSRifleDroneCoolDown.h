@@ -17,6 +17,6 @@ class TPSPROJECT_API UTPSRifleDroneCoolDown : public UTPSEquipmentAbilityBase
 public:
 	UTPSRifleDroneCoolDown();
 
-	virtual void InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
+	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
 	virtual void ApplyAbility() override;
 };

@@ -2,7 +2,7 @@
 
 
 #include "CharacterEquipmentAbility/TPSRifleDroneCoolDown.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
 {
@@ -10,9 +10,9 @@ UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
 	AbilityDescription = FText::FromString(TEXT("Cooldown Drone Skill when attack"));
 }
 
-void UTPSRifleDroneCoolDown::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleDroneCoolDown::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	Super::InitializeAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
 
 	//EventSystem->OnBulletHit.AddDynamic();
 }

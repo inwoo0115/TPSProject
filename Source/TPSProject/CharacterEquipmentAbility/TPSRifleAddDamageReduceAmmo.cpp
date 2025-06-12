@@ -2,7 +2,7 @@
 
 
 #include "CharacterEquipmentAbility/TPSRifleAddDamageReduceAmmo.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleAddDamageReduceAmmo::UTPSRifleAddDamageReduceAmmo()
 {
@@ -11,9 +11,9 @@ UTPSRifleAddDamageReduceAmmo::UTPSRifleAddDamageReduceAmmo()
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 30% and Lose 10 Ammo"));
 }
 
-void UTPSRifleAddDamageReduceAmmo::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleAddDamageReduceAmmo::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	Super::InitializeAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
 
 	WeaponContext.MaxAmmo -= 10;
 	WeaponContext.CurrentAmmo -= 10;

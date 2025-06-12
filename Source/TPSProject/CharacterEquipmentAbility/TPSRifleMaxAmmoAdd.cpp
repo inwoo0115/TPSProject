@@ -2,7 +2,7 @@
 
 
 #include "CharacterEquipmentAbility/TPSRifleMaxAmmoAdd.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleMaxAmmoAdd::UTPSRifleMaxAmmoAdd()
 {
@@ -10,9 +10,9 @@ UTPSRifleMaxAmmoAdd::UTPSRifleMaxAmmoAdd()
 	AbilityDescription = FText::FromString(TEXT("Add 50 Ammo"));
 }
 
-void UTPSRifleMaxAmmoAdd::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleMaxAmmoAdd::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	Super::InitializeAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
 
 	WeaponContext.MaxAmmo += 50;
 	WeaponContext.CurrentAmmo += 50;

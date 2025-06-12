@@ -2,7 +2,7 @@
 
 
 #include "CharacterEquipmentAbility/TPSRifleUltiGaugeBoost.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()
 {
@@ -10,9 +10,9 @@ UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()
 	AbilityDescription = FText::FromString(TEXT("Get Additional Ultimate Gauege"));
 }
 
-void UTPSRifleUltiGaugeBoost::InitializeAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleUltiGaugeBoost::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
 {
-	Super::InitializeAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
 
 	WeaponContext.UltiGaugeRatio += 0.1f;
 }

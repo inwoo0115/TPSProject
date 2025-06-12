@@ -6,7 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "Components/Button.h"
 #include "Components/TextBlock.h"
-#include "CharacterEquipmentAbility/TPSEquipmentAbilityData.h"
+#include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "TPSEquipmentSettingWidgetBase.generated.h"
 
 

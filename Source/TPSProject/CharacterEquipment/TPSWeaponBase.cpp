@@ -14,6 +14,8 @@ ATPSWeaponBase::ATPSWeaponBase()
 {
 	// 루트 컴포넌트 생성 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+
+	SetReplicates(true);
 }
 
 void ATPSWeaponBase::InitializeAbilities()
@@ -22,7 +24,7 @@ void ATPSWeaponBase::InitializeAbilities()
 	{
 		if (Ability && OwnerComponent)
 		{
-			Ability->InitializeAbility(EventSystem, WeaponContext);
+			Ability->InitializeWeaponAbility(EventSystem, WeaponContext);
 		}
 	}
 }
