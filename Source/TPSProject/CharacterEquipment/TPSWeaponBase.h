@@ -85,6 +85,10 @@ public:
 	UPROPERTY(ReplicatedUsing = OnRep_AbilitySlot)
 	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
 
+	// 델리게이트 해제 용 캐싱 슬롯
+	UPROPERTY()
+	TArray<class UTPSEquipmentAbilityBase*> PreviousSlot;
+
 	// 특성 배열 변화 시 적용
 	UFUNCTION()
 	void OnRep_AbilitySlot();
@@ -125,7 +129,7 @@ protected:
 	TObjectPtr<class UActorComponent> OwnerComponent;
 
 	// 무기 정보 구조체
-	UPROPERTY(Replicated, BlueprintReadOnly)
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FWeaponContext WeaponContext;
 
 	// 수동 리플리케이션

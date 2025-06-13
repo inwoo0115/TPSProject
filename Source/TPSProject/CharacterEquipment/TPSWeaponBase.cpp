@@ -10,6 +10,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 
+
 ATPSWeaponBase::ATPSWeaponBase()
 {
 	// 루트 컴포넌트 생성 
@@ -23,10 +24,9 @@ void ATPSWeaponBase::InitializeAbilities()
 {
 	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
 	{
-		if (Ability && OwnerComponent)
+		if (Ability)
 		{
 			Ability->InitializeWeaponAbility(WeaponContext);
-			UE_LOG(LogTemp, Warning, TEXT("hi"));
 		}
 	}
 }
@@ -69,7 +69,14 @@ void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAb
 
 void ATPSWeaponBase::OnRep_AbilitySlot()
 {
-	InitializeAbilities();
+	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
+	{
+		if (Ability)
+		{
+			// 델리게이트만 조정하게 변경
+			// Ability->InitializeWeaponAbility(WeaponContext);
+		}
+	}
 }
 
 void ATPSWeaponBase::Launch()
