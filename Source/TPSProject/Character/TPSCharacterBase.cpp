@@ -106,16 +106,6 @@ void ATPSCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Event System 설정
-	EventSystem = NewObject<UTPSGameplayEventSystem>();
-
-	// 컴포넌트 초기화
-	WeaponComponent->Initialize(EventSystem);
-	StatComponent->Initialize(EventSystem);
-	//DroneComponent->Initialize(EventSystem);
-	//SpAttackComponent->Initialize(EventSystem);
-	//UltimateComponent->Initialize(EventSystem);
-
 	// TODO: 추후 데이터에서 장비 장착
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
 	if (IsLocallyControlled() && TPSGameInstance)

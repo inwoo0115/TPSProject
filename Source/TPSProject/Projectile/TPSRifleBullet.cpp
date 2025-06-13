@@ -55,7 +55,7 @@ void ATPSRifleBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 			auto OwnerWeaponComponent = Cast<UTPSWeaponComponent>(OwnerWeapon->GetOwnerComponent());
 			if (OwnerWeaponComponent)
 			{
-				OwnerWeaponComponent->OnBulletHit.Broadcast();
+				//Bullet hit broad cast
 			}
 		}
 	}

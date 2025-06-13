@@ -10,9 +10,9 @@ UTPSRifleDamageBoost::UTPSRifleDamageBoost()
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 20%"));
 }
 
-void UTPSRifleDamageBoost::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleDamageBoost::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
-	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(WeaponContext);
 
 	WeaponContext.Damage += 10.0f;
 }

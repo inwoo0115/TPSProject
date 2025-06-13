@@ -17,6 +17,6 @@ class TPSPROJECT_API UTPSRifleAddDamageReduceAmmo : public UTPSEquipmentAbilityB
 public:
 	UTPSRifleAddDamageReduceAmmo();
 
-	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
+	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext) override;
 
 };

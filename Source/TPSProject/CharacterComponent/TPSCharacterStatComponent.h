@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TPSGameplayEventSystem.h"
 #include "TPSCharacterStatComponent.generated.h"
 
 
@@ -16,14 +15,8 @@ class TPSPROJECT_API UTPSCharacterStatComponent : public UActorComponent
 public:	
 	UTPSCharacterStatComponent();
 
-	// 이벤트 시스템 등록
-	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
-
 protected:
 	void GetDamageByField(FName FieldName, float &OutDamage);
-
-	UPROPERTY()
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
 	// 캐릭터 스탯
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)

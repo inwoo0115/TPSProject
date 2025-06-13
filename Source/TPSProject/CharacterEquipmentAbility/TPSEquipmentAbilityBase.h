@@ -16,12 +16,16 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 
 public:
 	UFUNCTION()
-	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext);
+	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext);
 
-	//virtual void InitializeGrenadeAbility(UTPSGameplayEventSystem* InitEventSystem, FSkillContext& SkillContext);
+	// UObject 리플리케이션을 위해 오버라이드
+	FORCEINLINE bool IsSupportedForNetworking() const override { return true; }
 
-	//virtual void InitializeDroneAbility(UTPSGameplayEventSystem* InitEventSystem, FSkillContext& SkillContext);
+	FORCEINLINE bool ReplicateSubobjects(class AActorChannel* Channel, class FOutBunch* Bunch, struct FReplicationFlags* RepFlags) { return false; }
 
+	int32 GetFunctionCallspace(UFunction* Function, FFrame* Stack) override;
+
+	bool CallRemoteFunction(UFunction* Function, void* Parameters, FOutParmRec* OutParms, FFrame* Stack) override;
 
 	UFUNCTION()
 	virtual void ApplyAbility();
@@ -29,7 +33,4 @@ public:
 	FText AbilityName;
 
 	FText AbilityDescription;
-
-protected:
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 };

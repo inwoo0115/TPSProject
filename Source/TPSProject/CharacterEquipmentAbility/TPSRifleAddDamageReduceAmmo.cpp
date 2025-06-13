@@ -11,9 +11,9 @@ UTPSRifleAddDamageReduceAmmo::UTPSRifleAddDamageReduceAmmo()
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 30% and Lose 10 Ammo"));
 }
 
-void UTPSRifleAddDamageReduceAmmo::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleAddDamageReduceAmmo::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
-	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(WeaponContext);
 
 	WeaponContext.MaxAmmo -= 10;
 	WeaponContext.CurrentAmmo -= 10;

@@ -4,11 +4,30 @@
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 
-void UTPSEquipmentAbilityBase::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSEquipmentAbilityBase::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
-	EventSystem = InitEventSystem;
 }
 
+
+int32 UTPSEquipmentAbilityBase::GetFunctionCallspace(UFunction* Function, FFrame* Stack)
+{
+	auto* Owner = GetTypedOuter<AActor>();
+
+	return Owner ? Owner->GetFunctionCallspace(Function, Stack) : FunctionCallspace::Local;
+}
+
+bool UTPSEquipmentAbilityBase::CallRemoteFunction(UFunction* Function, void* Parameters, FOutParmRec* OutParms, FFrame* Stack)
+{
+	if (AActor* MyOwner = GetTypedOuter<AActor>())
+	{
+		if (UNetDriver* NetDriver = MyOwner->GetNetDriver())
+		{
+			NetDriver->ProcessRemoteFunction(MyOwner, Function, Parameters, OutParms, Stack, this);
+			return true;
+		}
+	}
+	return false;
+}
 
 void UTPSEquipmentAbilityBase::ApplyAbility()
 {

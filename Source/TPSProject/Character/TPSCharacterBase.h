@@ -50,9 +50,6 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ultimate")
 	TObjectPtr<class UTPSUltimateComponent> UltimateComponent;*/
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "EventSystem")
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
-
 protected:
 
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))

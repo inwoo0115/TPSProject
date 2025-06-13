@@ -11,9 +11,9 @@ UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
 	AbilityDescription = FText::FromString(TEXT("Change to Laser Bullet when Attack"));
 }
 
-void UTPSRifleAddLaserBullet::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleAddLaserBullet::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
-	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(WeaponContext);
 
 	WeaponContext.AttackRatio = 0.9f;
 	WeaponContext.CurrentBullet = EProjectileType::RifleLaser;

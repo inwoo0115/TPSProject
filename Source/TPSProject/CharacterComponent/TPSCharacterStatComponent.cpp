@@ -17,10 +17,8 @@ UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 	Defense = 100;
 }
 
-void UTPSCharacterStatComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
-{
-	EventSystem = InputEventSystem;
-}
+
+
 
 void UTPSCharacterStatComponent::GetDamageByField(FName FieldName, float& OutDamage)
 {

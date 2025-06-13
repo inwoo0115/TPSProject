@@ -2,7 +2,6 @@
 
 
 #include "CharacterComponent/TPSCharacterBuffComponent.h"
-#include "TPSGameplayEventSystem.h"
 
 // Sets default values for this component's properties
 UTPSCharacterBuffComponent::UTPSCharacterBuffComponent()
@@ -14,10 +13,6 @@ UTPSCharacterBuffComponent::UTPSCharacterBuffComponent()
 	// ...
 }
 
-void UTPSCharacterBuffComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
-{
-	EventSystem = InputEventSystem;
-}
 
 void UTPSCharacterBuffComponent::GetBuffByField(FName FieldName, float& OutDamage)
 {

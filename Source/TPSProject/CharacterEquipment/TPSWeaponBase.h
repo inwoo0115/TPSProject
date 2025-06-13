@@ -15,25 +15,25 @@ struct FWeaponContext
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Damage;
+	float Damage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float AttackRatio;
+	float AttackRatio = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float ReloadTime;
+	float ReloadTime = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float UltiGaugeRatio;
+	float UltiGaugeRatio = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 MaxAmmo;
+	int32 MaxAmmo = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 CurrentAmmo;
+	int32 CurrentAmmo = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	int32 RequireAmmo;
+	int32 RequireAmmo = 0;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> WeaponIcon;
@@ -42,7 +42,7 @@ struct FWeaponContext
 	FText WeaponName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EProjectileType CurrentBullet;
+	EProjectileType CurrentBullet = EProjectileType::RifleBullet;
 };
 
 
@@ -77,14 +77,18 @@ public:
 	void InitializeAbilities();
 
 	// 무기 의존성 주입
-	void InitializeComponentAndEventSystem(UActorComponent* InitComponent, UTPSGameplayEventSystem* InitEventSystem);
+	void InitializeComponent(UActorComponent* InitComponent);
 
 	// 데이터 에셋에서 특성 초기화
 	void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 
 	// 사용가능한 전체 특성 배열
-	UPROPERTY(Replicated)
+	UPROPERTY(ReplicatedUsing = OnRep_AbilitySlot)
 	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
+
+	// 특성 배열 변화 시 적용
+	UFUNCTION()
+	void OnRep_AbilitySlot();
 
 	// 무기 정보 데이터 에셋
 	UPROPERTY(Replicated)
@@ -95,8 +99,6 @@ public:
 
 	UPROPERTY(Replicated)
 	bool bIsReloading = false;
-
-	//EProjectileType CurrentBullet;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	UActorComponent* GetOwnerComponent() const;
@@ -123,11 +125,10 @@ protected:
 	UPROPERTY(Replicated)
 	TObjectPtr<class UActorComponent> OwnerComponent;
 
-	// 이벤트 시스템 오브젝트
-	UPROPERTY(Replicated)
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
-
 	// 무기 정보 구조체
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, BlueprintReadOnly)
 	FWeaponContext WeaponContext;
+
+	// 수동 리플리케이션
+	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags);
 };

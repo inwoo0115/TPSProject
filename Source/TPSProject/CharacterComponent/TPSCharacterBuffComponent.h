@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TPSGameplayEventSystem.h"
 #include "TPSCharacterBuffComponent.generated.h"
 
 UENUM(BlueprintType)
@@ -26,13 +25,10 @@ class TPSPROJECT_API UTPSCharacterBuffComponent : public UActorComponent
 public:	
 	UTPSCharacterBuffComponent();
 
-	// 이벤트 시스템 등록
-	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
+
 
 protected:
 	void GetBuffByField(FName FieldName, float& OutDamage);
 
-	UPROPERTY()
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 		
 };

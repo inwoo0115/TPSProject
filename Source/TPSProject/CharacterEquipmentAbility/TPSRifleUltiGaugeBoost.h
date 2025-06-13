@@ -17,5 +17,5 @@ class TPSPROJECT_API UTPSRifleUltiGaugeBoost : public UTPSEquipmentAbilityBase
 public:
 	UTPSRifleUltiGaugeBoost();
 
-	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
+	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext) override;
 };

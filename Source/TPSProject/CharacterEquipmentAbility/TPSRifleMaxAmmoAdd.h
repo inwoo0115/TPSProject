@@ -17,5 +17,5 @@ class TPSPROJECT_API UTPSRifleMaxAmmoAdd : public UTPSEquipmentAbilityBase
 public:
 	UTPSRifleMaxAmmoAdd();
 
-	virtual void InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext) override;
+	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext) override;
 };

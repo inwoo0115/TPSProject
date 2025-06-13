@@ -53,9 +53,6 @@ public:
 
 	const ATPSWeaponBase* GetWeapon() const { return EquippedWeapon; }
 
-	UPROPERTY()
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
-
 	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSWeaponBase> EquippedWeapon;
 
@@ -65,4 +62,5 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerRPCEquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
+
 };

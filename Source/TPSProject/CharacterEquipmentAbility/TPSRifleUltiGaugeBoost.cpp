@@ -10,9 +10,9 @@ UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()
 	AbilityDescription = FText::FromString(TEXT("Get Additional Ultimate Gauege"));
 }
 
-void UTPSRifleUltiGaugeBoost::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleUltiGaugeBoost::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
-	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(WeaponContext);
 
 	WeaponContext.UltiGaugeRatio += 0.1f;
 }

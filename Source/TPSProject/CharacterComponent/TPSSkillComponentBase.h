@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "TPSGameplayEventSystem.h"
 #include "TPSSkillComponentBase.generated.h"
 
 
@@ -15,7 +14,5 @@ class TPSPROJECT_API UTPSSkillComponentBase : public UActorComponent
 
 public:
 
-	UPROPERTY()
-	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
 };

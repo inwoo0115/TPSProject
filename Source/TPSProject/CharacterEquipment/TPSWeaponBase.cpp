@@ -6,10 +6,9 @@
 #include "Character/TPSCharacterBase.h"
 #include "Projectile/TPSProjectileBase.h"
 #include "TPSWeaponData.h"
-#include "CharacterComponent/TPSGameplayEventSystem.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "Net/UnrealNetwork.h"
-
+#include "Engine/ActorChannel.h"
 
 ATPSWeaponBase::ATPSWeaponBase()
 {
@@ -26,15 +25,14 @@ void ATPSWeaponBase::InitializeAbilities()
 	{
 		if (Ability && OwnerComponent)
 		{
-			Ability->InitializeWeaponAbility(EventSystem, WeaponContext);
+			Ability->InitializeWeaponAbility(WeaponContext);
 		}
 	}
 }
 
-void ATPSWeaponBase::InitializeComponentAndEventSystem(UActorComponent* InitComponent, UTPSGameplayEventSystem* InitEventSystem)
+void ATPSWeaponBase::InitializeComponent(UActorComponent* InitComponent)
 {
 	OwnerComponent = InitComponent;
-	EventSystem = InitEventSystem;
 }
 
 void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
@@ -66,6 +64,11 @@ void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAb
 			AbilitySlot.Add(NewAbility3);
 		}
 	}
+}
+
+void ATPSWeaponBase::OnRep_AbilitySlot()
+{
+	InitializeAbilities();
 }
 
 void ATPSWeaponBase::Launch()
@@ -133,7 +136,7 @@ void ATPSWeaponBase::Fire()
 			auto WeaponComponent = Cast<UTPSWeaponComponent>(GetOwnerComponent());
 			if (WeaponComponent)
 			{
-				Projectile->SetDamage(WeaponComponent->EventSystem->BroadCastOnDamageCalculation(FName(TEXT("Weapon"))));
+				//Event System 기반 데미지 세팅
 			}
 		}
 	}
@@ -226,6 +229,20 @@ void ATPSWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ATPSWeaponBase, bCanFire);
 	DOREPLIFETIME(ATPSWeaponBase, bIsReloading);
 	DOREPLIFETIME(ATPSWeaponBase, OwnerComponent);
-	DOREPLIFETIME(ATPSWeaponBase, EventSystem);
 	DOREPLIFETIME(ATPSWeaponBase, WeaponContext);
+}
+
+bool ATPSWeaponBase::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
+{
+	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
+
+	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
+	{
+		if (Ability)
+		{
+			WroteSomething |= Channel->ReplicateSubobject(Ability, *Bunch, *RepFlags);
+		}
+	}
+
+	return WroteSomething;
 }

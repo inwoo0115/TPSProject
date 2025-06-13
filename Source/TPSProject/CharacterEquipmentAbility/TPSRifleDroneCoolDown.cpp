@@ -10,16 +10,23 @@ UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
 	AbilityDescription = FText::FromString(TEXT("Cooldown Drone Skill when attack"));
 }
 
-void UTPSRifleDroneCoolDown::InitializeWeaponAbility(UTPSGameplayEventSystem* InitEventSystem, FWeaponContext& WeaponContext)
+void UTPSRifleDroneCoolDown::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
-	Super::InitializeWeaponAbility(InitEventSystem, WeaponContext);
+	Super::InitializeWeaponAbility(WeaponContext);
 
-	//EventSystem->OnBulletHit.AddDynamic();
+	UE_LOG(LogTemp, Warning, TEXT("Init drone"));
 }
 
 void UTPSRifleDroneCoolDown::ApplyAbility()
 {
-	//CachedComponent->EventSystem
-	//drone cool down
-	// CachedComponent->EventSystem->OnStatChanged.Broadcast();
+	if (GEngine)
+	{
+		GEngine->AddOnScreenDebugMessage(
+			-1,                         // Key (-1: 항상 새로운 메시지로)
+			5.0f,                       // 화면에 표시되는 시간 (초)
+			FColor::Green,              // 텍스트 색상
+			TEXT("Apply drone cool down")  // 출력할 메시지
+		);
+	}
+	UE_LOG(LogTemp, Log, TEXT("Broad cast"));
 }

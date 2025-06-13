@@ -38,7 +38,7 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
 
 		// 무기 초기화
-		EquippedWeapon->InitializeComponentAndEventSystem(this, EventSystem);
+		EquippedWeapon->InitializeComponent(this);
 		EquippedWeapon->InitializeAbilitiesFromDataAsset(Ability1, Ability2, Ability3);
 		EquippedWeapon->InitializeAbilities();
 
@@ -57,11 +57,6 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 			}
 		}
 	}
-}
-
-void UTPSWeaponComponent::Initialize(UTPSGameplayEventSystem* InputEventSystem)
-{
-	EventSystem = InputEventSystem;
 }
 
 void UTPSWeaponComponent::FireWeapon()
