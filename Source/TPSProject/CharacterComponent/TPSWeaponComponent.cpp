@@ -5,6 +5,7 @@
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "TPSGameplayEventSystem.h"
 #include "GameFramework/Character.h"
+#include "Net/UnrealNetwork.h"
 
 UTPSWeaponComponent::UTPSWeaponComponent()
 {
@@ -14,6 +15,12 @@ UTPSWeaponComponent::UTPSWeaponComponent()
 
 void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
+	if (!GetOwner()->HasAuthority())
+	{
+		ServerRPCEquipWeapon(WeaponClass, Ability1, Ability2, Ability3);
+		return;
+	}
+
 	if (EquippedWeapon)
 	{
 		// 델리게이트 초기화
@@ -49,18 +56,6 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 				);
 			}
 		}
-	}
-
-	// 무기 장착 적용 멀티 캐스트
-	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-
-	if (OwnerPawn->HasAuthority())
-	{
-		MulticastRPCEquipWeapon(WeaponClass, Ability1, Ability2, Ability3);
-	}
-	else if (OwnerPawn->IsLocallyControlled())
-	{
-		ServerRPCEquipWeapon(WeaponClass, Ability1, Ability2, Ability3);
 	}
 }
 
@@ -104,18 +99,14 @@ bool UTPSWeaponComponent::GetCanReloadWeapon()
 	return EquippedWeapon->CanReload();
 }
 
+void UTPSWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(UTPSWeaponComponent, EquippedWeapon);
+}
+
 void UTPSWeaponComponent::ServerRPCEquipWeapon_Implementation(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
 	EquipWeapon(WeaponClass, Ability1, Ability2, Ability3);
-	MulticastRPCEquipWeapon(WeaponClass, Ability1, Ability2, Ability3);
-}
-
-void UTPSWeaponComponent::MulticastRPCEquipWeapon_Implementation(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
-{
-	APawn* OwnerPawn = Cast<APawn>(GetOwner());
-
-	if (!(OwnerPawn->IsLocallyControlled()) && !(GetOwner()->HasAuthority()))
-	{
-		EquipWeapon(WeaponClass, Ability1, Ability2, Ability3);
-	}
 }

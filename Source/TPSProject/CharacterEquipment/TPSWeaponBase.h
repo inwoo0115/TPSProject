@@ -14,14 +14,6 @@ struct FWeaponContext
 {
 	GENERATED_BODY()
 
-	// 무기 특성 목록
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
-
-	// 무기 발사체 클래스 목록
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> AbilityList;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float Damage;
 
@@ -91,15 +83,17 @@ public:
 	void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 
 	// 사용가능한 전체 특성 배열
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
 
 	// 무기 정보 데이터 에셋
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TObjectPtr<class UTPSWeaponData> WeaponData;
 
+	UPROPERTY(Replicated)
 	bool bCanFire = true;
 
+	UPROPERTY(Replicated)
 	bool bIsReloading = false;
 
 	//EProjectileType CurrentBullet;
@@ -110,19 +104,30 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	FWeaponContext GetWeaponContext() const;
 
+	// 무기 특성 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
+
+	// 무기 발사체 클래스 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> AbilityList;
+
 protected:
 	// 사격 딜레이 타이머
 	FTimerHandle FireCooldownHandle;
 
+	// RPC
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	// 오너 컴포넌트
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TObjectPtr<class UActorComponent> OwnerComponent;
 
 	// 이벤트 시스템 오브젝트
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
 	// 무기 정보 구조체
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	FWeaponContext WeaponContext;
 };

@@ -55,7 +55,7 @@ void UTPSMainWeaponSettingWidget::InitializeWidget()
 		};
 
 		int32 Index = 0;
-		for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : Weapon.AbilityList)
+		for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : CurrentWeapon->AbilityList)
 		{
 			if (!Pair.Value) continue;
 

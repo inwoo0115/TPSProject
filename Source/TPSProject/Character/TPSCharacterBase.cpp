@@ -116,7 +116,7 @@ void ATPSCharacterBase::BeginPlay()
 	//SpAttackComponent->Initialize(EventSystem);
 	//UltimateComponent->Initialize(EventSystem);
 
-	// TODO: 데이터에서 장비 장착
+	// TODO: 추후 데이터에서 장비 장착
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
 	if (IsLocallyControlled() && TPSGameInstance)
 	{

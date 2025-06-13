@@ -56,12 +56,13 @@ public:
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSystem> EventSystem;
 
-	UPROPERTY()
+	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSWeaponBase> EquippedWeapon;
+
+protected:
+	// RPC
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(Server, Reliable)
 	void ServerRPCEquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
-
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastRPCEquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 };

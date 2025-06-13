@@ -8,12 +8,16 @@
 #include "TPSWeaponData.h"
 #include "CharacterComponent/TPSGameplayEventSystem.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
+#include "Net/UnrealNetwork.h"
 
 
 ATPSWeaponBase::ATPSWeaponBase()
 {
 	// 루트 컴포넌트 생성 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+
+	bReplicates = true;
+	SetReplicateMovement(true);
 }
 
 void ATPSWeaponBase::InitializeAbilities()
@@ -36,27 +40,27 @@ void ATPSWeaponBase::InitializeComponentAndEventSystem(UActorComponent* InitComp
 void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
 	// Ability1
-	if (WeaponContext.AbilityList.Contains(Ability1))
+	if (AbilityList.Contains(Ability1))
 	{
-		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, WeaponContext.AbilityList[Ability1]);
+		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability1]);
 		if (NewAbility1)
 		{
 			AbilitySlot.Add(NewAbility1);
 		}
 	}
 	// Ability2
-	if (WeaponContext.AbilityList.Contains(Ability2))
+	if (AbilityList.Contains(Ability2))
 	{
-		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, WeaponContext.AbilityList[Ability2]);
+		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability2]);
 		if (NewAbility2)
 		{
 			AbilitySlot.Add(NewAbility2);
 		}
 	}
 	// Ability3
-	if (WeaponContext.AbilityList.Contains(Ability3))
+	if (AbilityList.Contains(Ability3))
 	{
-		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, WeaponContext.AbilityList[Ability3]);
+		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability3]);
 		if (NewAbility3)
 		{
 			AbilitySlot.Add(NewAbility3);
@@ -117,7 +121,7 @@ void ATPSWeaponBase::Fire()
 
 		// 첫 번째 총알 클래스로 생성
 		auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
-			WeaponContext.ProjectileList[WeaponContext.CurrentBullet],
+			ProjectileList[WeaponContext.CurrentBullet],
 			MuzzleLocation,
 			ShotRotation,
 			SpawnParams
@@ -177,9 +181,9 @@ void ATPSWeaponBase::SetWeaponContextFromData()
 {
 	if (WeaponData)
 	{
-		WeaponContext.ProjectileList = WeaponData->ProjectileList;
+		ProjectileList = WeaponData->ProjectileList;
 
-		WeaponContext.AbilityList = WeaponData->AbilityList;
+		AbilityList = WeaponData->AbilityList;
 
 		WeaponContext.Damage = WeaponData->Damage;
 
@@ -211,4 +215,17 @@ UActorComponent* ATPSWeaponBase::GetOwnerComponent() const
 FWeaponContext ATPSWeaponBase::GetWeaponContext() const
 {
 	return WeaponContext;
+}
+
+void ATPSWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPSWeaponBase, AbilitySlot);
+	DOREPLIFETIME(ATPSWeaponBase, WeaponData);
+	DOREPLIFETIME(ATPSWeaponBase, bCanFire);
+	DOREPLIFETIME(ATPSWeaponBase, bIsReloading);
+	DOREPLIFETIME(ATPSWeaponBase, OwnerComponent);
+	DOREPLIFETIME(ATPSWeaponBase, EventSystem);
+	DOREPLIFETIME(ATPSWeaponBase, WeaponContext);
 }
