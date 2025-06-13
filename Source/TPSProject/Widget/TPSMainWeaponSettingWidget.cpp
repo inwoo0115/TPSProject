@@ -7,6 +7,7 @@
 #include "GameInstance/TPSGameInstance.h"
 #include "Components/Image.h"
 #include "CharacterEquipmentAbility/TPSAbilityType.h"
+#include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 
 
 
@@ -106,25 +107,31 @@ void UTPSMainWeaponSettingWidget::OnConfirmButtonClicked()
 	{
 		// ¹«±â ÀåÂø
 		ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
-		if (RowSelectedButtons.Contains(1))
-		{
-			Ability1 = ButtonToAbilityMap[RowSelectedButtons[1]];
-		}
-		if (RowSelectedButtons.Contains(2))
-		{
-			Ability2 = ButtonToAbilityMap[RowSelectedButtons[2]];
-		}
-		if (RowSelectedButtons.Contains(3))
-		{
-			Ability3 = ButtonToAbilityMap[RowSelectedButtons[3]];
-		}
 
-		Pawn->WeaponComponent->EquipWeapon(
-			TPSGameInstance->WeaponClass,
-			Ability1,
-			Ability2,
-			Ability3
-		);
+		if (Pawn)
+		{
+			if (Pawn->WeaponComponent->GetWeapon())
+			{
+				if (RowSelectedButtons.Contains(1))
+				{
+					Ability1 = ButtonToAbilityMap[RowSelectedButtons[1]];
+				}
+				if (RowSelectedButtons.Contains(2))
+				{
+					Ability2 = ButtonToAbilityMap[RowSelectedButtons[2]];
+				}
+				if (RowSelectedButtons.Contains(3))
+				{
+					Ability3 = ButtonToAbilityMap[RowSelectedButtons[3]];
+				}
+			}
+			Pawn->WeaponComponent->EquipWeapon(
+				TPSGameInstance->WeaponClass,
+				Ability1,
+				Ability2,
+				Ability3
+			);
+		}
 	}
 }
 

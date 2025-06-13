@@ -22,6 +22,7 @@
 
 
 
+
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
 	//Input 설정
@@ -365,6 +366,17 @@ void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)
 		//애님 몽타주 재생
 		WeaponComponent->ReloadWeapon();
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
+
+		// 클라이언트에서 호출
+		if (!HasAuthority())
+		{
+			ServerRPCReloadAction();
+		}
+		// 서버에서만 호출
+		else
+		{
+			MulticastRPCReloadAction();
+		}
 	}
 }
 
@@ -456,6 +468,28 @@ void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
 	if (!IsLocallyControlled())
 	{
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
+	}
+}
+
+void ATPSCharacterPlayer::ServerRPCReloadAction_Implementation()
+{
+	MulticastRPCReloadAction();
+
+	if (!IsLocallyControlled() && WeaponComponent->GetCanReloadWeapon())
+	{
+		//애님 몽타주 재생
+		WeaponComponent->ReloadWeapon();
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
+	}
+}
+
+void ATPSCharacterPlayer::MulticastRPCReloadAction_Implementation()
+{
+	if (!IsLocallyControlled())
+	{
+		//애님 몽타주 재생
+		WeaponComponent->ReloadWeapon();
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
 	}
 }
 

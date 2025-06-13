@@ -4,14 +4,13 @@
 #include "Player/TPSMultiPlayerController.h"
 #include "Character/TPSCharacterBase.h"
 
+
 void ATPSMultiPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
 
 	if (!InPawn)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Possessed Pawn: "));
-
 		return;
 	}
 

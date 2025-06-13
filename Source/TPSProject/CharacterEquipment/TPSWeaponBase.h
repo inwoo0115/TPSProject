@@ -125,6 +125,4 @@ protected:
 	// 무기 정보 구조체
 	UPROPERTY()
 	FWeaponContext WeaponContext;
-
-
 };

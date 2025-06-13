@@ -16,6 +16,8 @@ class TPSPROJECT_API UTPSWeaponComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
+	UTPSWeaponComponent();
+
 	// 공격 키 해제 어빌리티 이벤트
 	FWeaponAbilityEvent OnStopFire;
 
@@ -56,4 +58,10 @@ public:
 
 	UPROPERTY()
 	TObjectPtr<class ATPSWeaponBase> EquippedWeapon;
+
+	UFUNCTION(Server, Reliable)
+	void ServerRPCEquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCEquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 };

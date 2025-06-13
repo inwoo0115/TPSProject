@@ -16,5 +16,4 @@ class TPSPROJECT_API ATPSMultiPlayerController : public ATPSPlayerController
 
 public:
 	virtual void OnPossess(APawn* InPawn) override;
-	
 };

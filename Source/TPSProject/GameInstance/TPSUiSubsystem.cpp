@@ -27,11 +27,6 @@ void UTPSUiSubsystem::Initialize(FSubsystemCollectionBase& Collection)
     // map 추가
     LoadWidget(EUIType::Pause, SoftClass_Pause);
 
-    //// 경로 저장
-    //TSoftClassPtr<UUserWidget> SoftClass_Ability(FSoftClassPath(TEXT("/Game/TPSProject/Widget/WB_WeaponAbilitySelect.WB_WeaponAbilitySelect_C")));
-    //// map 추가
-    //LoadWidget(EUIType::Ability, SoftClass_Ability);
-
     // 경로 저장
     TSoftClassPtr<UUserWidget> SoftClass_Equipment(FSoftClassPath(TEXT("/Game/TPSProject/Widget/WB_Equipment.WB_Equipment_C")));
     // map 추가

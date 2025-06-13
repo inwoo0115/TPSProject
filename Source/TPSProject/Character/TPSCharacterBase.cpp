@@ -116,13 +116,15 @@ void ATPSCharacterBase::BeginPlay()
 	//SpAttackComponent->Initialize(EventSystem);
 	//UltimateComponent->Initialize(EventSystem);
 
-	// TODO : Weapon임시 장착 (나중에 게임 인스턴스에서 한번에 불러올것)
+	// TODO: 데이터에서 장비 장착
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
-	if (TPSGameInstance)
+	if (IsLocallyControlled() && TPSGameInstance)
 	{
 		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 	}
+
 }
+
 
 void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlType)
 {

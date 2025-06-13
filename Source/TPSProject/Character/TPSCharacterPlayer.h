@@ -120,6 +120,12 @@ protected:
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastRPCAttackAction();
 
+	UFUNCTION(Server, Reliable)
+	void ServerRPCReloadAction();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCReloadAction();
+
 	UFUNCTION()
 	void OnRepIsRun();
 
