@@ -3,7 +3,6 @@
 
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
-#include "TPSGameplayEventSystem.h"
 #include "GameFramework/Character.h"
 #include "Net/UnrealNetwork.h"
 

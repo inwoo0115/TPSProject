@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
-#include "TPSGameplayEventSystem.h"
 #include "TPSWeaponComponent.generated.h"
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponAbilityEvent);
@@ -26,9 +25,6 @@ public:
 
 	// 장비 장착
 	void EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
-
-	// 이벤트 시스템 등록
-	void Initialize(UTPSGameplayEventSystem* InputEventSystem);
 
 	// 무기 트리거(발사)
 	void FireWeapon();

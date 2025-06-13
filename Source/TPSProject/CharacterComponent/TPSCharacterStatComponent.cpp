@@ -2,7 +2,6 @@
 
 
 #include "CharacterComponent/TPSCharacterStatComponent.h"
-#include "TPSGameplayEventSystem.h"
 
 // Sets default values for this component's properties
 UTPSCharacterStatComponent::UTPSCharacterStatComponent()

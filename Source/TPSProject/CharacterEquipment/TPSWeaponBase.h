@@ -6,7 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "Projectile/TPSProjectileType.h"
-#include "CharacterComponent/TPSGameplayEventSystem.h"
 #include "TPSWeaponBase.generated.h"
 
 USTRUCT(BlueprintType)

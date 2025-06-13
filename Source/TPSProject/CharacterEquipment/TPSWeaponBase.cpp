@@ -26,6 +26,7 @@ void ATPSWeaponBase::InitializeAbilities()
 		if (Ability && OwnerComponent)
 		{
 			Ability->InitializeWeaponAbility(WeaponContext);
+			UE_LOG(LogTemp, Warning, TEXT("hi"));
 		}
 	}
 }
