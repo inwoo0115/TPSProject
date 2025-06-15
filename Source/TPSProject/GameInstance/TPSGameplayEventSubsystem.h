@@ -6,6 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "TPSGameplayEventSubsystem.generated.h"
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnHitEvent);
+
 /**
  * 
  */
@@ -14,4 +16,10 @@ class TPSPROJECT_API UTPSGameplayEventSubsystem : public UGameInstanceSubsystem
 {
 	GENERATED_BODY()
 	
+public:
+	void Initialize(FSubsystemCollectionBase& Collection) override;
+
+	FOnHitEvent OnHitEvent;
+
+	void BroadcastHitEvent();
 };

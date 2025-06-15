@@ -30,7 +30,17 @@ public:
 	UFUNCTION()
 	virtual void ApplyAbility();
 
+	UFUNCTION()
+	virtual void InitializeAbilityEvent();
+
+	UFUNCTION()
+	virtual void CancelAbility();
+
 	FText AbilityName;
 
 	FText AbilityDescription;
+
+protected:
+	UFUNCTION()
+	UTPSGameplayEventSubsystem* GetGameplayEventSubsystem() const;
 };

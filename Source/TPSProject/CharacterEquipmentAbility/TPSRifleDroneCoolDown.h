@@ -19,4 +19,6 @@ public:
 
 	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext) override;
 	virtual void ApplyAbility() override;
+	virtual void CancelAbility() override;
+	virtual void InitializeAbilityEvent() override;
 };

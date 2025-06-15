@@ -9,6 +9,8 @@
 
 void UTPSOnlineSubsystem::Initialize(FSubsystemCollectionBase& Collection)
 {
+	Super::Initialize(Collection);
+
 	// ÇöÀç ÇÃ·§Æû¿¡ ´ëÇÑ Online subsystem interface¸¦ °¡Á®¿È
 	IOnlineSubsystem* Subsystem = IOnlineSubsystem::Get();
 	if (Subsystem)

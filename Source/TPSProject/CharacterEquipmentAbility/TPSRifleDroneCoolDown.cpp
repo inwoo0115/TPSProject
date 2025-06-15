@@ -3,6 +3,7 @@
 
 #include "CharacterEquipmentAbility/TPSRifleDroneCoolDown.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "GameInstance/TPSGameplayEventSubsystem.h"
 
 UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
 {
@@ -14,7 +15,6 @@ void UTPSRifleDroneCoolDown::InitializeWeaponAbility(FWeaponContext& WeaponConte
 {
 	Super::InitializeWeaponAbility(WeaponContext);
 
-	UE_LOG(LogTemp, Warning, TEXT("Init drone"));
 }
 
 void UTPSRifleDroneCoolDown::ApplyAbility()
@@ -28,5 +28,16 @@ void UTPSRifleDroneCoolDown::ApplyAbility()
 			TEXT("Apply drone cool down")  // 출력할 메시지
 		);
 	}
-	UE_LOG(LogTemp, Log, TEXT("Broad cast"));
+}
+
+void UTPSRifleDroneCoolDown::CancelAbility()
+{
+	GetGameplayEventSubsystem()->OnHitEvent.RemoveDynamic(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+}
+
+void UTPSRifleDroneCoolDown::InitializeAbilityEvent()
+{
+	GetGameplayEventSubsystem()->OnHitEvent.AddDynamic(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+
+	UE_LOG(LogTemp, Warning, TEXT("Init drone delegate"));
 }

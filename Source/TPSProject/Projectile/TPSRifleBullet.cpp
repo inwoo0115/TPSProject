@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
+#include "GameInstance/TPSGameplayEventSubsystem.h"
 
 ATPSRifleBullet::ATPSRifleBullet()
 {
@@ -55,7 +56,7 @@ void ATPSRifleBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 			auto OwnerWeaponComponent = Cast<UTPSWeaponComponent>(OwnerWeapon->GetOwnerComponent());
 			if (OwnerWeaponComponent)
 			{
-				//Bullet hit broad cast
+				GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>()->BroadcastHitEvent();
 			}
 		}
 	}

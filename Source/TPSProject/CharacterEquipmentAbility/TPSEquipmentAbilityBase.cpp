@@ -32,3 +32,16 @@ bool UTPSEquipmentAbilityBase::CallRemoteFunction(UFunction* Function, void* Par
 void UTPSEquipmentAbilityBase::ApplyAbility()
 {
 }
+
+void UTPSEquipmentAbilityBase::InitializeAbilityEvent()
+{
+}
+
+void UTPSEquipmentAbilityBase::CancelAbility()
+{
+}
+
+UTPSGameplayEventSubsystem* UTPSEquipmentAbilityBase::GetGameplayEventSubsystem() const
+{
+	return GetOuter()->GetWorld()->GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>();
+}
