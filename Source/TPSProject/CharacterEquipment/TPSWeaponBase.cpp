@@ -2,23 +2,12 @@
 
 
 #include "CharacterEquipment/TPSWeaponBase.h"
-#include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "Character/TPSCharacterBase.h"
 #include "Projectile/TPSProjectileBase.h"
 #include "TPSWeaponData.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "Engine/ActorChannel.h"
 
-
-ATPSWeaponBase::ATPSWeaponBase()
-{
-	// 루트 컴포넌트 생성 
-	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
-
-	bReplicates = true;
-	SetReplicateMovement(true);
-}
 
 void ATPSWeaponBase::InitializeAbilities()
 {
@@ -31,70 +20,6 @@ void ATPSWeaponBase::InitializeAbilities()
 	}
 }
 
-void ATPSWeaponBase::InitializeComponent(UActorComponent* InitComponent)
-{
-	OwnerComponent = InitComponent;
-}
-
-void ATPSWeaponBase::InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
-{
-	TArray<UTPSEquipmentAbilityBase*> NewSlot;
-
-	// Ability1
-	if (AbilityList.Contains(Ability1))
-	{
-		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability1]);
-		if (NewAbility1)
-		{
-			NewSlot.Add(NewAbility1);
-		}
-	}
-	// Ability2
-	if (AbilityList.Contains(Ability2))
-	{
-		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability2]);
-		if (NewAbility2)
-		{
-			NewSlot.Add(NewAbility2);
-		}
-	}
-	// Ability3
-	if (AbilityList.Contains(Ability3))
-	{
-		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability3]);
-		if (NewAbility3)
-		{
-			NewSlot.Add(NewAbility3);
-		}
-	}
-
-	AbilitySlot = NewSlot;
-}
-
-void ATPSWeaponBase::OnRep_AbilitySlot()
-{
-	for (UTPSEquipmentAbilityBase* Ability : PreviousSlot)
-	{
-		if (Ability)
-		{
-			// 델리게이트가 바인딩 되어 있을 경우 해제
-			Ability->CancelAbility();
-		}
-	}
-
-	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
-	{
-		if (Ability)
-		{
-			// 델리게이트만 조정하게 변경
-			Ability->InitializeAbilityEvent();
-			UE_LOG(LogTemp, Warning, TEXT("Ability Initialized: %s"), *Ability->GetName());
-		}
-	}
-
-	// 어빌리티 변경 업데이트
-	PreviousSlot = AbilitySlot;
-}
 
 void ATPSWeaponBase::Launch()
 {
@@ -235,11 +160,6 @@ void ATPSWeaponBase::SetWeaponContextFromData()
 	}
 }
 
-UActorComponent* ATPSWeaponBase::GetOwnerComponent() const
-{
-	return OwnerComponent;
-}
-
 FWeaponContext ATPSWeaponBase::GetWeaponContext() const
 {
 	return WeaponContext;
@@ -249,25 +169,8 @@ void ATPSWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	DOREPLIFETIME(ATPSWeaponBase, AbilitySlot);
 	DOREPLIFETIME(ATPSWeaponBase, WeaponData);
 	DOREPLIFETIME(ATPSWeaponBase, bCanFire);
 	DOREPLIFETIME(ATPSWeaponBase, bIsReloading);
-	DOREPLIFETIME(ATPSWeaponBase, OwnerComponent);
 	DOREPLIFETIME(ATPSWeaponBase, WeaponContext);
-}
-
-bool ATPSWeaponBase::ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags)
-{
-	bool WroteSomething = Super::ReplicateSubobjects(Channel, Bunch, RepFlags);
-
-	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
-	{
-		if (Ability)
-		{
-			WroteSomething |= Channel->ReplicateSubobject(Ability, *Bunch, *RepFlags);
-		}
-	}
-
-	return WroteSomething;
 }

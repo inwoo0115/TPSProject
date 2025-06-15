@@ -4,8 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "Projectile/TPSProjectileType.h"
+#include "TPSAbilityEquipmentBase.h"
 #include "TPSWeaponBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -46,12 +46,11 @@ struct FWeaponContext
 
 
 UCLASS()
-class TPSPROJECT_API ATPSWeaponBase : public AActor
+class TPSPROJECT_API ATPSWeaponBase : public ATPSAbilityEquipmentBase
 {
 	GENERATED_BODY()
 	
 public:
-	ATPSWeaponBase();
 
 	// 무기 기능 구현 함수 
 	virtual void Launch();
@@ -72,26 +71,8 @@ public:
 	// 무기 정보 초기화
 	void SetWeaponContextFromData();
 
-	// 컴포넌트에 특성 적용
-	void InitializeAbilities();
-
-	// 무기 의존성 주입
-	void InitializeComponent(UActorComponent* InitComponent);
-
-	// 데이터 에셋에서 특성 초기화
-	void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
-
-	// 사용가능한 전체 특성 배열
-	UPROPERTY(ReplicatedUsing = OnRep_AbilitySlot)
-	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
-
-	// 델리게이트 해제 용 캐싱 슬롯
-	UPROPERTY()
-	TArray<class UTPSEquipmentAbilityBase*> PreviousSlot;
-
-	// 특성 배열 변화 시 적용
-	UFUNCTION()
-	void OnRep_AbilitySlot();
+	// 컴포넌트에 장비 특성 적용
+	virtual void InitializeAbilities() override;
 
 	// 무기 정보 데이터 에셋
 	UPROPERTY(Replicated)
@@ -104,18 +85,12 @@ public:
 	bool bIsReloading = false;
 
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
-	UActorComponent* GetOwnerComponent() const;
-
-	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	FWeaponContext GetWeaponContext() const;
-
-	// 무기 특성 목록
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
 
 	// 무기 발사체 클래스 목록
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> AbilityList;
+	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
+
 
 protected:
 	// 사격 딜레이 타이머
@@ -124,14 +99,7 @@ protected:
 	// RPC
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	// 오너 컴포넌트
-	UPROPERTY(Replicated)
-	TObjectPtr<class UActorComponent> OwnerComponent;
-
 	// 무기 정보 구조체
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FWeaponContext WeaponContext;
-
-	// 수동 리플리케이션
-	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags);
 };

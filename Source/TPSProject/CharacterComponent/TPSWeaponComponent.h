@@ -7,8 +7,6 @@
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "TPSWeaponComponent.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FWeaponAbilityEvent);
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPSPROJECT_API UTPSWeaponComponent : public UActorComponent
 {
@@ -16,12 +14,6 @@ class TPSPROJECT_API UTPSWeaponComponent : public UActorComponent
 
 public:	
 	UTPSWeaponComponent();
-
-	// 공격 키 해제 어빌리티 이벤트
-	FWeaponAbilityEvent OnStopFire;
-
-	// 총알 충돌 시 어빌리티 이벤트
-	FWeaponAbilityEvent OnBulletHit;
 
 	// 장비 장착
 	void EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
