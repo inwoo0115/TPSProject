@@ -51,13 +51,12 @@ class TPSPROJECT_API ATPSWeaponBase : public ATPSAbilityEquipmentBase
 	GENERATED_BODY()
 	
 public:
+	virtual void BeginPlay() override;
 
 	// 무기 기능 구현 함수 
 	virtual void Launch();
 
 	virtual void Fire();
-
-	virtual void Release();
 
 	virtual void Reload();
 
@@ -91,8 +90,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
 
-
 protected:
+
 	// 사격 딜레이 타이머
 	FTimerHandle FireCooldownHandle;
 

@@ -43,4 +43,6 @@ public:
 protected:
 	UFUNCTION()
 	UTPSGameplayEventSubsystem* GetGameplayEventSubsystem() const;
+
+	FDelegateHandle DelegateHandle;
 };

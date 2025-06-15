@@ -7,7 +7,7 @@
 #include "TPSWeaponData.h"
 #include "CharacterComponent/TPSWeaponComponent.h"
 #include "Net/UnrealNetwork.h"
-
+#include "GameInstance/TPSGameplayEventSubsystem.h"
 
 void ATPSWeaponBase::InitializeAbilities()
 {
@@ -20,6 +20,17 @@ void ATPSWeaponBase::InitializeAbilities()
 	}
 }
 
+
+void ATPSWeaponBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 시작할 때 UI 정보 업데이트
+	if (EventSystem)
+	{
+		EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
+	}
+}
 
 void ATPSWeaponBase::Launch()
 {
@@ -89,11 +100,13 @@ void ATPSWeaponBase::Fire()
 				//Event System 기반 데미지 세팅
 			}
 		}
-	}
-}
 
-void ATPSWeaponBase::Release()
-{
+		// 총이 발사되면 UI 업데이트
+		if (EventSystem)
+		{
+			EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
+		}
+	}
 }
 
 void ATPSWeaponBase::Reload()
@@ -111,13 +124,19 @@ void ATPSWeaponBase::Reload()
 			WeaponContext.CurrentAmmo = WeaponContext.MaxAmmo;
 			bIsReloading = false;
 			bCanFire = true;
+
+			// 재장전 시 UI 업데이트
+			if (EventSystem)
+			{
+				EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
+			}
 		}), WeaponContext.ReloadTime, false);
 }
 
 void ATPSWeaponBase::Effect()
 {
-	// 클라이언트에서 이펙트 생성
-	// 오브젝트 풀링 해야 할까...?
+	// TODO: 클라이언트에서 이펙트 생성
+
 }
 
 bool ATPSWeaponBase::CanReload()

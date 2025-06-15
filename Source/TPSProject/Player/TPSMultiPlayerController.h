@@ -15,5 +15,18 @@ class TPSPROJECT_API ATPSMultiPlayerController : public ATPSPlayerController
 	GENERATED_BODY()
 
 public:
+	ATPSMultiPlayerController();
+
 	virtual void OnPossess(APawn* InPawn) override;
+
+	virtual void BeginPlay() override;
+
+protected:
+	// HUD Section
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = HUD)
+	TSubclassOf<class UTPSHUDWidget> HUDWidgetClass;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = HUD)
+	TObjectPtr<class UTPSHUDWidget> HUDWidget;
 };

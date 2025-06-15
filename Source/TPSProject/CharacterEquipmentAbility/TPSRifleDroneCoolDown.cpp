@@ -32,12 +32,12 @@ void UTPSRifleDroneCoolDown::ApplyAbility()
 
 void UTPSRifleDroneCoolDown::CancelAbility()
 {
-	GetGameplayEventSubsystem()->OnHitEvent.RemoveDynamic(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+	GetGameplayEventSubsystem()->OnHitEvent.Remove(DelegateHandle);
 }
 
 void UTPSRifleDroneCoolDown::InitializeAbilityEvent()
 {
-	GetGameplayEventSubsystem()->OnHitEvent.AddDynamic(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+	DelegateHandle = GetGameplayEventSubsystem()->OnHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbility);
 
 	UE_LOG(LogTemp, Warning, TEXT("Init drone delegate"));
 }

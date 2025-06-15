@@ -5,6 +5,7 @@
 #include "Net/UnrealNetwork.h"
 #include "Engine/ActorChannel.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "GameInstance/TPSGameplayEventSubsystem.h"
 
 ATPSAbilityEquipmentBase::ATPSAbilityEquipmentBase()
 {
@@ -15,6 +16,17 @@ ATPSAbilityEquipmentBase::ATPSAbilityEquipmentBase()
 
 	bReplicates = true;
 	SetReplicateMovement(true);
+}
+
+void ATPSAbilityEquipmentBase::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	auto GamePlayEventSystem = GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>();
+	if (GamePlayEventSystem)
+	{
+		EventSystem = GamePlayEventSystem;
+	}
 }
 
 void ATPSAbilityEquipmentBase::InitializeAbilities()

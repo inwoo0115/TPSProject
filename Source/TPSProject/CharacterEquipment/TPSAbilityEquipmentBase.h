@@ -15,6 +15,8 @@ class TPSPROJECT_API ATPSAbilityEquipmentBase : public AActor
 public:	
 	ATPSAbilityEquipmentBase();
 
+	virtual void BeginPlay() override;
+
 	// 컴포넌트에 특성 적용
 	virtual void InitializeAbilities();
 
@@ -57,4 +59,7 @@ protected:
 
 	// 수동 리플리케이션
 	bool ReplicateSubobjects(UActorChannel* Channel, FOutBunch* Bunch, FReplicationFlags* RepFlags);
+
+	UPROPERTY()
+	TObjectPtr<class UTPSGameplayEventSubsystem> EventSystem;
 };
