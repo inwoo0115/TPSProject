@@ -65,11 +65,6 @@ void UTPSWeaponComponent::LaunchWeapon()
 	EquippedWeapon->Launch();
 }
 
-void UTPSWeaponComponent::ReleaseWeapon()
-{
-	EquippedWeapon->Release();
-}
-
 void UTPSWeaponComponent::ReloadWeapon()
 {
 	EquippedWeapon->Reload();

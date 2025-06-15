@@ -24,9 +24,6 @@ public:
 	// 무기 입력 시작
 	void LaunchWeapon();
 
-	// 무기 트리거 중지
-	void ReleaseWeapon();
-
 	// 재장전
 	void ReloadWeapon();
 
