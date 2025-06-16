@@ -2,4 +2,33 @@
 
 
 #include "CharacterComponent/TPSSpAttackSkillComponent.h"
+#include "CharacterEquipment/TPSSpAttackSkillBase.h"
 
+void UTPSSpAttackSkillComponent::CastSkill()
+{
+	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->Cast();
+	}
+}
+
+void UTPSSpAttackSkillComponent::LaunchSkill()
+{
+	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->Launch();
+	}
+}
+
+bool UTPSSpAttackSkillComponent::GetCanCastSkill()
+{
+	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		return SkillEquipment->GetCanCast();
+	}
+
+	return false;
+}

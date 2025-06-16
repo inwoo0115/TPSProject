@@ -2,4 +2,41 @@
 
 
 #include "CharacterComponent/TPSDroneSkillComponent.h"
+#include "CharacterEquipment/TPSDroneSkillBase.h"
 
+void UTPSDroneSkillComponent::ShowCastUI()
+{
+	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->ShowUI();
+	}
+}
+
+void UTPSDroneSkillComponent::CastSkill()
+{
+	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->Cast();
+	}
+}
+
+void UTPSDroneSkillComponent::LaunchSkill()
+{
+	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->Launch();
+	}
+}
+
+bool UTPSDroneSkillComponent::GetCanCastSkill()
+{
+	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		return SkillEquipment->GetCanCast();
+	}
+	return false;
+}

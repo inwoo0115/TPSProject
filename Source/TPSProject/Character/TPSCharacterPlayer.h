@@ -52,6 +52,8 @@ protected:
 
 	void Interact(const FInputActionValue& Value);
 
+	void DroneUI(const FInputActionValue& Value);
+
 	void Drone(const FInputActionValue& Value);
 
 	void Reload(const FInputActionValue& Value);

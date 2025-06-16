@@ -2,21 +2,32 @@
 
 
 #include "CharacterComponent/TPSCharacterStatComponent.h"
+#include "GameInstance/TPSGameplayEventSubsystem.h"
 
-// Sets default values for this component's properties
 UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	CurrentHp = 200;
-	MaxHp = 200;
-	Damage = 100;
-	Defense = 100;
+	CurrentHP = 250;
+	MaxHP = 250;
+	Defensive = 1;
 }
 
-
+void UTPSCharacterStatComponent::BeginPlay()
+{
+	// HP UI 업데이트 및 Event System 캐싱
+	APawn* PawnOwner = Cast<APawn>(GetOwner());
+	if (PawnOwner && PawnOwner->IsLocallyControlled())
+	{
+		auto GameplayEventSystem = PawnOwner->GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>();
+		if (GameplayEventSystem)
+		{
+			EventSystem = GameplayEventSystem;
+			
+			EventSystem->OnHPChange.Broadcast(CurrentHP, MaxHP);
+		}
+	}
+}
 
 
 void UTPSCharacterStatComponent::GetDamageByField(FName FieldName, float& OutDamage)

@@ -91,8 +91,8 @@ ATPSCharacterBase::ATPSCharacterBase()
 	StatComponent = CreateDefaultSubobject<UTPSCharacterStatComponent>(TEXT("StatComponent"));
 
 	// SkillComponent 설정
-	// DroneComponent = CreateDefaultSubobject<UTPSDroneSkillComponent>(TEXT("DroneComponent"));
-	// SpAttackComponent = CreateDefaultSubobject<UTPSSpAttackSkillComponent>(TEXT("SpAttackComponent"));
+	DroneComponent = CreateDefaultSubobject<UTPSDroneSkillComponent>(TEXT("DroneComponent"));
+	SpAttackComponent = CreateDefaultSubobject<UTPSSpAttackSkillComponent>(TEXT("SpAttackComponent"));
 
 	// UltimateComponent 설정
 	// UltimateComponent = CreateDefaultSubobject<UTPSUltimateComponent>(TEXT("UltimateComponent"));
@@ -111,6 +111,8 @@ void ATPSCharacterBase::BeginPlay()
 	if (IsLocallyControlled() && TPSGameInstance)
 	{
 		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
+		DroneComponent->Equip(TPSGameInstance->DroneSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
+		SpAttackComponent->Equip(TPSGameInstance->SpAttackSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 	}
 
 }

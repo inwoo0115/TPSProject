@@ -18,11 +18,6 @@
 #include "Components/TimelineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 
-
-
-
-
-
 ATPSCharacterPlayer::ATPSCharacterPlayer()
 {
 	//Input 설정
@@ -148,7 +143,8 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Reload);
 	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Interact);
 	EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Ultimate);
-	EnhancedInputComponent->BindAction(DroneAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Drone);
+	EnhancedInputComponent->BindAction(DroneAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Drone);
+	EnhancedInputComponent->BindAction(DroneAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::DroneUI);
 	EnhancedInputComponent->BindAction(InfoAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Info);
 	EnhancedInputComponent->BindAction(EscAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Esc);
 }
@@ -326,8 +322,11 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled())
+	if (IsLocallyControlled() && SpAttackComponent->GetCanCastSkill())
 	{
+		SpAttackComponent->LaunchSkill();
+
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::SpAttack]);
 		// Server RPC
 		// MultiCast로 애님 몽타주 재생
 	}
@@ -355,8 +354,26 @@ void ATPSCharacterPlayer::Interact(const FInputActionValue& Value)
 	}
 }
 
+void ATPSCharacterPlayer::DroneUI(const FInputActionValue& Value)
+{
+	// 누른 상태로 스킬 설치 범위 보여주기
+	if (IsLocallyControlled() && DroneComponent->GetCanCastSkill())
+	{
+		DroneComponent->ShowCastUI();
+
+
+	}
+}
+
 void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 {
+	if (IsLocallyControlled() && DroneComponent->GetCanCastSkill())
+	{
+		DroneComponent->LaunchSkill();
+		DroneComponent->CastSkill();
+
+
+	}
 }
 
 void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)

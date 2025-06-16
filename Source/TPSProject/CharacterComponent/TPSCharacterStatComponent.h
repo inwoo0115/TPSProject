@@ -15,19 +15,25 @@ class TPSPROJECT_API UTPSCharacterStatComponent : public UActorComponent
 public:	
 	UTPSCharacterStatComponent();
 
+	virtual void BeginPlay() override;
+
 protected:
 	void GetDamageByField(FName FieldName, float &OutDamage);
 
 	// Ä³¸¯ÅÍ ½ºÅÈ
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
-	float CurrentHp;
+	float CurrentHP;
 	
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
-	float MaxHp;
+	float MaxHP;
+
+	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	float Defensive;
 
 	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
 	float Damage;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
-	float Defense;
+	// ÀÌº¥Æ® ½Ì±ÛÅæ Ä³½Ì
+	UPROPERTY()
+	TObjectPtr<class UTPSGameplayEventSubsystem> EventSystem;
 };

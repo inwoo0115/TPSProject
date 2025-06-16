@@ -5,6 +5,8 @@
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "CharacterEquipment/TPSDroneSkillBase.h"
+#include "CharacterEquipment/TPSSpAttackSkillBase.h"
 #include "TPSGameInstance.generated.h"
 
 /**
@@ -21,6 +23,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<ATPSWeaponBase> WeaponClass;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Appearance")
-	UMaterialInterface* WeaponMaterial;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<ATPSDroneSkillBase> DroneSkillEquipmentClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<ATPSSpAttackSkillBase> SpAttackSkillEquipmentClass;
 };

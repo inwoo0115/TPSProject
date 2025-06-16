@@ -57,7 +57,7 @@ void UTPSHUDWidget::UpdateSpAttack(float CurrentCoolTime, float MaxCoolTime)
 {
 	if (SpAttackProgressBar)
 	{
-		SpAttackProgressBar->SetPercent(1.0 - CurrentCoolTime / MaxCoolTime);
+		SpAttackProgressBar->SetPercent(CurrentCoolTime / MaxCoolTime);
 	}
 }
 
@@ -65,7 +65,7 @@ void UTPSHUDWidget::UpdateDrone(float CurrentCoolTime, float MaxCoolTime)
 {
 	if (DroneProgressBar)
 	{
-		DroneProgressBar->SetPercent(1.0 - CurrentCoolTime / MaxCoolTime);
+		DroneProgressBar->SetPercent(CurrentCoolTime / MaxCoolTime);
 	}
 }
 

@@ -9,6 +9,17 @@
 #include "Net/UnrealNetwork.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
 
+void ATPSWeaponBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 시작할 때 UI 정보 업데이트
+	if (EventSystem)
+	{
+		EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
+	}
+}
+
 void ATPSWeaponBase::InitializeAbilities()
 {
 	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
@@ -20,17 +31,6 @@ void ATPSWeaponBase::InitializeAbilities()
 	}
 }
 
-
-void ATPSWeaponBase::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// 시작할 때 UI 정보 업데이트
-	if (EventSystem)
-	{
-		EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
-	}
-}
 
 void ATPSWeaponBase::Launch()
 {

@@ -14,10 +14,15 @@ void UTPSGameInstance::Init()
 		WeaponClass = SoftClass_Main.LoadSynchronous();
 	}
 
-	// Weapon Class의 머터리얼
-	TSoftObjectPtr<UMaterialInterface> SoftMat(FSoftObjectPath(TEXT("/Game/ParagonWraith/Characters/Heroes/Wraith/Materials/M_Wraith_Gun.M_Wraith_Gun")));
-	if (SoftMat.IsValid())
+	TSoftClassPtr<ATPSSpAttackSkillBase> SoftClass_SpAttack(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicGrenade")));
+	if (SoftClass_SpAttack.IsValid())
 	{
-		WeaponMaterial = SoftMat.LoadSynchronous();
+		SpAttackSkillEquipmentClass = SoftClass_SpAttack.LoadSynchronous();
+	}
+
+	TSoftClassPtr<ATPSDroneSkillBase> SoftClass_Drone(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicDrone")));
+	if (SoftClass_Drone.IsValid())
+	{
+		DroneSkillEquipmentClass = SoftClass_Drone.LoadSynchronous();
 	}
 }
