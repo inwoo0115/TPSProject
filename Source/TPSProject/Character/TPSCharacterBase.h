@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = AnimMontage)
 	TObjectPtr<class UTPSAnimMontageData> AnimMontageData;
 
+	// 局丛 根鸥林 快急档 厚背
+	bool CanPlayMontageByPriority(UAnimMontage* NewPlayMontage);
+
 	// Getter
 	FVector GetCameraLocation() const;
 
@@ -51,7 +54,6 @@ public:
 	//TObjectPtr<class UTPSUltimateComponent> UltimateComponent;
 
 protected:
-
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))
 	TMap<ECharacterControlType, class UTPSCharacterControlData*> CharacterControlManager;
 

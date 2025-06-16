@@ -256,7 +256,7 @@ void ATPSCharacterPlayer::Run(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled() && WeaponComponent->GetCanLaunchWeapon())
+	if (IsLocallyControlled() && WeaponComponent->GetCanLaunchWeapon() && CanPlayMontageByPriority(AnimMontageData->AnimMontages[EMontageType::Attack]))
 	{
 		WeaponComponent->LaunchWeapon();
 		// 로컬에서 공격
@@ -294,6 +294,11 @@ void ATPSCharacterPlayer::AimOut(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 {
+	if (!CanPlayMontageByPriority(AnimMontageData->AnimMontages[EMontageType::RopeAction]))
+	{
+		return;
+	}
+
 	if (IsLocallyControlled() && !HasAuthority())
 	{
 		ServerRPCSpAction();
@@ -322,7 +327,7 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled() && SpAttackComponent->GetCanCastSkill())
+	if (IsLocallyControlled() && SpAttackComponent->GetCanCastSkill() && CanPlayMontageByPriority(AnimMontageData->AnimMontages[EMontageType::SpAttack]))
 	{
 		SpAttackComponent->LaunchSkill();
 
@@ -390,7 +395,7 @@ void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)
 {
-	if (IsLocallyControlled() && WeaponComponent->GetCanReloadWeapon())
+	if (IsLocallyControlled() && WeaponComponent->GetCanReloadWeapon() && CanPlayMontageByPriority(AnimMontageData->AnimMontages[EMontageType::Reload]))
 	{
 		//애님 몽타주 재생
 		WeaponComponent->ReloadWeapon();

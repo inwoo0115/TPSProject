@@ -163,6 +163,25 @@ void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlTyp
 	CurrentCharacterControlType = ControlType;
 }
 
+bool ATPSCharacterBase::CanPlayMontageByPriority(UAnimMontage* NewPlayMontage)
+{
+	auto CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+	if (CurrentMontage)
+	{
+		EMontagePriority CurrentPriority = AnimMontageData->AnimMontagePriority[CurrentMontage];
+		EMontagePriority NewPriority = AnimMontageData->AnimMontagePriority[NewPlayMontage];
+		if (CurrentPriority == NewPriority && NewPriority == EMontagePriority::Low)
+		{
+			return true;
+		}
+		else if (CurrentPriority >= NewPriority)
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 FVector ATPSCharacterBase::GetCameraLocation() const
 {
 	return Camera->GetComponentLocation();
