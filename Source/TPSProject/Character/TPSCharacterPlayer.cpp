@@ -327,8 +327,15 @@ void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
 		SpAttackComponent->LaunchSkill();
 
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::SpAttack]);
-		// Server RPC
-		// MultiCast로 애님 몽타주 재생
+		
+		if (!HasAuthority())
+		{
+			ServerRPCSPAttackAction();
+		}
+		else
+		{
+			MulticastRPCSpAttackAction();
+		}
 	}
 }
 
@@ -360,8 +367,6 @@ void ATPSCharacterPlayer::DroneUI(const FInputActionValue& Value)
 	if (IsLocallyControlled() && DroneComponent->GetCanCastSkill())
 	{
 		DroneComponent->ShowCastUI();
-
-
 	}
 }
 
@@ -372,7 +377,14 @@ void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 		DroneComponent->LaunchSkill();
 		DroneComponent->CastSkill();
 
-
+		if (!HasAuthority())
+		{
+			ServerRPCDroneAction();
+		}
+		else
+		{
+			MulticastRPCDroneAction();
+		}
 	}
 }
 
@@ -510,6 +522,46 @@ void ATPSCharacterPlayer::MulticastRPCReloadAction_Implementation()
 	}
 }
 
+void ATPSCharacterPlayer::ServerRPCSPAttackAction_Implementation()
+{
+	MulticastRPCSpAttackAction();
+
+	// 서버에서 몽타주 실행
+	if (!IsLocallyControlled())
+	{
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::SpAttack]);
+	}
+}
+
+void ATPSCharacterPlayer::MulticastRPCSpAttackAction_Implementation()
+{
+	if (!IsLocallyControlled())
+	{
+		// 로컬 클라이언트 제외 몽타주 실행
+		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::SpAttack]);
+	}
+}
+
+void ATPSCharacterPlayer::ServerRPCDroneAction_Implementation()
+{
+	MulticastRPCDroneAction();
+
+	// 서버에서 스킬 실행
+	if (!IsLocallyControlled())
+	{
+		DroneComponent->CastSkill();
+	}
+}
+
+void ATPSCharacterPlayer::MulticastRPCDroneAction_Implementation()
+{
+	if (!IsLocallyControlled())
+	{
+		// 로컬 클라이언트 제외 스킬 실행
+		DroneComponent->CastSkill();
+	}
+}
+
 void ATPSCharacterPlayer::OnRepIsRun()
 {
 	if (IsRun)
@@ -539,5 +591,5 @@ void ATPSCharacterPlayer::StartAttack()
 
 void ATPSCharacterPlayer::StartSpAttack()
 {
-	//SpAttackComponent->CastSkill();
+	SpAttackComponent->CastSkill();
 }

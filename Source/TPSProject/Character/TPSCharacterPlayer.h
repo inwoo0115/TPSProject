@@ -111,10 +111,16 @@ protected:
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 	UFUNCTION(Server, Reliable)
+	void ServerRPCRunAction();
+
+	UFUNCTION(Server, Reliable)
 	void ServerRPCSpAction();
 
 	UFUNCTION(Server, Reliable)
-	void ServerRPCRunAction();
+	void ServerRPCSPAttackAction();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCSpAttackAction();
 
 	UFUNCTION(Server, Reliable)
 	void ServerRPCAttackAction();
@@ -127,6 +133,13 @@ protected:
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastRPCReloadAction();
+
+	UFUNCTION(Server, Reliable)
+	void ServerRPCDroneAction();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCDroneAction();
+
 
 	UFUNCTION()
 	void OnRepIsRun();
