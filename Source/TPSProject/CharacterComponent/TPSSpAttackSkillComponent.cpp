@@ -9,7 +9,7 @@ void UTPSSpAttackSkillComponent::CastSkill()
 	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
 	if (SkillEquipment)
 	{
-		SkillEquipment->Cast();
+		SkillEquipment->CastSkill();
 	}
 }
 
@@ -18,7 +18,7 @@ void UTPSSpAttackSkillComponent::LaunchSkill()
 	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
 	if (SkillEquipment)
 	{
-		SkillEquipment->Launch();
+		SkillEquipment->LaunchSkill();
 	}
 }
 

@@ -45,9 +45,9 @@ public:
 
 	virtual void ShowUI();
 
-	virtual void Cast();
+	virtual void CastSkill();
 
-	virtual void Launch();
+	virtual void LaunchSkill();
 
 	virtual bool GetCanCast();
 

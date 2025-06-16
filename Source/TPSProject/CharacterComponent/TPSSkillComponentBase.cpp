@@ -42,10 +42,15 @@ void UTPSSkillComponentBase::Equip(TSubclassOf<ATPSAbilityEquipmentBase> Equipme
 		ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner());
 		if (OwnerCharacter && Equipment)
 		{
-			Equipment->AttachToComponent(
-				OwnerCharacter->GetRootComponent(),
-				FAttachmentTransformRules::KeepRelativeTransform
-			);
+			USkeletalMeshComponent* MeshComp = OwnerCharacter->GetMesh();
+			if (MeshComp)
+			{
+				Equipment->AttachToComponent(
+					MeshComp,
+					FAttachmentTransformRules::SnapToTargetNotIncludingScale,
+					FName("Muzzle_02")
+				);
+			}
 		}
 	}
 }

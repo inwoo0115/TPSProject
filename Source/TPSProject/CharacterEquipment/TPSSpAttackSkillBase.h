@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipment/TPSAbilityEquipmentBase.h"
+#include "Projectile/TPSProjectileType.h"
 #include "TPSSpAttackSkillBase.generated.h"
 
 
@@ -26,6 +27,9 @@ struct FSpAttackSkillContext
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText SkillEquipmentName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EProjectileType CurrentProjectile = EProjectileType::BasicGrenade;
 };
 
 /**
@@ -41,9 +45,9 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void Cast();
+	virtual void CastSkill();
 
-	virtual void Launch();
+	virtual void LaunchSkill();
 	
 	virtual bool GetCanCast();
 
@@ -61,6 +65,10 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FSpAttackSkillContext GetSkillContext() const;
+
+	// 수류탄 클래스 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
 
 protected:
 	float CurrentCoolTime = 0.0f;

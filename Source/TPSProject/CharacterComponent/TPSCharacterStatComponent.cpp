@@ -15,6 +15,8 @@ UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 
 void UTPSCharacterStatComponent::BeginPlay()
 {
+	Super::BeginPlay();
+
 	// HP UI 업데이트 및 Event System 캐싱
 	APawn* PawnOwner = Cast<APawn>(GetOwner());
 	if (PawnOwner && PawnOwner->IsLocallyControlled())

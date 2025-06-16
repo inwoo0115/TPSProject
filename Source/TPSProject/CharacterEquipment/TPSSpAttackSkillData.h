@@ -6,6 +6,8 @@
 #include "Engine/DataAsset.h"
 #include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "Projectile/TPSProjectileBase.h"
+#include "Projectile/TPSProjectileType.h"
 #include "TPSSpAttackSkillData.generated.h"
 
 /**
@@ -17,6 +19,9 @@ class TPSPROJECT_API UTPSSpAttackSkillData : public UDataAsset
 	GENERATED_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere, Category = ProjectileList)
+	TMap<EProjectileType, TSubclassOf<ATPSProjectileBase>> ProjectileList;
+
 	UPROPERTY(EditAnywhere, Category = EquipmentAbility)
 	TMap<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>> AbilityList;
 
@@ -34,4 +39,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	FText SkillEquipmentName;
+
+	UPROPERTY(EditAnywhere, Category = SkillInfo)
+	EProjectileType CurrentProjectile;
 };

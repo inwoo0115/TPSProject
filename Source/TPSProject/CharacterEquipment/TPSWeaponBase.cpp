@@ -2,10 +2,9 @@
 
 
 #include "CharacterEquipment/TPSWeaponBase.h"
-#include "Character/TPSCharacterBase.h"
+#include "Character/TPSCharacterBase.h"	
 #include "Projectile/TPSProjectileBase.h"
 #include "TPSWeaponData.h"
-#include "CharacterComponent/TPSWeaponComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
 
@@ -94,11 +93,7 @@ void ATPSWeaponBase::Fire()
 		// 총알 구조체가 만들어지면 데미지 설정
 		if (Projectile)
 		{
-			auto WeaponComponent = Cast<UTPSWeaponComponent>(GetOwnerComponent());
-			if (WeaponComponent)
-			{
-				//Event System 기반 데미지 세팅
-			}
+			//Event System 기반 데미지 세팅
 		}
 
 		// 총이 발사되면 UI 업데이트

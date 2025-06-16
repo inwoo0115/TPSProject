@@ -40,12 +40,12 @@ void ATPSDroneSkillBase::ShowUI()
     // 설치 위치 UI
 }
 
-void ATPSDroneSkillBase::Cast()
+void ATPSDroneSkillBase::CastSkill()
 {
     // 스킬 실행
 }
 
-void ATPSDroneSkillBase::Launch()
+void ATPSDroneSkillBase::LaunchSkill()
 {
     bCanCast = false;
 

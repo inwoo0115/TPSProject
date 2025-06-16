@@ -18,7 +18,7 @@ void UTPSDroneSkillComponent::CastSkill()
 	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
 	if (SkillEquipment)
 	{
-		SkillEquipment->Cast();
+		SkillEquipment->CastSkill();
 	}
 }
 
@@ -27,7 +27,7 @@ void UTPSDroneSkillComponent::LaunchSkill()
 	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
 	if (SkillEquipment)
 	{
-		SkillEquipment->Launch();
+		SkillEquipment->LaunchSkill();
 	}
 }
 
