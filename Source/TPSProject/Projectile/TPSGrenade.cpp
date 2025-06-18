@@ -18,8 +18,8 @@ ATPSGrenade::ATPSGrenade()
 	RootComponent = Collision;
 
 	// 기본 발사체 컴포넌트 설정
-	Movement->InitialSpeed = 2400.f;
-	Movement->MaxSpeed = 2400.f;
+	Movement->InitialSpeed = 3000.f;
+	Movement->MaxSpeed = 3000.f;
 	Movement->bRotationFollowsVelocity = true;
 	Movement->ProjectileGravityScale = 1.0f;
 

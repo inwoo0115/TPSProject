@@ -79,7 +79,12 @@ void ATPSWeaponBase::Fire()
 
 		// 총알 스폰
 		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
+
+		// 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
+		if (HasAuthority())
+		{
+			SpawnParams.Owner = Character->GetController();
+		}
 		SpawnParams.Instigator = GetInstigator();
 
 		// 첫 번째 총알 클래스로 생성
@@ -97,7 +102,7 @@ void ATPSWeaponBase::Fire()
 		}
 
 		// 총이 발사되면 UI 업데이트
-		if (EventSystem)
+		if (EventSystem && Character->IsLocallyControlled())
 		{
 			EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
 		}

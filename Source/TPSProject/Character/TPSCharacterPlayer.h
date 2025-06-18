@@ -26,6 +26,8 @@ public:
 
 	bool GetIsAim() const { return IsAim; };
 
+	FRotator GetCurrentControllerRotation() const { return CurrentControllerRotation; };
+
 	virtual void Tick(float DeltaSeconds);
 protected:
 	// SpInteraction Actor Check
@@ -137,10 +139,6 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerRPCDroneAction();
 
-	UFUNCTION(NetMulticast, Reliable)
-	void MulticastRPCDroneAction();
-
-
 	UFUNCTION()
 	void OnRepIsRun();
 
@@ -155,6 +153,10 @@ protected:
 	bool IsThrow = true;
 
 	bool IsAim = false;
+
+	// Controller Rotation Replication
+	UPROPERTY(Replicated)
+	FRotator CurrentControllerRotation = FRotator(0.0f, 0.0f, 0.0f);
 
 	// Spinteraction 타켓 액터
 	UPROPERTY(Replicated)

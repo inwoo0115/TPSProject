@@ -25,7 +25,8 @@ void ATPSSpAttackSkillBase::Tick(float DeltaTime)
     // 쿨타임 진행 중 일때 UI 업데이트
     if (!bCanCast)
     {
-        if (EventSystem)
+        auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+        if (EventSystem && Character->IsLocallyControlled())
         {
             CurrentCoolTime += DeltaTime;
 
@@ -60,25 +61,29 @@ void ATPSSpAttackSkillBase::CastSkill()
         FVector ShotDirection = (TargetPoint - MuzzleLocation).GetSafeNormal();
         FRotator ShotRotation = ShotDirection.Rotation();
 
-        // 총알 스폰
+        // 투사체 스폰
         FActorSpawnParameters SpawnParams;
-        SpawnParams.Owner = this;
+
+        // 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
+        if (HasAuthority())
+        {
+            SpawnParams.Owner = Character->GetController();
+        }
+
         SpawnParams.Instigator = GetInstigator();
 
-        // 첫 번째 총알 클래스로 생성
+        // 투사체 클래스로 생성
         auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
             ProjectileList[SkillContext.CurrentProjectile],
             MuzzleLocation,
             ShotRotation,
             SpawnParams
         );
-        UE_LOG(LogTemp, Warning, TEXT("SpAttack Start"));
 
         // 수류탄 구조체가 만들어지면 데미지 설정
         if (Projectile)
         {
             //Event System 기반 데미지 세팅
-            UE_LOG(LogTemp, Warning, TEXT("Grenade spawn"));
         }
     }
 }

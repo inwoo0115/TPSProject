@@ -158,6 +158,12 @@ void ATPSCharacterPlayer::Tick(float DeltaSeconds)
 
 	// Timeline 업데이트
 	AimTimeline.TickTimeline(DeltaSeconds);
+
+	// 컨트롤러 로테이션 업데이트
+	if (HasAuthority())
+	{
+		CurrentControllerRotation = Controller->GetControlRotation();
+	}
 }
 
 void ATPSCharacterPlayer::CheckSpInteraction()
@@ -386,10 +392,6 @@ void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 		{
 			ServerRPCDroneAction();
 		}
-		else
-		{
-			MulticastRPCDroneAction();
-		}
 	}
 }
 
@@ -449,6 +451,7 @@ void ATPSCharacterPlayer::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& 
 
 	DOREPLIFETIME(ATPSCharacterPlayer, SpInteractionTargetActor);
 	DOREPLIFETIME(ATPSCharacterPlayer, IsRun);
+	DOREPLIFETIME(ATPSCharacterPlayer, CurrentControllerRotation);
 }
 
 void ATPSCharacterPlayer::ServerRPCSpAction_Implementation()
@@ -489,11 +492,6 @@ void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
 void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
 {
 	MulticastRPCAttackAction();
-
-	if (!IsLocallyControlled())
-	{
-		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
-	}
 }
 
 void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
@@ -508,13 +506,7 @@ void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
 void ATPSCharacterPlayer::ServerRPCReloadAction_Implementation()
 {
 	MulticastRPCReloadAction();
-
-	if (!IsLocallyControlled() && WeaponComponent->GetCanReloadWeapon())
-	{
-		//애님 몽타주 재생
-		WeaponComponent->ReloadWeapon();
-		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
-	}
+	WeaponComponent->ReloadWeapon();
 }
 
 void ATPSCharacterPlayer::MulticastRPCReloadAction_Implementation()
@@ -522,7 +514,6 @@ void ATPSCharacterPlayer::MulticastRPCReloadAction_Implementation()
 	if (!IsLocallyControlled())
 	{
 		//애님 몽타주 재생
-		WeaponComponent->ReloadWeapon();
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Reload]);
 	}
 }
@@ -530,12 +521,6 @@ void ATPSCharacterPlayer::MulticastRPCReloadAction_Implementation()
 void ATPSCharacterPlayer::ServerRPCSPAttackAction_Implementation()
 {
 	MulticastRPCSpAttackAction();
-
-	// 서버에서 몽타주 실행
-	if (!IsLocallyControlled())
-	{
-		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::SpAttack]);
-	}
 }
 
 void ATPSCharacterPlayer::MulticastRPCSpAttackAction_Implementation()
@@ -549,20 +534,9 @@ void ATPSCharacterPlayer::MulticastRPCSpAttackAction_Implementation()
 
 void ATPSCharacterPlayer::ServerRPCDroneAction_Implementation()
 {
-	MulticastRPCDroneAction();
-
-	// 서버에서 스킬 실행
 	if (!IsLocallyControlled())
 	{
-		DroneComponent->CastSkill();
-	}
-}
-
-void ATPSCharacterPlayer::MulticastRPCDroneAction_Implementation()
-{
-	if (!IsLocallyControlled())
-	{
-		// 로컬 클라이언트 제외 스킬 실행
+		// 서버에서 스킬 실행
 		DroneComponent->CastSkill();
 	}
 }
@@ -587,14 +561,19 @@ void ATPSCharacterPlayer::AimUpdate(float Value)
 
 void ATPSCharacterPlayer::StartAttack()
 {
-	WeaponComponent->FireWeapon();
-	if (IsLocallyControlled())
+	// 서버나 로컬 클라이언트에서만 실행
+	if (IsLocallyControlled() || HasAuthority())
 	{
+		WeaponComponent->FireWeapon();
 		WeaponComponent->EffectWeapon();
 	}
 }
 
 void ATPSCharacterPlayer::StartSpAttack()
 {
-	SpAttackComponent->CastSkill();
+	// 서버나 로컬 클라이언트에서만 실행
+	if (IsLocallyControlled() || HasAuthority())
+	{
+		SpAttackComponent->CastSkill();
+	}
 }

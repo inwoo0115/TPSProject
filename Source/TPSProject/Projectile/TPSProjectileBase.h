@@ -24,9 +24,11 @@ protected:
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
 public:	
-	virtual void Tick(float DeltaTime) override;
 
 	virtual void SetDamage(float NewDamage);
+
+	// Owner를 제외하고 나머지 Replication
+	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
 protected:
 	// 콜리전 컴포넌트

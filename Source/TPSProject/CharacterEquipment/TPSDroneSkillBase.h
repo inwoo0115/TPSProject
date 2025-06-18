@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipment/TPSAbilityEquipmentBase.h"
+#include "Summons/TPSDroneType.h"
 #include "TPSDroneSkillBase.generated.h"
 
 
@@ -29,7 +30,14 @@ struct FDroneSkillContext
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FText SkillEquipmentName;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	EDroneType CurrentDroneActor;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TSubclassOf <class ATPSSkillRangeDecalBase>RangeDecal;
 };
+
 /**
  * 
  */
@@ -64,6 +72,15 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FDroneSkillContext GetSkillContext() const;
+
+	// 드론 클래스 목록
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EDroneType, TSubclassOf<class ATPSDroneActorBase>> DroneActorList;
+
+	// 스킬 범위 액터
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class ATPSSkillRangeDecalBase> TargetRange;
+
 
 protected:
 	float CurrentCoolTime = 0.0f;

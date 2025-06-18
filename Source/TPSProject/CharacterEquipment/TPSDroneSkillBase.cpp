@@ -5,6 +5,8 @@
 #include "GameInstance/TPSGameplayEventSubsystem.h"
 #include "Net/UnrealNetwork.h"
 #include "TPSDroneSkillData.h"
+#include "Character/TPSCharacterBase.h"
+#include "Summons/TPSSkillRangeDecalBase.h"
 
 
 void ATPSDroneSkillBase::BeginPlay()
@@ -25,7 +27,8 @@ void ATPSDroneSkillBase::Tick(float DeltaTime)
     // 쿨타임 진행 중 일때 UI 업데이트
     if (!bCanCast)
     {
-        if (EventSystem)
+        auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+        if (EventSystem && Character->IsLocallyControlled())
         {
             CurrentCoolTime += DeltaTime;
 
@@ -38,11 +41,109 @@ void ATPSDroneSkillBase::Tick(float DeltaTime)
 void ATPSDroneSkillBase::ShowUI()
 {
     // 설치 위치 UI
+    auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+    if (Character && Character->IsLocallyControlled())
+    {
+        // 카메라 기준 라인트레이스
+        FVector CameraLocation = Character->GetCameraLocation();
+        FRotator CameraRotation = Character->GetCameraRotation();
+
+        FVector TraceStart = CameraLocation + CameraRotation.Vector() * 100.0f;
+        FVector TraceEnd = TraceStart + CameraRotation.Vector() * 10000.0f;
+
+        FHitResult HitResult;
+        FCollisionQueryParams TraceParams;
+        TraceParams.AddIgnoredActor(this);
+        TraceParams.AddIgnoredActor(GetOwner());
+
+        bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
+        FVector TargetPoint = bHit ? HitResult.ImpactPoint : TraceEnd;
+
+        // Spawn Params
+        FActorSpawnParameters SpawnParams;
+        SpawnParams.Owner = this;
+        SpawnParams.Instigator = GetInstigator();
+
+        float Distance = FVector::Dist(TargetPoint, TraceStart);
+        if (Distance < 3000.0f)
+        {
+            if (TargetRange)
+            {
+                TargetRange->SetActorLocation(TargetPoint);
+            }
+            else
+            {
+                TargetRange = GetWorld()->SpawnActor<ATPSSkillRangeDecalBase>(
+                    SkillContext.RangeDecal,
+                    TargetPoint,
+                    FRotator(0, 0, 0),
+                    SpawnParams
+                );
+            }
+        }
+        else
+        {
+            if (TargetRange)
+            {
+                TargetRange->Destroy();
+                TargetRange = nullptr;
+            }
+        }
+    }
 }
 
 void ATPSDroneSkillBase::CastSkill()
 {
     // 스킬 실행
+    auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+    if (TargetRange && Character->IsLocallyControlled())
+    {
+        TargetRange->Destroy();
+        TargetRange = nullptr;
+    }
+
+    if (Character)
+    {
+        // 카메라 기준 라인트레이스
+        FVector CameraLocation = Character->GetCameraLocation();
+        FRotator CameraRotation = Character->GetCameraRotation();
+
+        FVector TraceStart = CameraLocation + CameraRotation.Vector() * 100.0f;
+        FVector TraceEnd = TraceStart + CameraRotation.Vector() * 10000.0f;
+
+        FHitResult HitResult;
+        FCollisionQueryParams TraceParams;
+        TraceParams.AddIgnoredActor(this);
+        TraceParams.AddIgnoredActor(GetOwner());
+
+        bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
+        FVector TargetPoint = bHit ? HitResult.ImpactPoint : TraceEnd;
+
+        float Distance = FVector::Dist(TargetPoint, TraceStart);
+        if (Distance < 3000.0f)
+        {
+            // 총알 스폰
+            FActorSpawnParameters SpawnParams;
+
+            // 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
+            if (HasAuthority())
+            {
+                SpawnParams.Owner = Character->GetController();
+            }
+
+            SpawnParams.Instigator = GetInstigator();
+
+            // 첫 번째 총알 클래스로 생성
+            auto Projectile = GetWorld()->SpawnActor<ATPSDroneActorBase>(
+                DroneActorList[SkillContext.CurrentDroneActor],
+                TargetPoint,
+                FRotator(0, 0, 0),
+                SpawnParams
+            );
+        }
+    }
 }
 
 void ATPSDroneSkillBase::LaunchSkill()
@@ -70,6 +171,8 @@ void ATPSDroneSkillBase::SetSkillContextFromData()
     {
         AbilityList = SkillData->AbilityList;
 
+        DroneActorList = SkillData->DroneActorList;
+
         SkillContext.Damage = SkillData->Damage;
 
         SkillContext.CoolTime = SkillData->CoolTime;
@@ -79,6 +182,10 @@ void ATPSDroneSkillBase::SetSkillContextFromData()
         SkillContext.SkillEquipmentIcon = SkillData->SkillEquipmentIcon;
 
         SkillContext.SkillEquipmentName = SkillData->SkillEquipmentName;
+
+        SkillContext.CurrentDroneActor = SkillData->CurrentDroneActor;
+
+        SkillContext.RangeDecal = SkillData->RangeDecal;
     }
 }
 

@@ -49,5 +49,19 @@ void UTPSPlayerAnimInstance::NativeUpdateAnimation(float DeltaSceonds)
 				Pitch = ControlRotation.Pitch;
 			}
 		}
+		else
+		{
+			FRotator ControlRotation = Owner->GetCurrentControllerRotation();
+			Yaw = ControlRotation.Yaw;
+			Roll = ControlRotation.Roll;
+			if (ControlRotation.Pitch > 180.0)
+			{
+				Pitch = ControlRotation.Pitch - 360.0;
+			}
+			else
+			{
+				Pitch = ControlRotation.Pitch;
+			}
+		}
 	}
 }
