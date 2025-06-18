@@ -15,6 +15,7 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 	GENERATED_BODY()
 
 public:
+	// 무기 장비에 상속
 	UFUNCTION()
 	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext);
 

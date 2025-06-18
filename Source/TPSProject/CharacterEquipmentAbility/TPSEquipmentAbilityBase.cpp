@@ -3,6 +3,7 @@
 
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "GameInstance/TPSGameplayEventSubsystem.h"
 
 void UTPSEquipmentAbilityBase::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {

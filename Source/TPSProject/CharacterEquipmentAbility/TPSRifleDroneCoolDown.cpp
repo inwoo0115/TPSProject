@@ -25,7 +25,8 @@ void UTPSRifleDroneCoolDown::ApplyAbility()
 			-1,                         // Key (-1: 항상 새로운 메시지로)
 			5.0f,                       // 화면에 표시되는 시간 (초)
 			FColor::Green,              // 텍스트 색상
-			);
+			TEXT("Apply drone cool down")  // 출력할 메시지
+		);
 	}
 }
 
