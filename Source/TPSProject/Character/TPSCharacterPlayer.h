@@ -125,7 +125,7 @@ protected:
 	void MulticastRPCSpAttackAction();
 
 	UFUNCTION(Server, Reliable)
-	void ServerRPCAttackAction();
+	void ServerRPCAttackAction(int32 Index);
 
 	UFUNCTION(NetMulticast, Reliable)
 	void MulticastRPCAttackAction();

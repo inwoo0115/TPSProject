@@ -45,7 +45,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 	// Ability1
 	if (AbilityList.Contains(Ability1))
 	{
-		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability1]);
+		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(GetOwner(), AbilityList[Ability1]);
 		if (NewAbility1)
 		{
 			NewSlot.Add(NewAbility1);
@@ -54,7 +54,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 	// Ability2
 	if (AbilityList.Contains(Ability2))
 	{
-		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability2]);
+		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(GetOwner(), AbilityList[Ability2]);
 		if (NewAbility2)
 		{
 			NewSlot.Add(NewAbility2);
@@ -63,7 +63,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 	// Ability3
 	if (AbilityList.Contains(Ability3))
 	{
-		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(this, AbilityList[Ability3]);
+		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(GetOwner(), AbilityList[Ability3]);
 		if (NewAbility3)
 		{
 			NewSlot.Add(NewAbility3);

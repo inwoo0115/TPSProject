@@ -3,7 +3,8 @@
 
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
-#include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "Interface/TPSEventComponentInterface.h"
 
 void UTPSEquipmentAbilityBase::InitializeWeaponAbility(FWeaponContext& WeaponContext)
 {
@@ -42,7 +43,13 @@ void UTPSEquipmentAbilityBase::CancelAbility()
 {
 }
 
-UTPSGameplayEventSubsystem* UTPSEquipmentAbilityBase::GetGameplayEventSubsystem() const
+UTPSGameplayEventComponent* UTPSEquipmentAbilityBase::GetOwnerEventComponent() const
 {
-	return GetOuter()->GetWorld()->GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>();
+	auto OwnerCharacter = Cast<ITPSEventComponentInterface>(GetOuter());
+	if (OwnerCharacter)
+	{
+		return OwnerCharacter->GetEventComponent();
+	}
+
+	return nullptr;
 }

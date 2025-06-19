@@ -6,6 +6,8 @@
 #include "UObject/NoExportTypes.h"
 #include "TPSEquipmentAbilityBase.generated.h"
 
+class UTPSGameplyaEventComponent;
+
 /**
  * 
  */
@@ -41,9 +43,10 @@ public:
 
 	FText AbilityDescription;
 
-protected:
 	UFUNCTION()
-	UTPSGameplayEventSubsystem* GetGameplayEventSubsystem() const;
+	UTPSGameplayEventComponent* GetOwnerEventComponent() const;
+
+protected:
 
 	FDelegateHandle DelegateHandle;
 };

@@ -31,12 +31,16 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 	if (World && WeaponClass)
 	{
 		// 무기 장착
-		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass);
+		FActorSpawnParameters Params;
+		Params.Owner = GetOwner();
+
+		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass, Params);
 
 		// 무기 초기화
 		EquippedWeapon->InitializeComponent(this);
 		EquippedWeapon->InitializeAbilitiesFromDataAsset(Ability1, Ability2, Ability3);
 		EquippedWeapon->InitializeAbilities();
+		// EquippedWeapon->InitializePool();
 
 		// 소켓 위치 할당
 		ACharacter* OwnerCharacter = Cast<ACharacter>(GetOwner());
@@ -83,6 +87,16 @@ bool UTPSWeaponComponent::GetCanLaunchWeapon()
 bool UTPSWeaponComponent::GetCanReloadWeapon()
 {
 	return EquippedWeapon->CanReload();
+}
+
+int32 UTPSWeaponComponent::GetPredictProjectileIndex()
+{
+	return EquippedWeapon->GetPredictProjectileIndex();
+}
+
+void UTPSWeaponComponent::SetPredictProejctileIndex(int32 Index)
+{
+	EquippedWeapon->SetPredictProjectileIndex(Index);
 }
 
 void UTPSWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

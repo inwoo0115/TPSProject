@@ -32,7 +32,7 @@ struct FDroneSkillContext
 	FText SkillEquipmentName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EDroneType CurrentDroneActor;
+	EDroneType CurrentDroneActor = EDroneType::BasicDrone;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf <class ATPSSkillRangeDecalBase>RangeDecal;

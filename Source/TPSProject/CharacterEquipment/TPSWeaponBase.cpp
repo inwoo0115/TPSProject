@@ -4,9 +4,11 @@
 #include "CharacterEquipment/TPSWeaponBase.h"
 #include "Character/TPSCharacterBase.h"	
 #include "Projectile/TPSProjectileBase.h"
+#include "Projectile/TPSProjectilePoolManager.h"
 #include "TPSWeaponData.h"
 #include "Net/UnrealNetwork.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "GameInstance/TPSPoolManagerSubsystem.h"
 
 void ATPSWeaponBase::BeginPlay()
 {
@@ -52,9 +54,15 @@ void ATPSWeaponBase::Fire()
 		return;
 	}
 
+	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+	if (!HasAuthority() || !Character->IsLocallyControlled())
+	{
+		return;
+	}
+
 	WeaponContext.CurrentAmmo -= WeaponContext.RequireAmmo;
 
-	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 	if (Character)
 	{
 		// 카메라 기준 라인트레이스
@@ -77,29 +85,54 @@ void ATPSWeaponBase::Fire()
 		FVector ShotDirection = (TargetPoint - MuzzleLocation).GetSafeNormal();
 		FRotator ShotRotation = ShotDirection.Rotation();
 
-		// 총알 스폰
-		FActorSpawnParameters SpawnParams;
-
-		// 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
 		if (HasAuthority())
 		{
-			SpawnParams.Owner = Character->GetController();
+			GetGameInstance()->GetSubsystem<UTPSPoolManagerSubsystem>()->GetProjectile(WeaponContext.CurrentBullet)->MulticastRPCActivate(MuzzleLocation, ShotDirection, ShotRotation);
 		}
-		SpawnParams.Instigator = GetInstigator();
+		
+
+		/*if (HasAuthority())
+			Pool->GetProjectile(WeaponContext.CurrentBullet)->MulticastRPCActivate(MuzzleLocation, ShotDirection, ShotRotation);
+		else
+		{
+			Pool->GetProjectileByID(WeaponContext.CurrentBullet, PredictProjectileIndex)->FireInLocal(MuzzleLocation, ShotDirection, ShotRotation);
+		}*/
+		// 총알 스폰
+		/*FActorSpawnParameters SpawnParams;
+
+		SpawnParams.Owner = GetOwner();
+		SpawnParams.Instigator = GetInstigator();*/
+
+		// 액터 지연 생성
+		//SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		//SpawnParams.bDeferConstruction = true;
 
 		// 첫 번째 총알 클래스로 생성
-		auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
+	/*	auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
 			ProjectileList[WeaponContext.CurrentBullet],
 			MuzzleLocation,
 			ShotRotation,
 			SpawnParams
-		);
+		);*/
 
-		// 총알 구조체가 만들어지면 데미지 설정
-		if (Projectile)
-		{
-			//Event System 기반 데미지 세팅
-		}
+		// 서버 일 경우 리플리케이션 or 클라이언트 일 경우 예측 발사체 배열에 추가
+		//if (Projectile)
+		//{
+		//	// 발사체 ID 부여
+		//	Projectile->ProjectileID = GetNextProjectileID();
+
+		//	if (HasAuthority())
+		//	{
+		//		LastProjectileID = Projectile->ProjectileID;
+		//	}
+		//	else
+		//	{
+		//		PredictedProjectiles.Add(Projectile->ProjectileID, Projectile);
+		//	}
+		//	UE_LOG(LogTemp, Warning, TEXT("%d"), Projectile->ProjectileID);
+		//	FTransform SpawnTransfrom = FTransform(ShotRotation, MuzzleLocation);
+		//	Projectile->FinishSpawning(SpawnTransfrom);
+		//}
 
 		// 총이 발사되면 UI 업데이트
 		if (EventSystem && Character->IsLocallyControlled())
@@ -184,6 +217,48 @@ FWeaponContext ATPSWeaponBase::GetWeaponContext() const
 	return WeaponContext;
 }
 
+void ATPSWeaponBase::OnRepInitializePool()
+{
+	InitializePool();
+}
+
+void ATPSWeaponBase::InitializePool()
+{
+	// 오브젝트 스폰
+	FActorSpawnParameters SpawnParams;
+
+	SpawnParams.Owner = GetOwner();
+	SpawnParams.Instigator = GetInstigator();
+	// 충돌 무시 설정
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+
+	Pool = GetWorld()->SpawnActor<ATPSProjectilePoolManager>(
+		ATPSProjectilePoolManager::StaticClass(),
+		FVector::ZeroVector,
+		FRotator::ZeroRotator,
+		SpawnParams
+	);
+	Pool->InitializePool(ProjectileList);
+}
+
+int32 ATPSWeaponBase::GetPredictProjectileIndex()
+{
+	// 사용가능한 투사체 가져오기
+	auto PredictProjectile = Pool->GetProjectile(WeaponContext.CurrentBullet);
+	if (PredictProjectile)
+	{
+		PredictProjectileIndex = PredictProjectile->ProjectileID;
+		return PredictProjectileIndex;
+	}
+	return 0;
+}
+
+void ATPSWeaponBase::SetPredictProjectileIndex(int32 Index)
+{
+	PredictProjectileIndex = Index;
+}
+
 void ATPSWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
@@ -192,4 +267,5 @@ void ATPSWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLi
 	DOREPLIFETIME(ATPSWeaponBase, bCanFire);
 	DOREPLIFETIME(ATPSWeaponBase, bIsReloading);
 	DOREPLIFETIME(ATPSWeaponBase, WeaponContext);
+	DOREPLIFETIME(ATPSWeaponBase, Pool);
 }

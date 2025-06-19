@@ -13,7 +13,6 @@ UTPSCharacterBuffComponent::UTPSCharacterBuffComponent()
 	// ...
 }
 
-
 void UTPSCharacterBuffComponent::GetBuffByField(FName FieldName, float& OutDamage)
 {
 	// 맵에서 현재 버프 수치 계산

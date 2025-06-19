@@ -13,6 +13,7 @@
 #include "CharacterComponent/TPSDroneSkillComponent.h"
 #include "CharacterComponent/TPSSpAttackSkillComponent.h"
 #include "CharacterComponent/TPSUltimateComponent.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "CharacterComponent/TPSCharacterStatComponent.h"
 #include "GameInstance/TPSGameInstance.h"
 #include "EnhancedInputSubsystems.h"
@@ -97,6 +98,9 @@ ATPSCharacterBase::ATPSCharacterBase()
 	// UltimateComponent 설정
 	// UltimateComponent = CreateDefaultSubobject<UTPSUltimateComponent>(TEXT("UltimateComponent"));
 
+	// EventComponent 설정
+	EventComponent = CreateDefaultSubobject<UTPSGameplayEventComponent>(TEXT("EventComponent"));
+
 	// 리플리케이션 설정
 	bReplicates = true;
 	SetReplicateMovement(true);
@@ -114,7 +118,6 @@ void ATPSCharacterBase::BeginPlay()
 		DroneComponent->Equip(TPSGameInstance->DroneSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		SpAttackComponent->Equip(TPSGameInstance->SpAttackSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 	}
-
 }
 
 
@@ -190,6 +193,11 @@ FVector ATPSCharacterBase::GetCameraLocation() const
 FRotator ATPSCharacterBase::GetCameraRotation() const
 {
 	return Camera->GetComponentRotation();
+}
+
+UTPSGameplayEventComponent* ATPSCharacterBase::GetEventComponent()
+{
+	return EventComponent;
 }
 
 void ATPSCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

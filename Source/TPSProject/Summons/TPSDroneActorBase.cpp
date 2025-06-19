@@ -22,7 +22,7 @@ ATPSDroneActorBase::ATPSDroneActorBase()
 	Mesh->SetCollisionProfileName("OverlapAllDynamic");
 
 	// 리플리케이션 설정
-	this->SetReplicates(true);
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -71,15 +71,3 @@ void ATPSDroneActorBase::Tick(float DeltaTime)
 		}
 	}
 }
-
-bool ATPSDroneActorBase::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const
-{
-	if (!GetOwner())
-	{
-		return true;
-	}
-
-	// 이 액터의 오너에게는 리플리케이션 되지 않음
-	return RealViewer != GetOwner();
-}
-

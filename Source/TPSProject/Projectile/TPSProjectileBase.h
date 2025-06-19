@@ -23,18 +23,29 @@ protected:
 	virtual void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
 
-public:	
+public:
 
 	virtual void SetDamage(float NewDamage);
 
-	// Owner를 제외하고 나머지 Replication
-	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
+	void FireInDirection(const FVector& Direction);
+
+	void FireInLocal(const FVector& SpawnLocation, const FVector& Direction, const FRotator& Rotation);
+		
+	void ResetProjectile();
+
+	UFUNCTION()
+	void OnLifeSpanExpired();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCActivate(const FVector& SpawnLocation, const FVector& Direction, const FRotator& Rotation);
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	int32 ProjectileID;
 
 protected:
 	// 콜리전 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "Collision")
 	TObjectPtr<class USphereComponent> Collision;
-
 
 	// 발사체 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectileMovement")
@@ -45,4 +56,9 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float Damage = 10.0f;
+
+	FTimerHandle LifeSpanHandle;
+
+	UPROPERTY()
+	TObjectPtr<AActor> PoolOwner;
 };

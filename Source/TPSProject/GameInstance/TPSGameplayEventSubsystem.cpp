@@ -7,8 +7,3 @@ void UTPSGameplayEventSubsystem::Initialize(FSubsystemCollectionBase& Collection
 {
 	Super::Initialize(Collection);
 }
-
-void UTPSGameplayEventSubsystem::BroadcastHitEvent()
-{
-	OnHitEvent.Broadcast();
-}

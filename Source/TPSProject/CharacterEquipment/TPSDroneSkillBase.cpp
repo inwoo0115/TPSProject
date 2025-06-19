@@ -62,7 +62,7 @@ void ATPSDroneSkillBase::ShowUI()
 
         // Spawn Params
         FActorSpawnParameters SpawnParams;
-        SpawnParams.Owner = this;
+        SpawnParams.Owner = GetOwner();
         SpawnParams.Instigator = GetInstigator();
 
         float Distance = FVector::Dist(TargetPoint, TraceStart);
@@ -98,12 +98,6 @@ void ATPSDroneSkillBase::CastSkill()
     // 스킬 실행
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
-    if (TargetRange && Character->IsLocallyControlled())
-    {
-        TargetRange->Destroy();
-        TargetRange = nullptr;
-    }
-
     if (Character)
     {
         // 카메라 기준 라인트레이스
@@ -126,13 +120,7 @@ void ATPSDroneSkillBase::CastSkill()
         {
             // 총알 스폰
             FActorSpawnParameters SpawnParams;
-
-            // 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
-            if (HasAuthority())
-            {
-                SpawnParams.Owner = Character->GetController();
-            }
-
+            SpawnParams.Owner = GetOwner();
             SpawnParams.Instigator = GetInstigator();
 
             // 첫 번째 총알 클래스로 생성
@@ -152,6 +140,14 @@ void ATPSDroneSkillBase::LaunchSkill()
 
     // Cast Cool Time Start
     CurrentCoolTime = 0.0f;
+
+    auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+    if (TargetRange && Character->IsLocallyControlled())
+    {
+        TargetRange->Destroy();
+        TargetRange = nullptr;
+    }
 
     // Cast Delay
     GetWorld()->GetTimerManager().SetTimer(CastCooldownHandle, FTimerDelegate::CreateLambda([this]()

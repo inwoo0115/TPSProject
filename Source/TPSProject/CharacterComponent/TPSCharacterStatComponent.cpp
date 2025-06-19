@@ -1,4 +1,4 @@
-// Fill out your copyright notice in the Description page of Project Settings.
+// Filout your copyright notice in the Description page of Project Settings.
 
 
 #include "CharacterComponent/TPSCharacterStatComponent.h"
@@ -30,7 +30,6 @@ void UTPSCharacterStatComponent::BeginPlay()
 		}
 	}
 }
-
 
 void UTPSCharacterStatComponent::GetDamageByField(FName FieldName, float& OutDamage)
 {

@@ -268,10 +268,13 @@ void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 		// 로컬에서 공격
 		GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
 
+		// 사용 가능한 발사체 설정
+		// int32 Index = WeaponComponent->GetPredictProjectileIndex();
+		int32 Index = 0;
 		// 로컬 클라이언트일 경우 서버 RPC 전송
 		if (!HasAuthority())
 		{
-			ServerRPCAttackAction();
+			ServerRPCAttackAction(Index);
 		}
 		else
 		{
@@ -386,7 +389,7 @@ void ATPSCharacterPlayer::Drone(const FInputActionValue& Value)
 	if (IsLocallyControlled() && DroneComponent->GetCanCastSkill())
 	{
 		DroneComponent->LaunchSkill();
-		DroneComponent->CastSkill();
+		//DroneComponent->CastSkill();
 
 		if (!HasAuthority())
 		{
@@ -489,8 +492,9 @@ void ATPSCharacterPlayer::ServerRPCRunAction_Implementation()
 	}
 }
 
-void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
+void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation(int32 Index)
 {
+	// WeaponComponent->SetPredictProejctileIndex(Index);
 	MulticastRPCAttackAction();
 }
 

@@ -86,11 +86,27 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weapon")
 	FWeaponContext GetWeaponContext() const;
 
-	// 무기 발사체 클래스 목록
+	// 발사체 클래스 목록
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
 
+	UPROPERTY(ReplicatedUsing=OnRepInitializePool)
+	TObjectPtr<class ATPSProjectilePoolManager> Pool;
+
+	UFUNCTION()
+	void OnRepInitializePool();
+
+	UFUNCTION()
+	void InitializePool();
+
+	// Predict Projectile Getter Setter
+	int32 GetPredictProjectileIndex(); 
+
+	void SetPredictProjectileIndex(int32 Index);
+
 protected:
+	UPROPERTY()
+	int32 PredictProjectileIndex = 0;
 
 	// 사격 딜레이 타이머
 	FTimerHandle FireCooldownHandle;
@@ -101,4 +117,5 @@ protected:
 	// 무기 정보 구조체
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "Weapon")
 	FWeaponContext WeaponContext;
+
 };

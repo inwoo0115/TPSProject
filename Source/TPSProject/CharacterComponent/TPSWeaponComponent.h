@@ -36,6 +36,11 @@ public:
 	// 장전 가능
 	bool GetCanReloadWeapon();
 
+	// 다음 예측 발사체 인덱스 반환
+	int32 GetPredictProjectileIndex();
+
+	void SetPredictProejctileIndex(int32 Index);
+
 	const ATPSWeaponBase* GetWeapon() const { return EquippedWeapon; }
 
 	UPROPERTY(Replicated)
@@ -47,5 +52,4 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerRPCEquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
-
 };

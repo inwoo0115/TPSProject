@@ -23,10 +23,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Owner를 제외하고 나머지 Replication
-	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
-
-
 	// 콜리전 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "Collision")
 	TObjectPtr<class USphereComponent> Collision;

@@ -25,10 +25,6 @@ class TPSPROJECT_API UTPSCharacterBuffComponent : public UActorComponent
 public:	
 	UTPSCharacterBuffComponent();
 
-
-
 protected:
 	void GetBuffByField(FName FieldName, float& OutDamage);
-
-		
 };
