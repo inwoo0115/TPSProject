@@ -14,7 +14,7 @@ ATPSProjectileBase::ATPSProjectileBase()
 	// 콜리전 설정
 	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
 	Collision->InitSphereRadius(5.0f);
-	Collision->SetCollisionProfileName("BlockAllDynamic");
+	Collision->SetCollisionProfileName("ProjectileProfile");
 	RootComponent = Collision;
 
 	// 기본 발사체 컴포넌트 설정
@@ -50,15 +50,15 @@ void ATPSProjectileBase::SetDamage(float NewDamage)
 	Damage = NewDamage;
 }
 
-bool ATPSProjectileBase::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const
-{
-	if (!GetOwner())
-	{
-		return true;
-	}
-
-	// 이 액터의 오너에게는 리플리케이션 되지 않음
-	return RealViewer != GetOwner();
-}
-
+//bool ATPSProjectileBase::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const
+//{
+//	if (!GetOwner())
+//	{
+//		return true;
+//	}
+//
+//	// 이 액터의 오너에게는 리플리케이션 되지 않음
+//	return RealViewer != GetOwner();
+//}
+//
 

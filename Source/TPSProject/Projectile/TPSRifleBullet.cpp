@@ -5,7 +5,8 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "Interface/TPSEventComponentInterface.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 
 ATPSRifleBullet::ATPSRifleBullet()
 {
@@ -14,7 +15,7 @@ ATPSRifleBullet::ATPSRifleBullet()
 
 	// 콜리전 설정
 	Collision->InitSphereRadius(5.0f);
-	Collision->SetCollisionProfileName("BlockAllDynamic");
+	Collision->SetCollisionProfileName("ProjectileProfile");
 	RootComponent = Collision;
 
 	// 기본 발사체 컴포넌트 설정
@@ -30,6 +31,7 @@ ATPSRifleBullet::ATPSRifleBullet()
 	{
 		Mesh->SetStaticMesh(BulletMeshAsset.Object);
 		Mesh->SetupAttachment(RootComponent);
+		Mesh->SetCollisionProfileName("NoCollision");
 	}
 }
 
@@ -48,9 +50,12 @@ void ATPSRifleBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 {
 	if (HasAuthority())
 	{
-		GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>()->BroadcastHitEvent();
+		auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
+		if (Event)
+		{
+			Event->GetEventComponent()->OnHitEvent.Broadcast();
+		}
 	}
 
-	// 충돌 시 파괴
 	Destroy();
 }

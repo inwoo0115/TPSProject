@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
+#include "Interface/TPSEventComponentInterface.h"
 #include "TPSCharacterBase.generated.h"
 
 UENUM()
@@ -14,7 +15,7 @@ enum class ECharacterControlType : uint8
 };
 
 UCLASS()
-class TPSPROJECT_API ATPSCharacterBase : public ACharacter
+class TPSPROJECT_API ATPSCharacterBase : public ACharacter, public ITPSEventComponentInterface
 {
 	GENERATED_BODY()
 
@@ -50,8 +51,13 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "SpAttack")
 	TObjectPtr<class UTPSSpAttackSkillComponent> SpAttackComponent;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Event")
+	TObjectPtr<class UTPSGameplayEventComponent> EventComponent;
+
 	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ultimate")
 	//TObjectPtr<class UTPSUltimateComponent> UltimateComponent;
+
+	virtual UTPSGameplayEventComponent* GetEventComponent() override;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))

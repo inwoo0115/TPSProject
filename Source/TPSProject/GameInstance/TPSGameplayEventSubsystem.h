@@ -6,7 +6,6 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "TPSGameplayEventSubsystem.generated.h"
 
-DECLARE_MULTICAST_DELEGATE(FOnHitEvent);
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChange, int32 /*Current*/, int32 /*Max*/);
 
@@ -21,10 +20,6 @@ class TPSPROJECT_API UTPSGameplayEventSubsystem : public UGameInstanceSubsystem
 	GENERATED_BODY()
 	
 public:
-	void Initialize(FSubsystemCollectionBase& Collection) override;
-
-	// Attack Event
-	FOnHitEvent OnHitEvent;
 
 	// HUD Event
 	FOnStatChange OnHPChange;
@@ -36,7 +31,4 @@ public:
 	FOnCoolTimeChange OnDroneCoolTimeChange;
 	
 	FOnCoolTimeChange OnSpAttackCoolTimeChange;
-
-	// 발사체 히트 이벤트
-	void BroadcastHitEvent();
 };

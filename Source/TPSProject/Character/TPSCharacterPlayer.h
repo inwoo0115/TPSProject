@@ -118,6 +118,9 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerRPCSpAction();
 
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCSpAction();
+
 	UFUNCTION(Server, Reliable)
 	void ServerRPCSPAttackAction();
 

@@ -3,7 +3,7 @@
 
 #include "CharacterEquipmentAbility/TPSRifleDroneCoolDown.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
-#include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 
 UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
 {
@@ -32,10 +32,10 @@ void UTPSRifleDroneCoolDown::ApplyAbility()
 
 void UTPSRifleDroneCoolDown::CancelAbility()
 {
-	GetGameplayEventSubsystem()->OnHitEvent.Remove(DelegateHandle);
+	GetOwnerEventComponent()->OnHitEvent.Remove(DelegateHandle);
 }
 
 void UTPSRifleDroneCoolDown::InitializeAbilityEvent()
 {
-	DelegateHandle = GetGameplayEventSubsystem()->OnHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbility);
 }

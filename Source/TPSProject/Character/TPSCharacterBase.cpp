@@ -17,6 +17,7 @@
 #include "GameInstance/TPSGameInstance.h"
 #include "EnhancedInputSubsystems.h"
 #include "Animation/TPSAnimMontageData.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
@@ -93,6 +94,9 @@ ATPSCharacterBase::ATPSCharacterBase()
 	// SkillComponent 설정
 	DroneComponent = CreateDefaultSubobject<UTPSDroneSkillComponent>(TEXT("DroneComponent"));
 	SpAttackComponent = CreateDefaultSubobject<UTPSSpAttackSkillComponent>(TEXT("SpAttackComponent"));
+
+	// EventComponent 설정
+	EventComponent = CreateDefaultSubobject<UTPSGameplayEventComponent>(TEXT("EventComponent"));
 
 	// UltimateComponent 설정
 	// UltimateComponent = CreateDefaultSubobject<UTPSUltimateComponent>(TEXT("UltimateComponent"));
@@ -202,4 +206,9 @@ void ATPSCharacterBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 void ATPSCharacterBase::OnRep_ControlType()
 {
 	SetCharacterControlData(CurrentCharacterControlType);
+}
+
+UTPSGameplayEventComponent* ATPSCharacterBase::GetEventComponent()
+{
+	return EventComponent;
 }

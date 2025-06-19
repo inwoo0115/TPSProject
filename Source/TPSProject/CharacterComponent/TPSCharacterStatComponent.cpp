@@ -2,6 +2,7 @@
 
 
 #include "CharacterComponent/TPSCharacterStatComponent.h"
+#include "Interface/TPSEventComponentInterface.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
 
 UTPSCharacterStatComponent::UTPSCharacterStatComponent()
@@ -29,6 +30,8 @@ void UTPSCharacterStatComponent::BeginPlay()
 			EventSystem->OnHPChange.Broadcast(CurrentHP, MaxHP);
 		}
 	}
+
+
 }
 
 

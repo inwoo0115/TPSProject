@@ -14,7 +14,7 @@ ATPSGrenade::ATPSGrenade()
 
 	// 콜리전 설정
 	Collision->InitSphereRadius(2.0f);
-	Collision->SetCollisionProfileName("BlockAllDynamic");
+	Collision->SetCollisionProfileName("ProjectileProfile");
 	RootComponent = Collision;
 
 	// 기본 발사체 컴포넌트 설정
@@ -30,6 +30,7 @@ ATPSGrenade::ATPSGrenade()
 	{
 		Mesh->SetStaticMesh(BulletMeshAsset.Object);
 		Mesh->SetupAttachment(RootComponent);
+		Mesh->SetCollisionProfileName("NoCollision");
 	}
 
 }

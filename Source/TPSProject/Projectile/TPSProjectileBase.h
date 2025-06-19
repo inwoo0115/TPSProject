@@ -28,7 +28,7 @@ public:
 	virtual void SetDamage(float NewDamage);
 
 	// Owner를 제외하고 나머지 Replication
-	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
+	// virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
 protected:
 	// 콜리전 컴포넌트

@@ -64,11 +64,7 @@ void ATPSSpAttackSkillBase::CastSkill()
         // 투사체 스폰
         FActorSpawnParameters SpawnParams;
 
-        // 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
-        if (HasAuthority())
-        {
-            SpawnParams.Owner = Character->GetController();
-        }
+        SpawnParams.Owner = GetOwner();
 
         SpawnParams.Instigator = GetInstigator();
 

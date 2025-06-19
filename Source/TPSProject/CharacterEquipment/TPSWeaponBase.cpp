@@ -80,14 +80,10 @@ void ATPSWeaponBase::Fire()
 		// 총알 스폰
 		FActorSpawnParameters SpawnParams;
 
-		// 서버에서 오너 컨트롤러 설정해서 리플리케이션 제한
-		if (HasAuthority())
-		{
-			SpawnParams.Owner = Character->GetController();
-		}
+		SpawnParams.Owner = GetOwner();
 		SpawnParams.Instigator = GetInstigator();
 
-		// 첫 번째 총알 클래스로 생성
+		// 총알 클래스 생성
 		auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
 			ProjectileList[WeaponContext.CurrentBullet],
 			MuzzleLocation,

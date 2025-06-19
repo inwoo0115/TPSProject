@@ -23,17 +23,19 @@ void UTPSSkillComponentBase::Equip(TSubclassOf<ATPSAbilityEquipmentBase> Equipme
 	if (Equipment)
 	{
 		Equipment->ClearAbilityDelegates();
-		// 기존 무기 설정 제거
+		// 기존 장비 설정 제거
 		Equipment->Destroy();
 	}
 
 	UWorld* World = GetWorld();
 	if (World && EquipmentClass)
 	{
-		// 무기 장착
-		Equipment = World->SpawnActor<ATPSAbilityEquipmentBase>(EquipmentClass);
+		// 장비 장착
+		FActorSpawnParameters Params;
+		Params.Owner = GetOwner();
+		Equipment = World->SpawnActor<ATPSAbilityEquipmentBase>(EquipmentClass, Params);
 
-		// 무기 초기화
+		// 장비 초기화
 		Equipment->InitializeComponent(this);
 		Equipment->InitializeAbilitiesFromDataAsset(Ability1, Ability2, Ability3);
 		Equipment->InitializeAbilities();
