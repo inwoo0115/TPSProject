@@ -32,10 +32,10 @@ void UTPSRifleDroneCoolDown::ApplyAbility()
 
 void UTPSRifleDroneCoolDown::CancelAbility()
 {
-	GetOwnerEventComponent()->OnHitEvent.Remove(DelegateHandle);
+	GetOwnerEventComponent()->OnAttackHitEvent.Remove(DelegateHandle);
 }
 
 void UTPSRifleDroneCoolDown::InitializeAbilityEvent()
 {
-	DelegateHandle = GetOwnerEventComponent()->OnHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnAttackHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbility);
 }

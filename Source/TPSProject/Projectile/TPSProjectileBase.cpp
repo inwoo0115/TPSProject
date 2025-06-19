@@ -50,15 +50,4 @@ void ATPSProjectileBase::SetDamage(float NewDamage)
 	Damage = NewDamage;
 }
 
-//bool ATPSProjectileBase::IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const
-//{
-//	if (!GetOwner())
-//	{
-//		return true;
-//	}
-//
-//	// 이 액터의 오너에게는 리플리케이션 되지 않음
-//	return RealViewer != GetOwner();
-//}
-//
 

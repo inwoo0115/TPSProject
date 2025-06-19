@@ -265,8 +265,6 @@ void ATPSCharacterPlayer::Attack(const FInputActionValue& Value)
 	if (IsLocallyControlled() && WeaponComponent->GetCanLaunchWeapon() && CanPlayMontageByPriority(AnimMontageData->AnimMontages[EMontageType::Attack]))
 	{
 		WeaponComponent->LaunchWeapon();
-		// 로컬에서 공격
-		//GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
 
 		// 로컬 클라이언트일 경우 서버 RPC 전송
 		if (!HasAuthority())
@@ -337,8 +335,6 @@ void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
 	{
 		SpAttackComponent->LaunchSkill();
 
-		//GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::SpAttack]);
-		
 		if (!HasAuthority())
 		{
 			ServerRPCSPAttackAction();
@@ -432,11 +428,6 @@ void ATPSCharacterPlayer::Esc(const FInputActionValue& Value)
 			{
 				UISubsystem->ShowUI(EUIType::Pause);
 			}
-			// TODO: 일단 ui키면 입력을 받지 않아서 의미가 없음 수정 예정
-			//else
-			//{
-			//	UISubsystem->HideCurrentUI();
-			//}
 		}
 	}
 }
@@ -506,11 +497,7 @@ void ATPSCharacterPlayer::ServerRPCAttackAction_Implementation()
 
 void ATPSCharacterPlayer::MulticastRPCAttackAction_Implementation()
 {
-	// 컨트롤 하지 않는 클라이언트 몽타주 재생
-	//if (!IsLocallyControlled())
-	//{
 	GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Attack]);
-	//}
 }
 
 void ATPSCharacterPlayer::ServerRPCReloadAction_Implementation()
@@ -569,7 +556,7 @@ void ATPSCharacterPlayer::AimUpdate(float Value)
 void ATPSCharacterPlayer::StartAttack()
 {
 	// 서버나 로컬 클라이언트에서만 실행
-	if (HasAuthority())
+	if (HasAuthority() || IsLocallyControlled())
 	{
 		WeaponComponent->FireWeapon();
 		WeaponComponent->EffectWeapon();

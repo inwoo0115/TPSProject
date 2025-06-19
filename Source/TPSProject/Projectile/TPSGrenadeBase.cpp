@@ -1,28 +1,29 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Projectile/TPSRifleBullet.h"
+#include "Projectile/TPSGrenadeBase.h"
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
-#include "Interface/TPSEventComponentInterface.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "Interface/TPSEventComponentInterface.h"
 
-ATPSRifleBullet::ATPSRifleBullet()
+
+ATPSGrenadeBase::ATPSGrenadeBase()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	// 콜리전 설정
-	Collision->InitSphereRadius(5.0f);
+	Collision->InitSphereRadius(2.0f);
 	Collision->SetCollisionProfileName("ProjectileProfile");
 	RootComponent = Collision;
 
 	// 기본 발사체 컴포넌트 설정
-	Movement->InitialSpeed = 10000.f;
-	Movement->MaxSpeed = 10000.f;
+	Movement->InitialSpeed = 3000.f;
+	Movement->MaxSpeed = 3000.f;
 	Movement->bRotationFollowsVelocity = true;
-	Movement->ProjectileGravityScale = 0.0f;
+	Movement->ProjectileGravityScale = 1.0f;
 
 	// 기본 메쉬 설정 (구체)
 	Mesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("StaticMesh"));
@@ -33,29 +34,28 @@ ATPSRifleBullet::ATPSRifleBullet()
 		Mesh->SetupAttachment(RootComponent);
 		Mesh->SetCollisionProfileName("NoCollision");
 	}
+
 }
 
-void ATPSRifleBullet::BeginPlay()
+void ATPSGrenadeBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Collision->OnComponentHit.AddDynamic(this, &ATPSRifleBullet::OnHit);
+	Collision->OnComponentHit.AddDynamic(this, &ATPSGrenadeBase::OnHit);
 
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);
-
 }
 
-void ATPSRifleBullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+void ATPSGrenadeBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	if (HasAuthority())
+	// 충돌 시 이벤트 호출
+	auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
+	if (Event)
 	{
-		auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
-		if (Event)
-		{
-			Event->GetEventComponent()->OnHitEvent.Broadcast();
-		}
+		Event->GetEventComponent()->OnSpAttackHitEvent.Broadcast();
 	}
 
+	// 충돌 시 파괴
 	Destroy();
 }

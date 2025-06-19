@@ -137,6 +137,12 @@ void ATPSDroneSkillBase::CastSkill()
 
 void ATPSDroneSkillBase::LaunchSkill()
 {
+    // 裹困 观老 版快 公瓤
+    if (!TargetRange)
+    {
+		return;
+    }
+
     bCanCast = false;
 
     // Cast Cool Time Start

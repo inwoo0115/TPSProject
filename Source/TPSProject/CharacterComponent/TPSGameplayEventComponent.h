@@ -18,7 +18,9 @@ public:
 	UTPSGameplayEventComponent();
 
 	// Attack Event
-	FOnHitEvent OnHitEvent;
+	FOnHitEvent OnAttackHitEvent;
 
+	// Sp Attack Event
+	FOnHitEvent OnSpAttackHitEvent;
 
 };

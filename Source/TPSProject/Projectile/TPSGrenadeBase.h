@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "Projectile/TPSProjectileBase.h"
-#include "TPSGrenade.generated.h"
+#include "TPSGrenadeBase.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API ATPSGrenade : public ATPSProjectileBase
+class TPSPROJECT_API ATPSGrenadeBase : public ATPSProjectileBase
 {
 	GENERATED_BODY()
-	
+
 public:
-	ATPSGrenade();
+	ATPSGrenadeBase();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

@@ -52,9 +52,13 @@ void ATPSWeaponBase::Fire()
 		return;
 	}
 
-	WeaponContext.CurrentAmmo -= WeaponContext.RequireAmmo;
-
 	auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+	if (Character->IsLocallyControlled())
+	{
+		WeaponContext.CurrentAmmo -= WeaponContext.RequireAmmo;
+	}
+
 	if (Character)
 	{
 		// 카메라 기준 라인트레이스
