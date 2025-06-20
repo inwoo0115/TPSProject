@@ -102,10 +102,10 @@ void ATPSUltimateSkillBase::ShowUI()
 
 void ATPSUltimateSkillBase::CastSkill()
 {
-    CurrentGauge = 0.0f;
-
     // 스킬 실행
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+    CurrentGauge = 0.0f;
 
     if (Character)
     {
@@ -136,6 +136,7 @@ void ATPSUltimateSkillBase::LaunchSkill()
     // 범위 밖일 경우 무효
     if (!TargetRange)
     {
+        bIsInRange = false;
         return;
     }
 
@@ -157,11 +158,18 @@ void ATPSUltimateSkillBase::LaunchSkill()
             TargetRange = nullptr;
         }
     }
+
+    bIsInRange = true;
 }
 
 bool ATPSUltimateSkillBase::GetCanCast()
 {
     return CurrentGauge == SkillContext.MaxGauge;
+}
+
+bool ATPSUltimateSkillBase::GetInRange()
+{
+    return bIsInRange;
 }
 
 void ATPSUltimateSkillBase::ClearUpdateDelegate()

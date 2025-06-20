@@ -32,4 +32,7 @@ public:
 
 	// UI 제거
 	virtual void DeleteUI();
+
+	// 범위 여부
+	virtual bool IsInRange();
 };

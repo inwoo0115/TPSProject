@@ -55,6 +55,8 @@ public:
 
 	virtual bool GetCanCast();
 
+	virtual bool GetInRange();
+
 	void ClearUpdateDelegate();
 
 	void SetSkillContextFromData();
@@ -99,4 +101,6 @@ protected:
 
 	UFUNCTION(Server, Reliable)
 	void ServerRPCTargetLocation(FVector NewLocation);
+
+	bool bIsInRange = false;
 };

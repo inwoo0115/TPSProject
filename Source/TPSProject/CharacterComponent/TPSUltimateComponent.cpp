@@ -101,3 +101,14 @@ void UTPSUltimateComponent::DeleteUI()
 		UltiEquipment->DeleteTargetUI();
 	}
 }
+
+bool UTPSUltimateComponent::IsInRange()
+{
+	auto UltiEquipment = Cast<ATPSUltimateSkillBase>(Equipment);
+	if (UltiEquipment)
+	{
+		return UltiEquipment->GetInRange();
+	}
+
+	return false;
+}

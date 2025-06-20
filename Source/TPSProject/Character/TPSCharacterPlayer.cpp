@@ -420,13 +420,16 @@ void ATPSCharacterPlayer::Ultimate(const FInputActionValue& Value)
 	{
 		UltimateComponent->LaunchSkill();
 
-		if (!HasAuthority())
+		if (UltimateComponent->IsInRange())
 		{
-			ServerRPCUltimateAction();
-		}
-		else
-		{
-			MulticastRPCUltimateAction();
+			if (!HasAuthority())
+			{
+				ServerRPCUltimateAction();
+			}
+			else
+			{
+				MulticastRPCUltimateAction();
+			}
 		}
 	}
 	else
