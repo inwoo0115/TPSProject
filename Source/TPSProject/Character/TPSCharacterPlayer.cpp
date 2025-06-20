@@ -420,8 +420,6 @@ void ATPSCharacterPlayer::Ultimate(const FInputActionValue& Value)
 	{
 		UltimateComponent->LaunchSkill();
 
-		UE_LOG(LogTemp, Warning, TEXT("LaunchSkill"));
-
 		if (!HasAuthority())
 		{
 			ServerRPCUltimateAction();

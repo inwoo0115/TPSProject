@@ -142,12 +142,20 @@ void ATPSUltimateSkillBase::LaunchSkill()
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
     // 서버 rpc 호출
-    TargetLocation = TargetRange->GetActorLocation();
+    ServerRPCTargetLocation(TargetRange->GetActorLocation());
 
-    if (TargetRange && Character->IsLocallyControlled())
+    // 궁극기 게이지 UI 갱신
+    CurrentGauge = 0.0f;
+    if (Character && Character->IsLocallyControlled())
     {
-        TargetRange->Destroy();
-        TargetRange = nullptr;
+        EventSystem->OnUltimateGaugeChange.Broadcast(CurrentGauge, SkillContext.MaxGauge);
+
+        // Target UI 제거
+        if (TargetRange)
+        {
+            TargetRange->Destroy();
+            TargetRange = nullptr;
+        }
     }
 }
 
@@ -217,4 +225,9 @@ void ATPSUltimateSkillBase::OnRepGaugeChanged()
     {
         EventSystem->OnUltimateGaugeChange.Broadcast(CurrentGauge, SkillContext.MaxGauge);
     }
+}
+
+void ATPSUltimateSkillBase::ServerRPCTargetLocation_Implementation(FVector NewLocation)
+{
+    TargetLocation = NewLocation;
 }

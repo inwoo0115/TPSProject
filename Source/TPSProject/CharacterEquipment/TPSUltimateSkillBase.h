@@ -94,4 +94,7 @@ protected:
 
 	UPROPERTY()
 	FVector TargetLocation = FVector(0, 0, 0);
+
+	UFUNCTION(Server, Reliable)
+	void ServerRPCTargetLocation(FVector NewLocation);
 };
