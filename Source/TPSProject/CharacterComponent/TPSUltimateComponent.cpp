@@ -3,6 +3,7 @@
 
 #include "CharacterComponent/TPSUltimateComponent.h"
 #include "CharacterEquipment/TPSUltimateSkillBase.h"
+#include "GameFramework/Character.h"
 
 void UTPSUltimateComponent::Equip(TSubclassOf<ATPSAbilityEquipmentBase> EquipmentClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
@@ -90,4 +91,13 @@ bool UTPSUltimateComponent::GetCanCastSkill()
     }
 
     return false;
+}
+
+void UTPSUltimateComponent::DeleteUI()
+{
+	auto UltiEquipment = Cast<ATPSUltimateSkillBase>(Equipment);
+	if (UltiEquipment)
+	{
+		UltiEquipment->DeleteTargetUI();
+	}
 }

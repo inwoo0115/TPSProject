@@ -59,6 +59,8 @@ public:
 
 	void SetSkillContextFromData();
 
+	void DeleteTargetUI();
+
 	virtual void InitializeAbilities() override;
 
 	void UpdateGauge(float AddGauge);

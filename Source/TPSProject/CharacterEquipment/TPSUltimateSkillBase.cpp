@@ -199,6 +199,15 @@ void ATPSUltimateSkillBase::SetSkillContextFromData()
     }
 }
 
+void ATPSUltimateSkillBase::DeleteTargetUI()
+{
+    if (TargetRange)
+    {
+        TargetRange->Destroy();
+        TargetRange = nullptr;
+    }
+}
+
 void ATPSUltimateSkillBase::InitializeAbilities()
 {
     // 특성 적용

@@ -29,4 +29,7 @@ public:
 
 	// 스킬 사용 가능 
 	virtual bool GetCanCastSkill() override;
+
+	// UI 제거
+	virtual void DeleteUI();
 };

@@ -429,6 +429,10 @@ void ATPSCharacterPlayer::Ultimate(const FInputActionValue& Value)
 			MulticastRPCUltimateAction();
 		}
 	}
+	else
+	{
+		UltimateComponent->DeleteUI();
+	}
 }
 
 void ATPSCharacterPlayer::UltimateUI(const FInputActionValue& Value)
