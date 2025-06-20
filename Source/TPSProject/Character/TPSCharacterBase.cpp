@@ -212,3 +212,14 @@ UTPSGameplayEventComponent* ATPSCharacterBase::GetEventComponent()
 {
 	return EventComponent;
 }
+
+float ATPSCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
+{
+	// 데미지 판정은 서버에서만
+	if (HasAuthority())
+	{
+		StatComponent->CaculateDamage(DamageAmount);
+	}
+
+	return 0.0f;
+}

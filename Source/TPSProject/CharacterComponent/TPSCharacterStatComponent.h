@@ -17,23 +17,33 @@ public:
 
 	virtual void BeginPlay() override;
 
+	// Replication ¼¼ÆÃ
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	void CaculateDamage(float TakeDamage);
+
+	void UpdateHp(float HpDelta);
+
 protected:
-	void GetDamageByField(FName FieldName, float &OutDamage);
 
 	// Ä³¸¯ÅÍ ½ºÅÈ
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(ReplicatedUsing=OnRep_CurrentHP, Transient, VisibleInstanceOnly, Category = Stat)
 	float CurrentHP;
 	
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(Replicated, Transient, VisibleInstanceOnly, Category = Stat)
 	float MaxHP;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(Replicated, Transient, VisibleInstanceOnly, Category = Stat)
 	float Defensive;
 
-	UPROPERTY(Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(Replicated, Transient, VisibleInstanceOnly, Category = Stat)
 	float Damage;
 
 	// ÀÌº¥Æ® ½Ì±ÛÅæ Ä³½Ì
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSubsystem> EventSystem;
+
+	// OnRep ÄÝ¹é
+	UFUNCTION()
+	void OnRep_CurrentHP();
 };

@@ -36,7 +36,8 @@ void UTPSHUDWidget::UpdateHP(int32 CurrentHPValue, int32 MaxHPValue)
 
 	if (HPBar)
 	{
-		HPBar->SetPercent(CurrentHPValue / MaxHPValue);
+		float HPPercent = float(CurrentHPValue) / float(MaxHPValue);
+		HPBar->SetPercent(HPPercent);
 	}
 }
 

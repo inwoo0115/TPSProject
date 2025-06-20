@@ -3,6 +3,8 @@
 
 #include "Summons/TPSDroneActorBase.h"
 #include "Components/SphereComponent.h"
+#include "Interface/TPSEventComponentInterface.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 
 // Sets default values
 ATPSDroneActorBase::ATPSDroneActorBase()
@@ -14,6 +16,7 @@ ATPSDroneActorBase::ATPSDroneActorBase()
 	Collision = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
 	Collision->InitSphereRadius(5.0f);
 	Collision->SetCollisionProfileName("OverlapAllDynamic");
+	Collision->SetGenerateOverlapEvents(true);
 	RootComponent = Collision;
 
 	// 기본 메쉬 설정 (구체)
@@ -22,7 +25,7 @@ ATPSDroneActorBase::ATPSDroneActorBase()
 	Mesh->SetCollisionProfileName("OverlapAllDynamic");
 
 	// 리플리케이션 설정
-	this->SetReplicates(true);
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -42,9 +45,30 @@ void ATPSDroneActorBase::BeginPlay()
 		bIsRising = true;
 	}
 
+	// 0.5초마다 CheckOverlaps 호출
+	GetWorld()->GetTimerManager().SetTimer(OverlapCheckTimerHandle, this, &ATPSDroneActorBase::CheckOverlaps, 0.5f, true);
+
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);
 	
+}
+
+void ATPSDroneActorBase::CheckOverlaps()
+{
+	TArray<AActor*> OverlappingActors;
+	Collision->GetOverlappingActors(OverlappingActors);
+
+	if (HasAuthority())
+	{
+		for (AActor* OtherActor : OverlappingActors)
+		{
+			auto EventInterface = Cast<ITPSEventComponentInterface>(OtherActor);
+			if (EventInterface && EventInterface->GetEventComponent())
+			{
+				EventInterface->GetEventComponent()->OnHpChangeEvent.Broadcast(5.0f);
+			}
+		}
+	}
 }
 
 // Called every frame

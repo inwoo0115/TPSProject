@@ -7,6 +7,7 @@
 #include "Components/StaticMeshComponent.h"
 #include "Interface/TPSEventComponentInterface.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 ATPSBulletBase::ATPSBulletBase()
 {
@@ -47,6 +48,20 @@ void ATPSBulletBase::BeginPlay()
 
 void ATPSBulletBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	auto OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn)
+	{
+		// 충돌 시 데미지 처리
+		UGameplayStatics::ApplyDamage(
+			OtherActor,
+			Damage,
+			OwnerPawn->GetController(),
+			this,
+			UDamageType::StaticClass()
+		);
+
+	}
+
 	// 충돌 시 이벤트 호출
 	auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
 	if (Event)

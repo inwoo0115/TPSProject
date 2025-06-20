@@ -5,6 +5,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Components/SphereComponent.h"
 
+
 // Sets default values
 ATPSProjectileBase::ATPSProjectileBase()
 {
@@ -25,7 +26,7 @@ ATPSProjectileBase::ATPSProjectileBase()
 	Movement->ProjectileGravityScale = 0.0f;
 
 	// 리플리케이션 설정
-	this->SetReplicates(true);
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
@@ -40,8 +41,6 @@ void ATPSProjectileBase::BeginPlay()
 
 void ATPSProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
-	// 충돌 시 처리 등록
-
 	Destroy();
 }
 

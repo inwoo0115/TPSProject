@@ -9,6 +9,8 @@
 
 DECLARE_MULTICAST_DELEGATE(FOnHitEvent);
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnStatChangeEvent, float);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPSPROJECT_API UTPSGameplayEventComponent : public UActorComponent
 {
@@ -22,5 +24,8 @@ public:
 
 	// Sp Attack Event
 	FOnHitEvent OnSpAttackHitEvent;
+
+	// Hp Change Event
+	FOnStatChangeEvent OnHpChangeEvent;
 
 };
