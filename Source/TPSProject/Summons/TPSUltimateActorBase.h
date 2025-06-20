@@ -25,4 +25,12 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 	float Damage = 10.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+	float LifeTime = 3.0f;
+
+	// 콜리전 컴포넌트
+	UPROPERTY(EditDefaultsOnly, Category = "Collision")
+	TObjectPtr<class USphereComponent> Collision;
+
 };

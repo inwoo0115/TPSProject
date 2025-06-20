@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipment/TPSAbilityEquipmentBase.h"
+#include "Summons/TPSUltimateType.h"
+#include "Summons/TPSUltimateActorBase.h"
 #include "TPSUltimateSkillBase.generated.h"
 
 USTRUCT(BlueprintType)
@@ -18,6 +20,9 @@ struct FUltimateSkillContext
 	float MaxGauge = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float LifeTime = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> SkillEquipmentIcon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
@@ -25,6 +30,9 @@ struct FUltimateSkillContext
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf <class ATPSSkillRangeDecalBase> RangeDecal;
+
+	UPROPERTY(EditAnywhere, Category = SkillInfo)
+	EUltimateType CurrentUltimate;
 };
 
 
@@ -66,6 +74,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class ATPSSkillRangeDecalBase> TargetRange;
 
+	UPROPERTY(EditAnywhere, Category = UltimateList)
+	TMap<EUltimateType, TSubclassOf<ATPSUltimateActorBase>> UltimateActorList;
+
 protected:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "SkillEquipment")
 	FUltimateSkillContext SkillContext;
@@ -80,4 +91,7 @@ protected:
 	void OnRepGaugeChanged();
 
 	FDelegateHandle DelegateHandle;
+
+	UPROPERTY()
+	FVector TargetLocation = FVector(0, 0, 0);
 };

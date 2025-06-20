@@ -6,6 +6,8 @@
 #include "Engine/DataAsset.h"
 #include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "Summons/TPSUltimateType.h"
+#include "Summons/TPSUltimateActorBase.h"
 #include "Summons/TPSSkillRangeDecalBase.h"
 #include "TPSUltimateSkillData.generated.h"
 
@@ -21,8 +23,14 @@ public:
 	UPROPERTY(EditAnywhere, Category = EquipmentAbility)
 	TMap<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>> AbilityList;
 
+	UPROPERTY(EditAnywhere, Category = UltimateList)
+	TMap<EUltimateType, TSubclassOf<ATPSUltimateActorBase>> UltimateActorList;
+
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	float Damage;
+
+	UPROPERTY(EditAnywhere, Category = SkillInfo)
+	float LifeTime;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	float UltiGauge;
@@ -35,4 +43,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	TSubclassOf<ATPSSkillRangeDecalBase> RangeDecal;
+
+	UPROPERTY(EditAnywhere, Category = SkillInfo)
+	EUltimateType CurrentUltimate;
 };

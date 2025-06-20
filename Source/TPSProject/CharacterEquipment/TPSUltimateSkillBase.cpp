@@ -109,46 +109,24 @@ void ATPSUltimateSkillBase::CastSkill()
 
     if (Character)
     {
-        // 카메라 기준 라인트레이스
-        FVector CameraLocation = Character->GetCameraLocation();
-        FRotator CameraRotation = Character->GetCameraRotation();
+        // 궁극기 액터 스폰
+        FActorSpawnParameters SpawnParams;
 
-        FVector TraceStart = CameraLocation + CameraRotation.Vector() * 100.0f;
-        FVector TraceEnd = TraceStart + CameraRotation.Vector() * 10000.0f;
+        SpawnParams.Owner = GetOwner();
 
-        FHitResult HitResult;
-        FCollisionQueryParams TraceParams;
-        TraceParams.AddIgnoredActor(this);
-        TraceParams.AddIgnoredActor(GetOwner());
+        SpawnParams.Instigator = GetInstigator();
 
-        bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams);
-        FVector TargetPoint = bHit ? HitResult.ImpactPoint : TraceEnd;
+        auto Ulti = GetWorld()->SpawnActor<ATPSUltimateActorBase>(
+            UltimateActorList[SkillContext.CurrentUltimate],
+            TargetLocation,
+            FRotator(0, 0, 0),
+            SpawnParams
+        );
 
-        float Distance = FVector::Dist(TargetPoint, TraceStart);
-        if (Distance < 3000.0f)
+        if (Ulti)
         {
-            // 궁극기 액터 스폰
-            FActorSpawnParameters SpawnParams;
-
-            SpawnParams.Owner = GetOwner();
-
-            SpawnParams.Instigator = GetInstigator();
-
-            /*auto Drone = GetWorld()->SpawnActor<ATPSDroneActorBase>(
-                DroneActorList[SkillContext.CurrentDroneActor],
-                TargetPoint,
-                FRotator(0, 0, 0),
-                SpawnParams
-            );*/
-
-            //if (Drone)
-            //{
-            //    // 드론 내부 변수 설정
-            //    Drone->Power = SkillContext.Power;
-            //    Drone->LifeTime = SkillContext.LifeTime;
-            //    Drone->OverlapRatio = SkillContext.Duration;
-            //    Drone->UltiGaugeRatio = SkillContext.UltiGaugeRatio;
-            //}
+            Ulti->Damage = SkillContext.Damage;
+            Ulti->LifeTime = SkillContext.LifeTime;
         }
     }
 }
@@ -162,6 +140,9 @@ void ATPSUltimateSkillBase::LaunchSkill()
     }
 
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+    // 서버 rpc 호출
+    TargetLocation = TargetRange->GetActorLocation();
 
     if (TargetRange && Character->IsLocallyControlled())
     {
@@ -201,6 +182,12 @@ void ATPSUltimateSkillBase::SetSkillContextFromData()
         SkillContext.SkillEquipmentName = SkillData->SkillEquipmentName;
 
         SkillContext.RangeDecal = SkillData->RangeDecal;
+
+        UltimateActorList = SkillData->UltimateActorList;
+
+        SkillContext.CurrentUltimate = SkillData->CurrentUltimate;
+
+        SkillContext.LifeTime = SkillData->LifeTime;
     }
 }
 
