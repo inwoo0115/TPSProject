@@ -6,46 +6,32 @@
 #include "Engine/DataAsset.h"
 #include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
-#include "Summons/TPSDroneType.h"
-#include "Summons/TPSDroneActorBase.h"
 #include "Summons/TPSSkillRangeDecalBase.h"
-#include "TPSDroneSkillData.generated.h"
+#include "TPSUltimateSkillData.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API UTPSDroneSkillData : public UDataAsset
+class TPSPROJECT_API UTPSUltimateSkillData : public UDataAsset
 {
 	GENERATED_BODY()
 	
 public:
-	UPROPERTY(EditAnywhere, Category = DroneList)
-	TMap<EDroneType, TSubclassOf<ATPSDroneActorBase>> DroneActorList;
-
 	UPROPERTY(EditAnywhere, Category = EquipmentAbility)
 	TMap<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>> AbilityList;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
-	float Power;
+	float Damage;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
-	float CoolTime;
-
-	UPROPERTY(EditAnywhere, Category = SkillInfo)
-	float LifeTime;
-
-	UPROPERTY(EditAnywhere, Category = SkillInfo)
-	float UltiGaugeRatio;
+	float UltiGauge;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	TSoftObjectPtr<UTexture2D> SkillEquipmentIcon;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	FText SkillEquipmentName;
-
-	UPROPERTY(EditAnywhere, Category = SkillInfo)
-	EDroneType CurrentDroneActor;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	TSubclassOf<ATPSSkillRangeDecalBase> RangeDecal;

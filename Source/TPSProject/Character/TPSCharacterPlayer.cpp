@@ -142,7 +142,8 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(SpAttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::SpAttack);
 	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Reload);
 	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Interact);
-	EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Ultimate);
+	EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Ultimate);
+	EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::UltimateUI);
 	EnhancedInputComponent->BindAction(DroneAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Drone);
 	EnhancedInputComponent->BindAction(DroneAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::DroneUI);
 	EnhancedInputComponent->BindAction(InfoAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Info);
@@ -415,6 +416,30 @@ void ATPSCharacterPlayer::Reload(const FInputActionValue& Value)
 
 void ATPSCharacterPlayer::Ultimate(const FInputActionValue& Value)
 {
+	if (IsLocallyControlled() && UltimateComponent->GetCanCastSkill() && CanPlayMontageByPriority(AnimMontageData->AnimMontages[EMontageType::Ultimate]))
+	{
+		UltimateComponent->LaunchSkill();
+
+		UE_LOG(LogTemp, Warning, TEXT("LaunchSkill"));
+
+		if (!HasAuthority())
+		{
+			ServerRPCUltimateAction();
+		}
+		else
+		{
+			MulticastRPCUltimateAction();
+		}
+	}
+}
+
+void ATPSCharacterPlayer::UltimateUI(const FInputActionValue& Value)
+{
+	// 누른 상태로 스킬 설치 범위 보여주기
+	if (IsLocallyControlled() && UltimateComponent->GetCanCastSkill())
+	{
+		UltimateComponent->ShowCastUI();
+	}
 }
 
 void ATPSCharacterPlayer::Esc(const FInputActionValue& Value)
@@ -535,6 +560,16 @@ void ATPSCharacterPlayer::ServerRPCDroneAction_Implementation()
 }
 
 
+void ATPSCharacterPlayer::ServerRPCUltimateAction_Implementation()
+{
+	MulticastRPCUltimateAction();
+}
+
+void ATPSCharacterPlayer::MulticastRPCUltimateAction_Implementation()
+{
+	GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::Ultimate]);
+}
+
 void ATPSCharacterPlayer::OnRepIsRun()
 {
 	if (IsRun)
@@ -565,9 +600,18 @@ void ATPSCharacterPlayer::StartAttack()
 
 void ATPSCharacterPlayer::StartSpAttack()
 {
-	// 서버나 로컬 클라이언트에서만 실행
+	// 서버에서만 실행
 	if (HasAuthority())
 	{
 		SpAttackComponent->CastSkill();
+	}
+}
+
+void ATPSCharacterPlayer::StartUltimate()
+{
+	// 서버에서만 실행
+	if (HasAuthority())
+	{
+		UltimateComponent->CastSkill();
 	}
 }

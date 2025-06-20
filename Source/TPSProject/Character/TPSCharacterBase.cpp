@@ -19,6 +19,8 @@
 #include "Animation/TPSAnimMontageData.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 
+#include "Interface/TPSUltiGaugeInterface.h"
+
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
 {
@@ -99,7 +101,7 @@ ATPSCharacterBase::ATPSCharacterBase()
 	EventComponent = CreateDefaultSubobject<UTPSGameplayEventComponent>(TEXT("EventComponent"));
 
 	// UltimateComponent 설정
-	// UltimateComponent = CreateDefaultSubobject<UTPSUltimateComponent>(TEXT("UltimateComponent"));
+	UltimateComponent = CreateDefaultSubobject<UTPSUltimateComponent>(TEXT("UltimateComponent"));
 
 	// 리플리케이션 설정
 	bReplicates = true;
@@ -117,8 +119,8 @@ void ATPSCharacterBase::BeginPlay()
 		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		DroneComponent->Equip(TPSGameInstance->DroneSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		SpAttackComponent->Equip(TPSGameInstance->SpAttackSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
+		UltimateComponent->Equip(TPSGameInstance->UltimateSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 	}
-
 }
 
 
@@ -218,7 +220,18 @@ float ATPSCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	// 데미지 판정은 서버에서만
 	if (HasAuthority())
 	{
-		StatComponent->CaculateDamage(DamageAmount);
+		float DamageResult = StatComponent->CaculateDamage(DamageAmount);
+
+		// TODO 임시 궁극기 게이지 테스트 용
+		auto EventInterface = Cast<ITPSEventComponentInterface>(EventInstigator->GetPawn());
+		if (EventInterface)
+		{
+			auto GaugeInterface = Cast<ITPSUltiGaugeInterface>(DamageCauser);
+			if (GaugeInterface)
+			{
+				EventInterface->GetEventComponent()->OnUltiGaugeUpdateEvent.Broadcast(DamageResult * GaugeInterface->GetUltimateGaugeRatio());
+			}
+		}
 	}
 
 	return 0.0f;

@@ -1,44 +1,51 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipment/TPSDroneSkillBase.h"
+#include "CharacterEquipment/TPSUltimateSkillBase.h"
+#include "Character/TPSCharacterBase.h"	
+#include "Interface/TPSEventComponentInterface.h"  
 #include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Net/UnrealNetwork.h"
-#include "TPSDroneSkillData.h"
-#include "Character/TPSCharacterBase.h"
-#include "Summons/TPSSkillRangeDecalBase.h"
+#include "TPSUltimateSkillData.h"
 
-
-void ATPSDroneSkillBase::BeginPlay()
+void ATPSUltimateSkillBase::BeginPlay()
 {
     Super::BeginPlay();
 
-    if (EventSystem)
+    // 게이지 업데이트 함수 바인딩
+    auto EventComponent = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (EventComponent)
     {
-        // UI Update
-        EventSystem->OnDroneCoolTimeChange.Broadcast(SkillContext.CoolTime, SkillContext.CoolTime);
+        EventComponent->GetEventComponent()->OnUltiGaugeUpdateEvent.AddUObject(this, &ATPSUltimateSkillBase::UpdateGauge);
+    }
+
+    auto Character = Cast<ATPSCharacterBase>(GetOwner());
+    if (Character && Character->IsLocallyControlled())
+    {
+        EventSystem->OnUltimateGaugeChange.Broadcast(CurrentGauge, SkillContext.MaxGauge);
     }
 }
 
-void ATPSDroneSkillBase::Tick(float DeltaTime)
+void ATPSUltimateSkillBase::UpdateGauge(float AddGauge)
 {
-    Super::Tick(DeltaTime);
-
-    // 쿨타임 진행 중 일때 UI 업데이트
-    if (!bCanCast)
+    if (CurrentGauge + AddGauge > SkillContext.MaxGauge)
     {
-        auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
-        if (EventSystem && Character->IsLocallyControlled())
-        {
-            CurrentCoolTime += DeltaTime;
+        CurrentGauge = SkillContext.MaxGauge;
+    }
+    else
+    {
+        CurrentGauge += AddGauge;
+    }
 
-            // UI Update
-            EventSystem->OnDroneCoolTimeChange.Broadcast(CurrentCoolTime, SkillContext.CoolTime);
-        }
+    auto Character = Cast<ATPSCharacterBase>(GetOwner());
+    if (Character && Character->IsLocallyControlled())
+    {
+        EventSystem->OnUltimateGaugeChange.Broadcast(CurrentGauge, SkillContext.MaxGauge);
     }
 }
 
-void ATPSDroneSkillBase::ShowUI()
+void ATPSUltimateSkillBase::ShowUI()
 {
     // 설치 위치 UI
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
@@ -93,8 +100,10 @@ void ATPSDroneSkillBase::ShowUI()
     }
 }
 
-void ATPSDroneSkillBase::CastSkill()
+void ATPSUltimateSkillBase::CastSkill()
 {
+    CurrentGauge = 0.0f;
+
     // 스킬 실행
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
@@ -118,44 +127,39 @@ void ATPSDroneSkillBase::CastSkill()
         float Distance = FVector::Dist(TargetPoint, TraceStart);
         if (Distance < 3000.0f)
         {
-            // 드론 스폰
+            // 궁극기 액터 스폰
             FActorSpawnParameters SpawnParams;
 
             SpawnParams.Owner = GetOwner();
 
             SpawnParams.Instigator = GetInstigator();
 
-            auto Drone = GetWorld()->SpawnActor<ATPSDroneActorBase>(
+            /*auto Drone = GetWorld()->SpawnActor<ATPSDroneActorBase>(
                 DroneActorList[SkillContext.CurrentDroneActor],
                 TargetPoint,
                 FRotator(0, 0, 0),
                 SpawnParams
-            );
+            );*/
 
-            if (Drone)
-            {
-                // 드론 내부 변수 설정
-                Drone->Power = SkillContext.Power;
-                Drone->LifeTime = SkillContext.LifeTime;
-                Drone->OverlapRatio = SkillContext.Duration;
-                Drone->UltiGaugeRatio = SkillContext.UltiGaugeRatio;
-            }
+            //if (Drone)
+            //{
+            //    // 드론 내부 변수 설정
+            //    Drone->Power = SkillContext.Power;
+            //    Drone->LifeTime = SkillContext.LifeTime;
+            //    Drone->OverlapRatio = SkillContext.Duration;
+            //    Drone->UltiGaugeRatio = SkillContext.UltiGaugeRatio;
+            //}
         }
     }
 }
 
-void ATPSDroneSkillBase::LaunchSkill()
+void ATPSUltimateSkillBase::LaunchSkill()
 {
     // 범위 밖일 경우 무효
     if (!TargetRange)
     {
-		return;
+        return;
     }
-
-    bCanCast = false;
-
-    // Cast Cool Time Start
-    CurrentCoolTime = 0.0f;
 
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
@@ -164,61 +168,57 @@ void ATPSDroneSkillBase::LaunchSkill()
         TargetRange->Destroy();
         TargetRange = nullptr;
     }
-
-
-    // Cast Delay
-    GetWorld()->GetTimerManager().SetTimer(CastCooldownHandle, FTimerDelegate::CreateLambda([this]()
-        {
-            bCanCast = true;
-        }), SkillContext.CoolTime, false);
 }
 
-bool ATPSDroneSkillBase::GetCanCast()
+bool ATPSUltimateSkillBase::GetCanCast()
 {
-    return bCanCast;
+    return CurrentGauge == SkillContext.MaxGauge;
 }
 
-void ATPSDroneSkillBase::SetSkillContextFromData()
+void ATPSUltimateSkillBase::SetSkillContextFromData()
 {
     if (SkillData)
     {
         AbilityList = SkillData->AbilityList;
 
-        DroneActorList = SkillData->DroneActorList;
+        SkillContext.Damage = SkillData->Damage;
 
-        SkillContext.Power = SkillData->Power;
+        CurrentGauge = 0.0f;
 
-        SkillContext.CoolTime = SkillData->CoolTime;
-
-        SkillContext.UltiGaugeRatio = SkillData->UltiGaugeRatio;
+        SkillContext.MaxGauge = SkillData->UltiGauge;
 
         SkillContext.SkillEquipmentIcon = SkillData->SkillEquipmentIcon;
 
         SkillContext.SkillEquipmentName = SkillData->SkillEquipmentName;
 
-        SkillContext.CurrentDroneActor = SkillData->CurrentDroneActor;
-
         SkillContext.RangeDecal = SkillData->RangeDecal;
-
-        SkillContext.LifeTime = SkillData->LifeTime;
     }
 }
 
-void ATPSDroneSkillBase::InitializeAbilities()
+void ATPSUltimateSkillBase::InitializeAbilities()
 {
-    // 컨텍스트 기반 특성 적용
+    // 특성 적용
 }
 
-FDroneSkillContext ATPSDroneSkillBase::GetSkillContext() const
+FUltimateSkillContext ATPSUltimateSkillBase::GetSkillContext() const
 {
 	return SkillContext;
 }
 
-void ATPSDroneSkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+void ATPSUltimateSkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
     Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-    DOREPLIFETIME(ATPSDroneSkillBase, SkillContext);
-    DOREPLIFETIME(ATPSDroneSkillBase, bCanCast);
-    DOREPLIFETIME(ATPSDroneSkillBase, SkillData);
+    DOREPLIFETIME(ATPSUltimateSkillBase, SkillContext);
+    DOREPLIFETIME(ATPSUltimateSkillBase, SkillData);
+    DOREPLIFETIME(ATPSUltimateSkillBase, CurrentGauge);
+}
+
+void ATPSUltimateSkillBase::OnRepGaugeChanged()
+{
+    auto Character = Cast<ATPSCharacterBase>(GetOwner());
+    if (Character && Character->IsLocallyControlled())
+    {
+        EventSystem->OnUltimateGaugeChange.Broadcast(CurrentGauge, SkillContext.MaxGauge);
+    }
 }

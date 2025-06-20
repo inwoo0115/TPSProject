@@ -53,7 +53,7 @@ void UTPSCharacterStatComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProp
 	DOREPLIFETIME(UTPSCharacterStatComponent, Damage);
 }
 
-void UTPSCharacterStatComponent::CaculateDamage(float TakeDamage)
+float UTPSCharacterStatComponent::CaculateDamage(float TakeDamage)
 {
 	float DamageResult = TakeDamage * (100 / (100 + Defensive));
 
@@ -72,6 +72,8 @@ void UTPSCharacterStatComponent::CaculateDamage(float TakeDamage)
 	{
 		EventSystem->OnHPChange.Broadcast(CurrentHP, MaxHP);
 	}
+
+	return DamageResult;
 }
 
 void UTPSCharacterStatComponent::UpdateHp(float HpDelta)

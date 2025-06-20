@@ -54,8 +54,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Event")
 	TObjectPtr<class UTPSGameplayEventComponent> EventComponent;
 
-	//UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ultimate")
-	//TObjectPtr<class UTPSUltimateComponent> UltimateComponent;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Ultimate")
+	TObjectPtr<class UTPSUltimateComponent> UltimateComponent;
 
 	virtual UTPSGameplayEventComponent* GetEventComponent() override;
 

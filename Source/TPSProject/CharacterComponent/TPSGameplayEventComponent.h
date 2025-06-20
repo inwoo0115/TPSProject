@@ -28,4 +28,7 @@ public:
 	// Hp Change Event
 	FOnStatChangeEvent OnHpChangeEvent;
 
+	// Ulti Gauge Event
+	FOnStatChangeEvent OnUltiGaugeUpdateEvent;
+
 };

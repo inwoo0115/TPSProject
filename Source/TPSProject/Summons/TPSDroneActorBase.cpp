@@ -46,7 +46,7 @@ void ATPSDroneActorBase::BeginPlay()
 	}
 
 	// 0.5초마다 CheckOverlaps 호출
-	GetWorld()->GetTimerManager().SetTimer(OverlapCheckTimerHandle, this, &ATPSDroneActorBase::CheckOverlaps, 0.5f, true);
+	GetWorld()->GetTimerManager().SetTimer(OverlapCheckTimerHandle, this, &ATPSDroneActorBase::CheckOverlaps, OverlapRatio, true);
 
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);
@@ -58,6 +58,7 @@ void ATPSDroneActorBase::CheckOverlaps()
 	TArray<AActor*> OverlappingActors;
 	Collision->GetOverlappingActors(OverlappingActors);
 
+	// 서버에서 오버랩 이벤트 처리
 	if (HasAuthority())
 	{
 		for (AActor* OtherActor : OverlappingActors)
@@ -65,7 +66,8 @@ void ATPSDroneActorBase::CheckOverlaps()
 			auto EventInterface = Cast<ITPSEventComponentInterface>(OtherActor);
 			if (EventInterface && EventInterface->GetEventComponent())
 			{
-				EventInterface->GetEventComponent()->OnHpChangeEvent.Broadcast(5.0f);
+				// 0.5초마다 +5 체력
+				EventInterface->GetEventComponent()->OnHpChangeEvent.Broadcast(Power);
 			}
 		}
 	}
@@ -105,5 +107,10 @@ bool ATPSDroneActorBase::IsNetRelevantFor(const AActor* RealViewer, const AActor
 
 	// 이 액터의 오너에게는 리플리케이션 되지 않음
 	return RealViewer != GetOwner();
+}
+
+float ATPSDroneActorBase::GetUltimateGaugeRatio()
+{
+	return UltiGaugeRatio;
 }
 

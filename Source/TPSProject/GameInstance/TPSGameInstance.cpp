@@ -25,4 +25,10 @@ void UTPSGameInstance::Init()
 	{
 		DroneSkillEquipmentClass = SoftClass_Drone.LoadSynchronous();
 	}
+
+	TSoftClassPtr<ATPSUltimateSkillBase> SoftClass_Ulti(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicUltimate")));
+	if (SoftClass_Ulti.IsValid())
+	{
+		UltimateSkillEquipmentClass = SoftClass_Ulti.LoadSynchronous();
+	}
 }

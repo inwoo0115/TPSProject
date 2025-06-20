@@ -95,10 +95,11 @@ void ATPSWeaponBase::Fire()
 			SpawnParams
 		);
 
-		// 총알 구조체가 만들어지면 데미지 설정
+		// 총알 구조체가 만들어지면 내부 설정
 		if (Projectile)
 		{
-			//Event System 기반 데미지 세팅
+			Projectile->Damage = WeaponContext.Damage;
+			Projectile->UltiGaugeRatio = WeaponContext.UltiGaugeRatio;
 		}
 
 		// 총이 발사되면 UI 업데이트

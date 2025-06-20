@@ -4,11 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Interface/TPSUltiGaugeInterface.h"
 #include "TPSProjectileBase.generated.h"
 
 
 UCLASS()
-class TPSPROJECT_API ATPSProjectileBase : public AActor
+class TPSPROJECT_API ATPSProjectileBase : public AActor, public ITPSUltiGaugeInterface
 {
 	GENERATED_BODY()
 	
@@ -27,11 +28,18 @@ public:
 
 	virtual void SetDamage(float NewDamage);
 
+	virtual float GetUltimateGaugeRatio() override;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float Damage = 10.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float UltiGaugeRatio = 10.0f;
+
 protected:
 	// 콜리전 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "Collision")
 	TObjectPtr<class USphereComponent> Collision;
-
 
 	// 발사체 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "ProjectileMovement")
@@ -39,7 +47,4 @@ protected:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float LifeTime = 3.0f;
-
-	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
-	float Damage = 10.0f;
 };

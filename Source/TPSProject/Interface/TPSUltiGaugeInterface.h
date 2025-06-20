@@ -4,11 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Interface.h"
-#include "TPSPlayableAnimationInterface.generated.h"
+#include "TPSUltiGaugeInterface.generated.h"
 
 // This class does not need to be modified.
 UINTERFACE(MinimalAPI)
-class UTPSPlayableAnimationInterface : public UInterface
+class UTPSUltiGaugeInterface : public UInterface
 {
 	GENERATED_BODY()
 };
@@ -16,13 +16,11 @@ class UTPSPlayableAnimationInterface : public UInterface
 /**
  * 
  */
-class TPSPROJECT_API ITPSPlayableAnimationInterface
+class TPSPROJECT_API ITPSUltiGaugeInterface
 {
 	GENERATED_BODY()
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
-	virtual void StartAttack() = 0;
-	virtual void StartSpAttack() = 0;
-	virtual void StartUltimate() = 0;
+	virtual float GetUltimateGaugeRatio() = 0;
 };

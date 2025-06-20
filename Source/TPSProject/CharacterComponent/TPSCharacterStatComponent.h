@@ -20,7 +20,7 @@ public:
 	// Replication ¼¼ÆÃ
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	void CaculateDamage(float TakeDamage);
+	float CaculateDamage(float TakeDamage);
 
 	void UpdateHp(float HpDelta);
 

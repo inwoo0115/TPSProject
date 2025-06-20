@@ -49,4 +49,9 @@ void ATPSProjectileBase::SetDamage(float NewDamage)
 	Damage = NewDamage;
 }
 
+float ATPSProjectileBase::GetUltimateGaugeRatio()
+{
+	return UltiGaugeRatio;
+}
+
 

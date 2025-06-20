@@ -72,7 +72,7 @@ void UTPSHUDWidget::UpdateDrone(float CurrentCoolTime, float MaxCoolTime)
 
 void UTPSHUDWidget::UpdateUltimate(int32 CurrentGauge, int32 MaxGauge)
 {
-	int32 ProgressRatio = CurrentGauge / MaxGauge * 100;
+	int32 ProgressRatio = float(CurrentGauge) / float(MaxGauge) * 100.0f;
 
 	if (UltimateProgressValue)
 	{
@@ -84,7 +84,7 @@ void UTPSHUDWidget::UpdateUltimate(int32 CurrentGauge, int32 MaxGauge)
 		UMaterialInstanceDynamic* CircularProgress = UltimateProgress->GetDynamicMaterial();
 		if (CircularProgress)
 		{
-			CircularProgress->SetScalarParameterValue("CircularProgress01_Blue", CurrentGauge / MaxGauge);
+			CircularProgress->SetScalarParameterValue("CircularProgress01_Blue", float(CurrentGauge) / float(MaxGauge));
 		}
 
 	}

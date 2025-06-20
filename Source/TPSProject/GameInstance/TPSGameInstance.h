@@ -4,9 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Engine/GameInstance.h"
-#include "CharacterEquipment/TPSWeaponBase.h"
 #include "CharacterEquipment/TPSDroneSkillBase.h"
 #include "CharacterEquipment/TPSSpAttackSkillBase.h"
+#include "CharacterEquipment/TPSWeaponBase.h"
+#include "CharacterEquipment/TPSUltimateSkillBase.h"
 #include "TPSGameInstance.generated.h"
 
 /**
@@ -21,11 +22,14 @@ public:
 	virtual void Init() override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<ATPSWeaponBase> WeaponClass;
+	TSubclassOf<class ATPSWeaponBase> WeaponClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<ATPSDroneSkillBase> DroneSkillEquipmentClass;
+	TSubclassOf<class ATPSDroneSkillBase> DroneSkillEquipmentClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<ATPSSpAttackSkillBase> SpAttackSkillEquipmentClass;
+	TSubclassOf<class ATPSSpAttackSkillBase> SpAttackSkillEquipmentClass;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class ATPSUltimateSkillBase> UltimateSkillEquipmentClass;
 };

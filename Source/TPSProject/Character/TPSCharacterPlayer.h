@@ -62,6 +62,8 @@ protected:
 
 	void Ultimate(const FInputActionValue& Value);
 
+	void UltimateUI(const FInputActionValue& Value);
+
 	void Esc(const FInputActionValue& Value);
 
 	void Info(const FInputActionValue& Value);
@@ -142,6 +144,12 @@ protected:
 	UFUNCTION(Server, Reliable)
 	void ServerRPCDroneAction();
 
+	UFUNCTION(Server, Reliable)
+	void ServerRPCUltimateAction();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCUltimateAction();
+
 	UFUNCTION()
 	void OnRepIsRun();
 
@@ -180,4 +188,6 @@ protected:
 	void StartAttack() override;
 
 	void StartSpAttack() override;
+
+	void StartUltimate() override;
 };

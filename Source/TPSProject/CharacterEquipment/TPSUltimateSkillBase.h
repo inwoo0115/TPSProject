@@ -4,29 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipment/TPSAbilityEquipmentBase.h"
-#include "Summons/TPSDroneType.h"
-#include "TPSDroneSkillBase.generated.h"
-
+#include "TPSUltimateSkillBase.generated.h"
 
 USTRUCT(BlueprintType)
-struct FDroneSkillContext
+struct FUltimateSkillContext
 {
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Power = 0.0f;
+	float Damage = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float CoolTime = 0.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float Duration = 0.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float UltiGaugeRatio = 0.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float LifeTime = 0.0f;
+	float MaxGauge = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> SkillEquipmentIcon;
@@ -35,24 +24,20 @@ struct FDroneSkillContext
 	FText SkillEquipmentName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EDroneType CurrentDroneActor = EDroneType::BasicDrone;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSubclassOf <class ATPSSkillRangeDecalBase> RangeDecal;
 };
+
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API ATPSDroneSkillBase : public ATPSAbilityEquipmentBase
+class TPSPROJECT_API ATPSUltimateSkillBase : public ATPSAbilityEquipmentBase
 {
 	GENERATED_BODY()
-
+	
 public:
 	virtual void BeginPlay() override;
-
-	virtual void Tick(float DeltaTime) override;
 
 	virtual void ShowUI();
 
@@ -66,33 +51,29 @@ public:
 
 	virtual void InitializeAbilities() override;
 
+	void UpdateGauge(float AddGauge);
+
 	// 스킬 장비 정보 데이터 에셋
 	UPROPERTY(Replicated)
-	TObjectPtr<class UTPSDroneSkillData> SkillData;
-
-	UPROPERTY(Replicated)
-	bool bCanCast = true;
+	TObjectPtr<class UTPSUltimateSkillData> SkillData;
 
 	UFUNCTION(BlueprintCallable)
-	FDroneSkillContext GetSkillContext() const;
-
-	// 드론 클래스 목록
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	TMap<EDroneType, TSubclassOf<class ATPSDroneActorBase>> DroneActorList;
+	FUltimateSkillContext GetSkillContext() const;
 
 	// 스킬 범위 액터
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class ATPSSkillRangeDecalBase> TargetRange;
 
-
 protected:
-	float CurrentCoolTime = 0.0f;
-
-	FTimerHandle CastCooldownHandle;
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "SkillEquipment")
+	FUltimateSkillContext SkillContext;
 
 	// RPC
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "SkillEquipment")
-	FDroneSkillContext SkillContext;
+	UPROPERTY(ReplicatedUsing=OnRepGaugeChanged, EditAnywhere, BlueprintReadWrite)
+	float CurrentGauge = 0.0f;
+
+	UFUNCTION()
+	void OnRepGaugeChanged();
 };
