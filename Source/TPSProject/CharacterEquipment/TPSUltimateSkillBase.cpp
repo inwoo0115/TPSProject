@@ -17,7 +17,7 @@ void ATPSUltimateSkillBase::BeginPlay()
     auto EventComponent = Cast<ITPSEventComponentInterface>(GetOwner());
     if (EventComponent)
     {
-        EventComponent->GetEventComponent()->OnUltiGaugeUpdateEvent.AddUObject(this, &ATPSUltimateSkillBase::UpdateGauge);
+       DelegateHandle = EventComponent->GetEventComponent()->OnUltiGaugeUpdateEvent.AddUObject(this, &ATPSUltimateSkillBase::UpdateGauge);
     }
 
     auto Character = Cast<ATPSCharacterBase>(GetOwner());
@@ -173,6 +173,15 @@ void ATPSUltimateSkillBase::LaunchSkill()
 bool ATPSUltimateSkillBase::GetCanCast()
 {
     return CurrentGauge == SkillContext.MaxGauge;
+}
+
+void ATPSUltimateSkillBase::ClearUpdateDelegate()
+{
+    auto EventComponent = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (EventComponent)
+    {
+        EventComponent->GetEventComponent()->OnUltiGaugeUpdateEvent.Remove(DelegateHandle);
+    }
 }
 
 void ATPSUltimateSkillBase::SetSkillContextFromData()

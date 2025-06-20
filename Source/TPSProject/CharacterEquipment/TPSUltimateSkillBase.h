@@ -47,6 +47,8 @@ public:
 
 	virtual bool GetCanCast();
 
+	void ClearUpdateDelegate();
+
 	void SetSkillContextFromData();
 
 	virtual void InitializeAbilities() override;
@@ -76,4 +78,6 @@ protected:
 
 	UFUNCTION()
 	void OnRepGaugeChanged();
+
+	FDelegateHandle DelegateHandle;
 };
