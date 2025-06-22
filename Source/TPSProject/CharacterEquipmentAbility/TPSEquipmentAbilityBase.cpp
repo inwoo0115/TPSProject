@@ -3,9 +3,24 @@
 
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
+#include "CharacterEquipment/TPSDroneSkillBase.h"
+#include "CharacterEquipment/TPSSpAttackSkillBase.h"
+#include "CharacterEquipment/TPSUltimateSkillBase.h"
 #include "Interface/TPSEventComponentInterface.h"
 
 void UTPSEquipmentAbilityBase::InitializeWeaponAbility(FWeaponContext& WeaponContext)
+{
+}
+
+void UTPSEquipmentAbilityBase::InitializeDroneAbility(FDroneSkillContext& SkillContext)
+{
+}
+
+void UTPSEquipmentAbilityBase::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)
+{
+}
+
+void UTPSEquipmentAbilityBase::InitializeUltimateAbility(FUltimateSkillContext& SkillContext)
 {
 }
 

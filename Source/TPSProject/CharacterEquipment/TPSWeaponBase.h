@@ -41,7 +41,7 @@ struct FWeaponContext
 	FText WeaponName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	EProjectileType CurrentBullet = EProjectileType::RifleBullet;
+	EProjectileType CurrentBullet = EProjectileType::BasicBullet;
 };
 
 
@@ -52,6 +52,8 @@ class TPSPROJECT_API ATPSWeaponBase : public ATPSAbilityEquipmentBase
 	
 public:
 	virtual void BeginPlay() override;
+
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 	// 무기 기능 구현 함수 
 	virtual void Launch();
@@ -89,6 +91,8 @@ public:
 	// 무기 발사체 클래스 목록
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
+
+	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
 
 protected:
 

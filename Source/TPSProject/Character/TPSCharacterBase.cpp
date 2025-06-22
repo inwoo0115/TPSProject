@@ -116,7 +116,7 @@ void ATPSCharacterBase::BeginPlay()
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
 	if (IsLocallyControlled() && TPSGameInstance)
 	{
-		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
+		WeaponComponent->EquipWeapon(TPSGameInstance->WeaponClass1, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		DroneComponent->Equip(TPSGameInstance->DroneSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		SpAttackComponent->Equip(TPSGameInstance->SpAttackSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		UltimateComponent->Equip(TPSGameInstance->UltimateSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);

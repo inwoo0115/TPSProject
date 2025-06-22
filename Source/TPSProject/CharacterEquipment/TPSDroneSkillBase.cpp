@@ -7,7 +7,7 @@
 #include "TPSDroneSkillData.h"
 #include "Character/TPSCharacterBase.h"
 #include "Summons/TPSSkillRangeDecalBase.h"
-
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 
 void ATPSDroneSkillBase::BeginPlay()
 {
@@ -17,6 +17,25 @@ void ATPSDroneSkillBase::BeginPlay()
     {
         // UI Update
         EventSystem->OnDroneCoolTimeChange.Broadcast(SkillContext.CoolTime, SkillContext.CoolTime);
+    }
+
+    // 스탯 변경 델리게이트 바인딩
+    auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (GameplayEventInterface)
+    {
+        OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnDroneFieldChangeEvent.AddUObject(this, &ATPSDroneSkillBase::ChangeFieldStatByValue);
+    }
+}
+
+void ATPSDroneSkillBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+    // 스탯 변경 델리게이트 제거
+    auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (GameplayEventInterface)
+    {
+        GameplayEventInterface->GetEventComponent()->OnDroneFieldChangeEvent.Remove(OnFieldChangedHandle);
     }
 }
 
@@ -210,6 +229,13 @@ void ATPSDroneSkillBase::SetSkillContextFromData()
 void ATPSDroneSkillBase::InitializeAbilities()
 {
     // 컨텍스트 기반 특성 적용
+    for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
+    {
+        if (Ability)
+        {
+            Ability->InitializeDroneAbility(SkillContext);
+        }
+    }
 }
 
 FDroneSkillContext ATPSDroneSkillBase::GetSkillContext() const
@@ -219,40 +245,18 @@ FDroneSkillContext ATPSDroneSkillBase::GetSkillContext() const
 
 void ATPSDroneSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
 {
-    FString NetModeStr;
-    switch (GetNetMode())
-    {
-    case NM_Client: NetModeStr = TEXT("Client"); break;
-    case NM_ListenServer: NetModeStr = TEXT("ListenServer"); break;
-    case NM_DedicatedServer: NetModeStr = TEXT("DedicatedServer"); break;
-    case NM_Standalone: NetModeStr = TEXT("Standalone"); break;
-    }
-
-    UE_LOG(LogTemp, Warning, TEXT("[ChangeFieldStatByValue] Called on %s (%s), FieldName=%s, DeltaValue=%.2f, HasAuthority=%s"),
-        *GetName(),
-        *NetModeStr,
-        *FieldName.ToString(),
-        Value,
-        HasAuthority() ? TEXT("true") : TEXT("false"));
-
     // 1) 클래스 내부에서 FieldName을 가진 FProperty 찾기
     FProperty* FoundProperty = GetClass()->FindPropertyByName(FieldName);
     if (FoundProperty)
     {
         if (FFloatProperty* FloatProp = CastField<FFloatProperty>(FoundProperty))
         {
-			float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
-
-            UE_LOG(LogTemp, Warning, TEXT("[ChangeFieldStatByValue] Found float property: %s. CurrentValue=%.2f -> NewValue=%.2f"),
-                *FoundProperty->GetName(),
-                FloatProp->GetPropertyValue_InContainer(this),
-                NewValue);
+            float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
 
             FloatProp->SetPropertyValue_InContainer(this, NewValue);
             return;
         }
     }
-
     // 2) FDroneSkillContext 내부에서 FieldName을 가진 FProperty 찾기
     UScriptStruct* ContextStruct = FDroneSkillContext::StaticStruct();
     FProperty* ContextProp = ContextStruct->FindPropertyByName(FieldName);

@@ -16,7 +16,7 @@ void UTPSRifleAddLaserBullet::InitializeWeaponAbility(FWeaponContext& WeaponCont
 	Super::InitializeWeaponAbility(WeaponContext);
 
 	WeaponContext.AttackRatio = 0.9f;
-	WeaponContext.CurrentBullet = EProjectileType::RifleLaser;
+	WeaponContext.CurrentBullet = EProjectileType::LaserBullet;
 	WeaponContext.Damage += 50.0f;
 	WeaponContext.RequireAmmo = 10;
 }

@@ -17,9 +17,17 @@ class TPSPROJECT_API UTPSEquipmentAbilityBase : public UObject
 	GENERATED_BODY()
 
 public:
-	// 무기 장비에 상속
 	UFUNCTION()
 	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext);
+
+	UFUNCTION()
+	virtual void InitializeDroneAbility(FDroneSkillContext& SkillContext);
+
+	UFUNCTION()
+	virtual void InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext);
+
+	UFUNCTION()
+	virtual void InitializeUltimateAbility(FUltimateSkillContext& SkillContext);
 
 	// UObject 리플리케이션을 위해 오버라이드
 	FORCEINLINE bool IsSupportedForNetworking() const override { return true; }

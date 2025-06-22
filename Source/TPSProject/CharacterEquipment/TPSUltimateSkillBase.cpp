@@ -25,6 +25,13 @@ void ATPSUltimateSkillBase::BeginPlay()
     {
         EventSystem->OnUltimateGaugeChange.Broadcast(CurrentGauge, SkillContext.MaxGauge);
     }
+
+    // 스탯 변경 델리게이트 바인딩
+    auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (GameplayEventInterface)
+    {
+        OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnUltimateFieldChangeEvent.AddUObject(this, &ATPSUltimateSkillBase::ChangeFieldStatByValue);
+    }
 }
 
 void ATPSUltimateSkillBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -32,6 +39,12 @@ void ATPSUltimateSkillBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
     Super::EndPlay(EndPlayReason);
 
     ClearUpdateDelegate();
+    // 스탯 변경 델리게이트 제거
+    auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (GameplayEventInterface)
+    {
+        GameplayEventInterface->GetEventComponent()->OnUltimateFieldChangeEvent.Remove(OnFieldChangedHandle);
+    }
 }
 
 void ATPSUltimateSkillBase::UpdateGauge(float AddGauge)
@@ -226,11 +239,50 @@ void ATPSUltimateSkillBase::DeleteTargetUI()
 void ATPSUltimateSkillBase::InitializeAbilities()
 {
     // 특성 적용
+    for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
+    {
+        if (Ability)
+        {
+            Ability->InitializeUltimateAbility(SkillContext);
+        }
+    }
 }
 
 FUltimateSkillContext ATPSUltimateSkillBase::GetSkillContext() const
 {
 	return SkillContext;
+}
+
+void ATPSUltimateSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
+{
+    // 1) 클래스 내부에서 FieldName을 가진 FProperty 찾기
+    FProperty* FoundProperty = GetClass()->FindPropertyByName(FieldName);
+    if (FoundProperty)
+    {
+        if (FFloatProperty* FloatProp = CastField<FFloatProperty>(FoundProperty))
+        {
+            float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+
+            FloatProp->SetPropertyValue_InContainer(this, NewValue);
+            return;
+        }
+    }
+    // 2) FDroneSkillContext 내부에서 FieldName을 가진 FProperty 찾기
+    UScriptStruct* ContextStruct = FUltimateSkillContext::StaticStruct();
+    FProperty* ContextProp = ContextStruct->FindPropertyByName(FieldName);
+    if (ContextProp)
+    {
+        if (FFloatProperty* FloatProp = CastField<FFloatProperty>(ContextProp))
+        {
+            float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+            FloatProp->SetPropertyValue_InContainer(&SkillContext, NewValue);
+            return;
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+    }
 }
 
 void ATPSUltimateSkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

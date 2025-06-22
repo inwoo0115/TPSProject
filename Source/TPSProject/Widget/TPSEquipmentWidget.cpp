@@ -5,6 +5,9 @@
 #include "Components/Button.h"
 #include "GameInstance/TPSUiSubsystem.h"
 #include "TPSMainWeaponSettingWidget.h"
+#include "TPSDroneSettingWidget.h"
+#include "TPSUltimateSettingWidget.h"
+#include "TPSSpAttackSettingWidget.h"
 
 void UTPSEquipmentWidget::NativeConstruct()
 {
@@ -66,16 +69,56 @@ void UTPSEquipmentWidget::OnWeapon01Clicked()
 
 void UTPSEquipmentWidget::OnWeapon02Clicked()
 {
+	if (SubWeaponSettingWidgetClass)
+	{
+		// 困连 积己
+		UTPSMainWeaponSettingWidget* Widget = CreateWidget<UTPSMainWeaponSettingWidget>(GetWorld(), MainWeaponSettingWidgetClass);
+
+		if (Widget)
+		{
+			Widget->AddToViewport(12);
+		}
+	}
 }
 
 void UTPSEquipmentWidget::OnSpWeaponClicked()
 {
+	if (SpAttackSettingWidgetClass)
+	{
+		// 困连 积己
+		UTPSSpAttackSettingWidget* Widget = CreateWidget<UTPSSpAttackSettingWidget>(GetWorld(), SpAttackSettingWidgetClass);
+
+		if (Widget)
+		{
+			Widget->AddToViewport(12);
+		}
+	}
 }
 
 void UTPSEquipmentWidget::OnUltimateClicked()
 {
+	if (UltimateSettingWidgetClass)
+	{
+		// 困连 积己
+		UTPSUltimateSettingWidget* Widget = CreateWidget<UTPSUltimateSettingWidget>(GetWorld(), UltimateSettingWidgetClass);
+
+		if (Widget)
+		{
+			Widget->AddToViewport(12);
+		}
+	}
 }
 
 void UTPSEquipmentWidget::OnDroneClicked()
 {
+	if (DroneSettingWidgetClass)
+	{
+		// 困连 积己
+		UTPSDroneSettingWidget* Widget = CreateWidget<UTPSDroneSettingWidget>(GetWorld(),DroneSettingWidgetClass);
+
+		if (Widget)
+		{
+			Widget->AddToViewport(12);
+		}
+	}
 }

@@ -27,6 +27,12 @@ public:
 	// Sp Attack Event
 	FOnHitEvent OnSpAttackHitEvent;
 
+	// Drone Cast Event
+	FOnHitEvent OnDroneCastEvent;
+
+	// Ultimate Cast Event
+	FOnHitEvent OnUltimateCastEvent;
+
 	// Hp Change Event
 	FOnStatChangeEvent OnHpChangeEvent;
 
@@ -34,6 +40,11 @@ public:
 	FOnStatChangeEvent OnUltiGaugeUpdateEvent;
 
 	//Field Change Event
-	FOnFieldChangeEvent OnFieldChangeEvent;
+	FOnFieldChangeEvent OnDroneFieldChangeEvent;
 
+	FOnFieldChangeEvent OnUltimateFieldChangeEvent;
+
+	FOnFieldChangeEvent OnWeaponFieldChangeEvent;
+
+	FOnFieldChangeEvent OnSpAttackFieldChangeEvent;
 };

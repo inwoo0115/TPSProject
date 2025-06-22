@@ -83,6 +83,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = UltimateList)
 	TMap<EUltimateType, TSubclassOf<ATPSUltimateActorBase>> UltimateActorList;
 
+	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
+
+
 protected:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "SkillEquipment")
 	FUltimateSkillContext SkillContext;

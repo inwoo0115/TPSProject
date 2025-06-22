@@ -7,9 +7,9 @@
 // Sets default values
 ATPSBasicDroneActor::ATPSBasicDroneActor()
 {
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> BulletMeshAsset(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
-	if (BulletMeshAsset.Object)
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> MeshAsset(TEXT("/Engine/BasicShapes/Sphere.Sphere"));
+	if (MeshAsset.Object)
 	{
-		Mesh->SetStaticMesh(BulletMeshAsset.Object);
+		Mesh->SetStaticMesh(MeshAsset.Object);
 	}
 }

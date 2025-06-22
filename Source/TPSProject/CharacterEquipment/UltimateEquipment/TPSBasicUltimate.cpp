@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipment/TPSBasicUltimate.h"
-#include "TPSUltimateSkillData.h"
+#include "TPSBasicUltimate.h"
+#include "CharacterEquipment/TPSUltimateSkillData.h"
 
 ATPSBasicUltimate::ATPSBasicUltimate()
 {

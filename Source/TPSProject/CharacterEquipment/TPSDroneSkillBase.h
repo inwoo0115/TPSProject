@@ -52,6 +52,8 @@ class TPSPROJECT_API ATPSDroneSkillBase : public ATPSAbilityEquipmentBase
 public:
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void ShowUI();
@@ -86,10 +88,10 @@ public:
 
 	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
 
-protected:
 	UPROPERTY()
 	float CurrentCoolTime = 0.0f;
 
+protected:
 	FTimerHandle CastCooldownHandle;
 
 	// RPC

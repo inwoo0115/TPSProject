@@ -8,10 +8,13 @@ UENUM(BlueprintType)
 enum class EProjectileType : uint8
 {
 	// Rifle Bullet
-	RifleBullet UMETA(DisplayName = "Rifle Bullet"),
-	RifleLaser UMETA(DisplayName = "Rifle Laser"),
+	BasicBullet UMETA(DisplayName = "Basic Bullet"),
+	LaserBullet UMETA(DisplayName = "Laser Bullet"),
+	FireBullet UMETA(DisplayName = "Fire Bullet"),
+	EnergyBullet UMETA(DisplayName = "Energy Bullet"),
 
 	// Grenade
 	BasicGrenade UMETA(DisplayName = "Basic Grenade"),
-	FlameGrenade UMETA(DisplayName = "Flame Grenade")
+	FlameGrenade UMETA(DisplayName = "Flame Grenade"),
+	HealGrenade  UMETA(DisplayName = "Heal Grenade")
 };

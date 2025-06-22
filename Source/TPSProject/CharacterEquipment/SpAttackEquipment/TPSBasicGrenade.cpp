@@ -1,8 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipment/TPSBasicGrenade.h"
-#include "TPSSpAttackSkillData.h"
+#include "TPSBasicGrenade.h"
+#include "CharacterEquipment/TPSSpAttackSkillData.h"
 
 ATPSBasicGrenade::ATPSBasicGrenade()
 {

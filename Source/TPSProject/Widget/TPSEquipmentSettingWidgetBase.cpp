@@ -3,7 +3,11 @@
 
 #include "Widget/TPSEquipmentSettingWidgetBase.h"
 #include "TPSEquipmentSettingWidgetBase.h"
+#include "CharacterEquipment/TPSAbilityEquipmentBase.h"
 #include "Components/Button.h"
+#include "Components/Image.h"
+#include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "Character/TPSCharacterBase.h"
 
 void UTPSEquipmentSettingWidgetBase::ToggleRowSelection(UButton* Button, int32 RowIndex)
 {
@@ -110,9 +114,91 @@ void UTPSEquipmentSettingWidgetBase::OnAbility3_2Clicked()
 void UTPSEquipmentSettingWidgetBase::OnConfirmButtonClicked()
 {
 	// 특성 선택 적용
+	EAbilityType Ability1 = EAbilityType::None;
+	EAbilityType Ability2 = EAbilityType::None;
+	EAbilityType Ability3 = EAbilityType::None;
+
+	// 장착
+	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
+
+	if (Pawn)
+	{
+		if (RowSelectedButtons.Contains(1))
+		{
+			Ability1 = ButtonToAbilityMap[RowSelectedButtons[1]];
+		}
+		if (RowSelectedButtons.Contains(2))
+		{
+			Ability2 = ButtonToAbilityMap[RowSelectedButtons[2]];
+		}
+		if (RowSelectedButtons.Contains(3))
+		{
+			Ability3 = ButtonToAbilityMap[RowSelectedButtons[3]];
+		}
+		EquipBySelectWidget(Ability1, Ability2, Ability3);
+	}
 }
 
-void UTPSEquipmentSettingWidgetBase::InitializeWidget()
+void UTPSEquipmentSettingWidgetBase::EquipBySelectWidget(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3)
 {
-	// 위젯 정보 캐릭터에서 가져오기
+}
+
+void UTPSEquipmentSettingWidgetBase::InitializeWidget(const ATPSAbilityEquipmentBase* CurrentEquipment, TSoftObjectPtr<UTexture2D> Icon, FText ContextName)
+{
+	// 이미지 장비 텍스쳐 할당
+	Icon.LoadSynchronous();
+	UTexture2D* IconTexture = Icon.Get();
+	if (IconTexture)
+		EquipmentIcon->SetBrushFromTexture(IconTexture);
+
+	//// 장비 이름 할당
+	EquipmentName->SetText(ContextName);
+
+
+	// 버튼 & 텍스트 배열 구성
+	TArray<UButton*> Buttons = {
+		EquipmentAbility1_1, EquipmentAbility1_2,
+		EquipmentAbility2_1, EquipmentAbility2_2,
+		EquipmentAbility3_1, EquipmentAbility3_2
+	};
+
+	TArray<UTextBlock*> TextBlocks = {
+		EquipmentAbilityText1_1, EquipmentAbilityText1_2,
+		EquipmentAbilityText2_1, EquipmentAbilityText2_2,
+		EquipmentAbilityText3_1, EquipmentAbilityText3_2
+	};
+
+	int32 Index = 0;
+	for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : CurrentEquipment->AbilityList)
+	{
+		if (!Pair.Value) continue;
+		//인스턴스 생성
+		UTPSEquipmentAbilityBase* AbilityCDO = Pair.Value->GetDefaultObject<UTPSEquipmentAbilityBase>();
+		if (!AbilityCDO) continue;
+		if (Buttons.IsValidIndex(Index) && TextBlocks.IsValidIndex(Index))
+		{
+			// 1. 텍스트 블록에 이름 바인딩
+			TextBlocks[Index]->SetText(AbilityCDO->AbilityName);
+			// 2. 버튼에 툴팁 텍스트 바인딩
+			UTextBlock* TooltipTextBlock = NewObject<UTextBlock>(this);
+			if (TooltipTextBlock)
+			{
+				TooltipTextBlock->SetText(AbilityCDO->AbilityDescription);
+				Buttons[Index]->SetToolTip(TooltipTextBlock);
+			}
+			// 3. 버튼에 Enum 바인딩
+			ButtonToAbilityMap.Add(Buttons[Index], Pair.Key);
+		}
+		// 현재 선택된 특성 표시
+		for (UTPSEquipmentAbilityBase* Ability : CurrentEquipment->AbilitySlot)
+		{
+			// 객체 자체 비교는 좀 그렇긴 함 TODO: 추후에 데이터로 관리
+			if (AbilityCDO->GetClass() == Ability->GetClass())
+			{
+				ToggleRowSelection(Buttons[Index], (Index / 2) + 1);
+			}
+		}
+		++Index;
+	}
+
 }

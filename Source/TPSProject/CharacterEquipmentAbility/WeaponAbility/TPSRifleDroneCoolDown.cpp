@@ -19,7 +19,7 @@ void UTPSRifleDroneCoolDown::InitializeWeaponAbility(FWeaponContext& WeaponConte
 
 void UTPSRifleDroneCoolDown::ApplyAbility()
 {
-	GetOwnerEventComponent()->OnFieldChangeEvent.Broadcast(FName(TEXT("CurrentCoolTime")), 1.0f);
+	GetOwnerEventComponent()->OnDroneFieldChangeEvent.Broadcast(FName(TEXT("CurrentCoolTime")), 1.0f);
 }
 
 void UTPSRifleDroneCoolDown::CancelAbility()

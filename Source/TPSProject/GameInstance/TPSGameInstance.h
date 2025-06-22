@@ -22,7 +22,10 @@ public:
 	virtual void Init() override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class ATPSWeaponBase> WeaponClass;
+	TSubclassOf<class ATPSWeaponBase> WeaponClass1;
+
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
+	TSubclassOf<class ATPSWeaponBase> WeaponClass2;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class ATPSDroneSkillBase> DroneSkillEquipmentClass;

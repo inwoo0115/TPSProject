@@ -7,6 +7,8 @@
 #include "TPSWeaponData.h"
 #include "Net/UnrealNetwork.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
+
 
 void ATPSWeaponBase::BeginPlay()
 {
@@ -16,6 +18,25 @@ void ATPSWeaponBase::BeginPlay()
 	if (EventSystem)
 	{
 		EventSystem->OnAmmoChange.Broadcast(WeaponContext.CurrentAmmo, WeaponContext.MaxAmmo);
+	}
+
+	// 스탯 변경 델리게이트 바인딩
+	auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+	if (GameplayEventInterface)
+	{
+		OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnWeaponFieldChangeEvent.AddUObject(this, &ATPSWeaponBase::ChangeFieldStatByValue);
+	}
+}
+
+void ATPSWeaponBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	// 스탯 변경 델리게이트 제거
+	auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+	if (GameplayEventInterface)
+	{
+		GameplayEventInterface->GetEventComponent()->OnWeaponFieldChangeEvent.Remove(OnFieldChangedHandle);
 	}
 }
 
@@ -183,6 +204,38 @@ void ATPSWeaponBase::SetWeaponContextFromData()
 FWeaponContext ATPSWeaponBase::GetWeaponContext() const
 {
 	return WeaponContext;
+}
+
+void ATPSWeaponBase::ChangeFieldStatByValue(FName FieldName, float Value)
+{
+	// 1) 클래스 내부에서 FieldName을 가진 FProperty 찾기
+	FProperty* FoundProperty = GetClass()->FindPropertyByName(FieldName);
+	if (FoundProperty)
+	{
+		if (FFloatProperty* FloatProp = CastField<FFloatProperty>(FoundProperty))
+		{
+			float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+
+			FloatProp->SetPropertyValue_InContainer(this, NewValue);
+			return;
+		}
+	}
+	// 2) FDroneSkillContext 내부에서 FieldName을 가진 FProperty 찾기
+	UScriptStruct* ContextStruct = FWeaponContext::StaticStruct();
+	FProperty* ContextProp = ContextStruct->FindPropertyByName(FieldName);
+	if (ContextProp)
+	{
+		if (FFloatProperty* FloatProp = CastField<FFloatProperty>(ContextProp))
+		{
+			float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+			FloatProp->SetPropertyValue_InContainer(&WeaponContext, NewValue);
+			return;
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+	}
 }
 
 void ATPSWeaponBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipment/TPSBasicRifle.h"
+#include "TPSBasicRifle.h"
 #include "CharacterEquipment/TPSWeaponData.h"
 
 ATPSBasicRifle::ATPSBasicRifle()

@@ -17,7 +17,6 @@ class TPSPROJECT_API UTPSMainWeaponSettingWidget : public UTPSEquipmentSettingWi
 protected:
 	virtual void NativeConstruct() override;
 
-	virtual void OnConfirmButtonClicked() override;
+	virtual void EquipBySelectWidget(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3) override;
 
-	virtual void InitializeWidget() override;
 };

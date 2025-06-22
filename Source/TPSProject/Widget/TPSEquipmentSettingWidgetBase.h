@@ -59,7 +59,10 @@ protected:
 	virtual void OnConfirmButtonClicked();
 
 	UFUNCTION()
-	virtual void InitializeWidget();
+	virtual void EquipBySelectWidget(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
+
+	UFUNCTION()
+	virtual void InitializeWidget(const ATPSAbilityEquipmentBase* CurrentEquipment, TSoftObjectPtr<UTexture2D> Icon, FText ContextName);
 
 public:
 	UPROPERTY(meta = (BindWidget))

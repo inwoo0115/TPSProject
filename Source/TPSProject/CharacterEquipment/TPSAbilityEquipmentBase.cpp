@@ -30,13 +30,6 @@ void ATPSAbilityEquipmentBase::BeginPlay()
 	{
 		EventSystem = GamePlayEventSystem;
 	}
-
-	// 스탯 변경 델리게이트 바인딩
-	auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
-	if (GameplayEventInterface)
-	{
-		OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnFieldChangeEvent.AddUObject(this, &ATPSAbilityEquipmentBase::ChangeFieldStatByValue);
-	}
 }
 
 void ATPSAbilityEquipmentBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -44,13 +37,6 @@ void ATPSAbilityEquipmentBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 	Super::EndPlay(EndPlayReason); 
 	
 	ClearAbilityDelegates();
-
-	// 스탯 변경 델리게이트 제거
-	auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
-	if (GameplayEventInterface)
-	{
-		GameplayEventInterface->GetEventComponent()->OnFieldChangeEvent.Remove(OnFieldChangedHandle);
-	}
 }
 
 void ATPSAbilityEquipmentBase::InitializeAbilities()

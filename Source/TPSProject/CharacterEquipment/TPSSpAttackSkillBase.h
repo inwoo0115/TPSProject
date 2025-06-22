@@ -46,6 +46,8 @@ class TPSPROJECT_API ATPSSpAttackSkillBase : public ATPSAbilityEquipmentBase
 public:
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void CastSkill();
@@ -73,8 +75,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList;
 
-protected:
+	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
+
 	float CurrentCoolTime = 0.0f;
+protected:
 
 	FTimerHandle CastCooldownHandle;
 

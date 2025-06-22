@@ -8,10 +8,16 @@ void UTPSGameInstance::Init()
 	Super::Init();
 	
 	// 캐릭터가 가지고 있는 Equipment class
-	TSoftClassPtr<ATPSWeaponBase> SoftClass_Main(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicRifle")));
-	if (SoftClass_Main.IsValid())
+	TSoftClassPtr<ATPSWeaponBase> SoftClass_Weapon1(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicRifle")));
+	if (SoftClass_Weapon1.IsValid())
 	{
-		WeaponClass = SoftClass_Main.LoadSynchronous();
+		WeaponClass1 = SoftClass_Weapon1.LoadSynchronous();
+	}
+
+	TSoftClassPtr<ATPSWeaponBase> SoftClass_Weapon2(FSoftClassPath(TEXT("/Script/TPSProject.TPSFlameRifle")));
+	if (SoftClass_Weapon2.IsValid())
+	{
+		WeaponClass2 = SoftClass_Weapon2.LoadSynchronous();
 	}
 
 	TSoftClassPtr<ATPSSpAttackSkillBase> SoftClass_SpAttack(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicGrenade")));

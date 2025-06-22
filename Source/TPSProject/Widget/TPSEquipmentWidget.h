@@ -60,4 +60,15 @@ public:
 	UPROPERTY(EditAnywhere, Category = "UI")
 	TSubclassOf<UTPSEquipmentSettingWidgetBase> MainWeaponSettingWidgetClass;
 
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UTPSEquipmentSettingWidgetBase> SubWeaponSettingWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UTPSEquipmentSettingWidgetBase> DroneSettingWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UTPSEquipmentSettingWidgetBase> SpAttackSettingWidgetClass;
+
+	UPROPERTY(EditAnywhere, Category = "UI")
+	TSubclassOf<UTPSEquipmentSettingWidgetBase> UltimateSettingWidgetClass;
 };
