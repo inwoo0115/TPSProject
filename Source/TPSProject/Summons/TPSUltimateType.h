@@ -10,6 +10,7 @@ UENUM(BlueprintType)
 enum class EUltimateType : uint8
 {
 	BasicUltimate UMETA(DisplayName = "Basic Ultimate"),
+	LightningUltimate UMETA(DisplayName = "Lightning Ultimate"),
 
 };
 

@@ -11,8 +11,8 @@ UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 
-	CurrentHP = 250;
-	MaxHP = 250;
+	CurrentHP = 500;
+	MaxHP = 500;
 	Defensive = 10;
 
 	SetIsReplicated(true);

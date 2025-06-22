@@ -8,7 +8,7 @@
 UTPSGrenadeAddBulletDamage::UTPSGrenadeAddBulletDamage()
 {
 	AbilityName = FText::FromString(TEXT("Add Bullet Damage"));
-	AbilityDescription = FText::FromString(TEXT("Add Additional Damage on Weapon Attack"));
+	AbilityDescription = FText::FromString(TEXT("Add Additional Damage on Weapon Attack for 5 seconds"));
 
 }
 

@@ -18,7 +18,7 @@ public:
 	UTPSDroneAddDamageNextUlti();
 
 	virtual void InitializeDroneAbility(FDroneSkillContext& SkillContext) override;
-	virtual void ApplyAbility() override;
+	virtual void ApplyAbilityWithLocation(FVector Location);
 	virtual void CancelAbility() override;
 	virtual void InitializeAbilityEvent() override;
 };

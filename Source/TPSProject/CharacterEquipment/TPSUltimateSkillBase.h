@@ -23,6 +23,12 @@ struct FUltimateSkillContext
 	float LifeTime = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackTimes = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	float AttackRadius = 0.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> SkillEquipmentIcon;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

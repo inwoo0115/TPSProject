@@ -17,7 +17,7 @@ void UTPSDroneGainUltiGauge::InitializeDroneAbility(FDroneSkillContext& SkillCon
 	Super::InitializeDroneAbility(SkillContext);
 }
 
-void UTPSDroneGainUltiGauge::ApplyAbility()
+void UTPSDroneGainUltiGauge::ApplyAbilityWithLocation(FVector Location)
 {
 	ServerRPCApplyAbility();
 	GetOwnerEventComponent()->OnUltimateFieldChangeEvent.Broadcast(FName(TEXT("CurrentGauge")), 10.0f);
@@ -30,7 +30,7 @@ void UTPSDroneGainUltiGauge::CancelAbility()
 
 void UTPSDroneGainUltiGauge::InitializeAbilityEvent()
 {
-	DelegateHandle = GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneGainUltiGauge::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneGainUltiGauge::ApplyAbilityWithLocation);
 }
 
 void UTPSDroneGainUltiGauge::ServerRPCApplyAbility_Implementation()

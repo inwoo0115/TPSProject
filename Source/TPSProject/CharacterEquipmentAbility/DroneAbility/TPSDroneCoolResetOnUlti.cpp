@@ -17,7 +17,7 @@ void UTPSDroneCoolResetOnUlti::InitializeDroneAbility(FDroneSkillContext& SkillC
 	Super::InitializeDroneAbility(SkillContext);
 }
 
-void UTPSDroneCoolResetOnUlti::ApplyAbility()
+void UTPSDroneCoolResetOnUlti::ApplyAbilityWithLocation(FVector Location)
 {
 	GetOwnerEventComponent()->OnDroneFieldChangeEvent.Broadcast(FName(TEXT("CurrentCoolTime")), 100.0f);
 }
@@ -29,5 +29,5 @@ void UTPSDroneCoolResetOnUlti::CancelAbility()
 
 void UTPSDroneCoolResetOnUlti::InitializeAbilityEvent()
 {
-	DelegateHandle = GetOwnerEventComponent()->OnUltimateCastEvent.AddUObject(this, &UTPSDroneCoolResetOnUlti::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnUltimateCastEvent.AddUObject(this, &UTPSDroneCoolResetOnUlti::ApplyAbilityWithLocation);
 }

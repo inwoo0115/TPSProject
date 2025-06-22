@@ -129,8 +129,8 @@ void ATPSUltimateSkillBase::CastSkill()
 
     if (Character)
     {
-        const int32 NumEffects = FMath::RandRange(5, 6);     // 5~6개 소환
-        const float Radius = 400.0f;                         // 소환 반경
+        const int32 NumEffects = SkillContext.AttackTimes;
+        const float Radius = SkillContext.AttackRadius;      // 소환 반경
         const FVector OriginLocation = TargetLocation;       // 중심 위치
 
         for (int32 i = 0; i < NumEffects; i++)
@@ -169,26 +169,6 @@ void ATPSUltimateSkillBase::CastSkill()
                 RandomDelay, false
             );
         }
-
-        // 궁극기 액터 스폰
-        /*FActorSpawnParameters SpawnParams;
-
-        SpawnParams.Owner = GetOwner();
-
-        SpawnParams.Instigator = GetInstigator();*/
-
-        /*auto Ulti = GetWorld()->SpawnActor<ATPSUltimateActorBase>(
-            UltimateActorList[SkillContext.CurrentUltimate],
-            TargetLocation,
-            FRotator(0, 0, 0),
-            SpawnParams
-        );*/
-
-        /*if (Ulti)
-        {
-            Ulti->Damage = SkillContext.Damage;
-            Ulti->LifeTime = SkillContext.LifeTime;
-        }*/
     }
 }
 
@@ -204,7 +184,7 @@ void ATPSUltimateSkillBase::LaunchSkill()
     auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
     if (EventInterface)
     {
-        EventInterface->GetEventComponent()->OnUltimateCastEvent.Broadcast();
+        EventInterface->GetEventComponent()->OnUltimateCastEvent.Broadcast(TargetRange->GetActorLocation());
     }
 
 
@@ -272,6 +252,10 @@ void ATPSUltimateSkillBase::SetSkillContextFromData()
         SkillContext.CurrentUltimate = SkillData->CurrentUltimate;
 
         SkillContext.LifeTime = SkillData->LifeTime;
+
+        SkillContext.AttackTimes = SkillData->AttackTimes;
+
+        SkillContext.AttackRadius = SkillData->AttackRadius;
     }
 }
 

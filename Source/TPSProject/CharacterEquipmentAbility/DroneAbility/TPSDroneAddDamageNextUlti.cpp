@@ -16,7 +16,7 @@ void UTPSDroneAddDamageNextUlti::InitializeDroneAbility(FDroneSkillContext& Skil
 	Super::InitializeDroneAbility(SkillContext);
 }
 
-void UTPSDroneAddDamageNextUlti::ApplyAbility()
+void UTPSDroneAddDamageNextUlti::ApplyAbilityWithLocation(FVector Location)
 {
 	GetOwnerEventComponent()->OnUltimateFieldChangeEvent.Broadcast(FName(TEXT("Damage")), 30.0f);
 
@@ -42,5 +42,5 @@ void UTPSDroneAddDamageNextUlti::CancelAbility()
 
 void UTPSDroneAddDamageNextUlti::InitializeAbilityEvent()
 {
-	DelegateHandle = GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneAddDamageNextUlti::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneAddDamageNextUlti::ApplyAbilityWithLocation);
 }

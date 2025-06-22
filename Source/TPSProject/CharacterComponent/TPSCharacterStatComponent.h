@@ -27,16 +27,16 @@ public:
 protected:
 
 	// Ä³¸¯ÅÍ ½ºÅÈ
-	UPROPERTY(ReplicatedUsing=OnRep_CurrentHP, Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(ReplicatedUsing=OnRep_CurrentHP, Transient, EditAnywhere, Category = Stat)
 	float CurrentHP;
 	
-	UPROPERTY(Replicated, Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(Replicated, Transient, EditAnywhere, Category = Stat)
 	float MaxHP;
 
-	UPROPERTY(Replicated, Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(Replicated, Transient, EditAnywhere, Category = Stat)
 	float Defensive;
 
-	UPROPERTY(Replicated, Transient, VisibleInstanceOnly, Category = Stat)
+	UPROPERTY(Replicated, Transient, EditAnywhere, Category = Stat)
 	float Damage;
 
 	// ÀÌº¥Æ® ½Ì±ÛÅæ Ä³½Ì

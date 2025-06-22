@@ -181,7 +181,7 @@ void ATPSDroneSkillBase::LaunchSkill()
     auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
     if (EventInterface)
     {
-        EventInterface->GetEventComponent()->OnDroneCastEvent.Broadcast();
+        EventInterface->GetEventComponent()->OnDroneCastEvent.Broadcast(TargetRange->GetActorLocation());
     }
 
     // Cast Cool Time Start

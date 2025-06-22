@@ -9,8 +9,6 @@
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnHitEvent, FVector);
 
-DECLARE_MULTICAST_DELEGATE(FOnCastEvent);
-
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStatChangeEvent, float);
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnFieldChangeEvent, FName /*Field*/, float /*Value*/);
@@ -30,10 +28,10 @@ public:
 	FOnHitEvent OnSpAttackHitEvent;
 
 	// Drone Cast Event
-	FOnCastEvent OnDroneCastEvent;
+	FOnHitEvent OnDroneCastEvent;
 
 	// Ultimate Cast Event
-	FOnCastEvent OnUltimateCastEvent;
+	FOnHitEvent OnUltimateCastEvent;
 
 	// Hp Change Event
 	FOnStatChangeEvent OnHpChangeEvent;
