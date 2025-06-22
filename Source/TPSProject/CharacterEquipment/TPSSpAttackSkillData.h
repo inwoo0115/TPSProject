@@ -35,6 +35,9 @@ public:
 	float UltiGaugeRatio;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
+	float ExplosionRadius;
+
+	UPROPERTY(EditAnywhere, Category = SkillInfo)
 	TSoftObjectPtr<UTexture2D> SkillEquipmentIcon;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)

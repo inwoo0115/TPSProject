@@ -44,11 +44,6 @@ void ATPSProjectileBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	Destroy();
 }
 
-void ATPSProjectileBase::SetDamage(float NewDamage)
-{
-	Damage = NewDamage;
-}
-
 float ATPSProjectileBase::GetUltimateGaugeRatio()
 {
 	return UltiGaugeRatio;

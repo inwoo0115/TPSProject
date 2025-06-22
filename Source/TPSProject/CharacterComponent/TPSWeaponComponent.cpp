@@ -33,6 +33,7 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 		// 무기 장착
 		FActorSpawnParameters Params;
 		Params.Owner = GetOwner();
+		Params.Instigator = GetOwner()->GetInstigator();
 		EquippedWeapon = World->SpawnActor<ATPSWeaponBase>(WeaponClass, Params);
 
 		// 무기 초기화

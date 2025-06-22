@@ -81,6 +81,7 @@ void ATPSSpAttackSkillBase::CastSkill()
         {
             Projectile->Damage = SkillContext.Damage;
             Projectile->UltiGaugeRatio = SkillContext.UltiGaugeRatio;
+			Projectile->ExplosionRadius = SkillContext.ExplosionRadius; 
         }
     }
 }
@@ -124,6 +125,8 @@ void ATPSSpAttackSkillBase::SetSkillContextFromData()
         SkillContext.SkillEquipmentName = SkillData->SkillEquipmentName;
 
         SkillContext.CurrentProjectile = SkillData->CurrentProjectile;
+
+		SkillContext.ExplosionRadius = SkillData->ExplosionRadius;
     }
 }
 

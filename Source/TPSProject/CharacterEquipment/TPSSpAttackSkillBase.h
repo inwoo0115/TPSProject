@@ -22,6 +22,9 @@ struct FSpAttackSkillContext
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float UltiGaugeRatio = 0.0f;
 
+	UPROPERTY(EditAnywhere, Category = SkillInfo)
+	float ExplosionRadius = 0.0f;
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TSoftObjectPtr<UTexture2D> SkillEquipmentIcon;
 

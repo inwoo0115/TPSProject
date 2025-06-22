@@ -7,7 +7,7 @@ void UTPSGameInstance::Init()
 {
 	Super::Init();
 	
-	// 캐릭터가 가지고 있는 Weapon class
+	// 캐릭터가 가지고 있는 Equipment class
 	TSoftClassPtr<ATPSWeaponBase> SoftClass_Main(FSoftClassPath(TEXT("/Script/TPSProject.TPSBasicRifle")));
 	if (SoftClass_Main.IsValid())
 	{

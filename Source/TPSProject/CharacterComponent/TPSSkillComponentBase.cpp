@@ -33,6 +33,7 @@ void UTPSSkillComponentBase::Equip(TSubclassOf<ATPSAbilityEquipmentBase> Equipme
 		// 장비 장착
 		FActorSpawnParameters Params;
 		Params.Owner = GetOwner();
+		Params.Instigator = GetOwner()->GetInstigator();
 		Equipment = World->SpawnActor<ATPSAbilityEquipmentBase>(EquipmentClass, Params);
 
 		// 장비 초기화

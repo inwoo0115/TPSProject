@@ -232,7 +232,8 @@ float ATPSCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 				EventInterface->GetEventComponent()->OnUltiGaugeUpdateEvent.Broadcast(DamageResult * GaugeInterface->GetUltimateGaugeRatio());
 			}
 		}
-	}
 
+		return DamageResult;
+	}
 	return 0.0f;
 }

@@ -26,8 +26,6 @@ protected:
 
 public:	
 
-	virtual void SetDamage(float NewDamage);
-
 	virtual float GetUltimateGaugeRatio() override;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
@@ -35,6 +33,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float UltiGaugeRatio = 10.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	float ExplosionRadius = 100.0f;
 
 protected:
 	// 콜리전 컴포넌트
