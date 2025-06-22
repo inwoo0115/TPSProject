@@ -10,7 +10,6 @@ enum class EDroneType : uint8
 {
 	BasicDrone UMETA(DisplayName = "Basic Drone"),
 	AttackDrone UMETA(DisplayName = "Attack Drone"),
-	ElectricDrone UMETA(DisplayName = "Electric Drone"),
 	FootHolderDrone UMETA(DisplayName = "FootHolder Drone")
 };
 

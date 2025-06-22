@@ -4,18 +4,17 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
-#include "TPSDroneAddElectricAttack.generated.h"
+#include "TPSDroneBoostHeal.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API UTPSDroneAddElectricAttack : public UTPSEquipmentAbilityBase
+class TPSPROJECT_API UTPSDroneBoostHeal : public UTPSEquipmentAbilityBase
 {
 	GENERATED_BODY()
-	
 public:
-	UTPSDroneAddElectricAttack();
+	UTPSDroneBoostHeal();
 
 	virtual void InitializeDroneAbility(FDroneSkillContext& SkillContext) override;
 };
