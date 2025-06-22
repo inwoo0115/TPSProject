@@ -8,6 +8,7 @@
 #include "Character/TPSCharacterBase.h"
 #include "Summons/TPSSkillRangeDecalBase.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "Interface/TPSEventComponentInterface.h"
 
 void ATPSDroneSkillBase::BeginPlay()
 {
@@ -119,6 +120,12 @@ void ATPSDroneSkillBase::CastSkill()
 {
     // 스킬 실행
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
+
+    auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (EventInterface)
+    {
+        EventInterface->GetEventComponent()->OnDroneCastEvent.Broadcast();
+    }
 
     if (Character)
     {
