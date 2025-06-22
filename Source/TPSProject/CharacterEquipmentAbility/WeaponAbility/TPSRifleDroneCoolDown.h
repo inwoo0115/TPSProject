@@ -18,7 +18,8 @@ public:
 	UTPSRifleDroneCoolDown();
 
 	virtual void InitializeWeaponAbility(FWeaponContext& WeaponContext) override;
-	virtual void ApplyAbility() override;
+	virtual void ApplyAbilityWithLocation(FVector Location);
+
 	virtual void CancelAbility() override;
 	virtual void InitializeAbilityEvent() override;
 };

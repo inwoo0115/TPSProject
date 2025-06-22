@@ -7,9 +7,9 @@
 
 UTPSDroneGainUltiGauge::UTPSDroneGainUltiGauge()
 {
-	AbilityName = FText::FromString(TEXT("More Power"));
+	AbilityName = FText::FromString(TEXT("Additional Ulti Guage"));
 
-	AbilityDescription = FText::FromString(TEXT("Add 10 Damage or Heal per second"));
+	AbilityDescription = FText::FromString(TEXT("Add 10% Ultimate Guage"));
 }
 
 void UTPSDroneGainUltiGauge::InitializeDroneAbility(FDroneSkillContext& SkillContext)
@@ -19,6 +19,7 @@ void UTPSDroneGainUltiGauge::InitializeDroneAbility(FDroneSkillContext& SkillCon
 
 void UTPSDroneGainUltiGauge::ApplyAbility()
 {
+	ServerRPCApplyAbility();
 	GetOwnerEventComponent()->OnUltimateFieldChangeEvent.Broadcast(FName(TEXT("CurrentGauge")), 10.0f);
 }
 
@@ -30,4 +31,9 @@ void UTPSDroneGainUltiGauge::CancelAbility()
 void UTPSDroneGainUltiGauge::InitializeAbilityEvent()
 {
 	DelegateHandle = GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneGainUltiGauge::ApplyAbility);
+}
+
+void UTPSDroneGainUltiGauge::ServerRPCApplyAbility_Implementation()
+{
+	GetOwnerEventComponent()->OnUltimateFieldChangeEvent.Broadcast(FName(TEXT("CurrentGauge")), 10.0f);
 }

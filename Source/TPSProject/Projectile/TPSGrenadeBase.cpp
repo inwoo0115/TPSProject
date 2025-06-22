@@ -67,7 +67,7 @@ void ATPSGrenadeBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 	auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
 	if (Event)
 	{
-		Event->GetEventComponent()->OnSpAttackHitEvent.Broadcast();
+		Event->GetEventComponent()->OnSpAttackHitEvent.Broadcast(GetActorLocation());
 	}
 
 	// Ãæµ¹ ½Ã ÆÄ±«

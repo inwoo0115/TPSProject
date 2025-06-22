@@ -17,7 +17,7 @@ void UTPSRifleDroneCoolDown::InitializeWeaponAbility(FWeaponContext& WeaponConte
 
 }
 
-void UTPSRifleDroneCoolDown::ApplyAbility()
+void UTPSRifleDroneCoolDown::ApplyAbilityWithLocation(FVector Location)
 {
 	GetOwnerEventComponent()->OnDroneFieldChangeEvent.Broadcast(FName(TEXT("CurrentCoolTime")), 1.0f);
 }
@@ -29,5 +29,5 @@ void UTPSRifleDroneCoolDown::CancelAbility()
 
 void UTPSRifleDroneCoolDown::InitializeAbilityEvent()
 {
-	DelegateHandle = GetOwnerEventComponent()->OnAttackHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnAttackHitEvent.AddUObject(this, &UTPSRifleDroneCoolDown::ApplyAbilityWithLocation);
 }

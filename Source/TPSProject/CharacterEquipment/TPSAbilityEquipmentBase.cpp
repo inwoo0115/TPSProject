@@ -84,7 +84,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 
 	// 서버일 경우 델리게이트 바인딩
 	auto OwnerPawn = Cast<APawn>(GetOwner());
-	if (OwnerPawn && OwnerPawn->IsLocallyControlled() && HasAuthority())
+	if (OwnerPawn && HasAuthority())
 	{
 		for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
 		{

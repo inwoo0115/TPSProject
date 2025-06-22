@@ -59,14 +59,13 @@ void ATPSBulletBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPr
 			this,
 			UDamageType::StaticClass()
 		);
-
 	}
 
 	// 충돌 시 이벤트 호출
 	auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
 	if (Event)
 	{
-		Event->GetEventComponent()->OnAttackHitEvent.Broadcast();
+		Event->GetEventComponent()->OnAttackHitEvent.Broadcast(GetActorLocation());
 	}
 
 	Destroy(); // 충돌 시 발사체 파괴

@@ -21,4 +21,7 @@ public:
 	virtual void ApplyAbility() override;
 	virtual void CancelAbility() override;
 	virtual void InitializeAbilityEvent() override;
+
+	UFUNCTION(Server, Reliable)
+	void ServerRPCApplyAbility();
 };

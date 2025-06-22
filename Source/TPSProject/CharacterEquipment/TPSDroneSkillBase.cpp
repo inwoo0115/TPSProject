@@ -121,12 +121,6 @@ void ATPSDroneSkillBase::CastSkill()
     // 스킬 실행
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
-    auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
-    if (EventInterface)
-    {
-        EventInterface->GetEventComponent()->OnDroneCastEvent.Broadcast();
-    }
-
     if (Character)
     {
         // 카메라 기준 라인트레이스
@@ -183,6 +177,13 @@ void ATPSDroneSkillBase::LaunchSkill()
 
     bCanCast = false;
 
+    // Cast delegate
+    auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (EventInterface)
+    {
+        EventInterface->GetEventComponent()->OnDroneCastEvent.Broadcast();
+    }
+
     // Cast Cool Time Start
     CurrentCoolTime = 0.0f;
 
@@ -193,13 +194,6 @@ void ATPSDroneSkillBase::LaunchSkill()
         TargetRange->Destroy();
         TargetRange = nullptr;
     }
-
-
-    // Cast Delay
-    /*GetWorld()->GetTimerManager().SetTimer(CastCooldownHandle, FTimerDelegate::CreateLambda([this]()
-        {
-            bCanCast = true;
-        }), SkillContext.CoolTime, false);*/
 }
 
 bool ATPSDroneSkillBase::GetCanCast()

@@ -29,5 +29,5 @@ void UTPSDroneCoolResetOnUlti::CancelAbility()
 
 void UTPSDroneCoolResetOnUlti::InitializeAbilityEvent()
 {
-	GetOwnerEventComponent()->OnUltimateCastEvent.AddUObject(this, &UTPSDroneCoolResetOnUlti::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnUltimateCastEvent.AddUObject(this, &UTPSDroneCoolResetOnUlti::ApplyAbility);
 }

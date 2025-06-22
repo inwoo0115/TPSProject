@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
-#include "TPSDroneUltiGaugeBoost.generated.h"
+#include "TPSGrenadeAddDamage.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API UTPSDroneUltiGaugeBoost : public UTPSEquipmentAbilityBase
+class TPSPROJECT_API UTPSGrenadeAddDamage : public UTPSEquipmentAbilityBase
 {
 	GENERATED_BODY()
-
+	
 public:
-	UTPSDroneUltiGaugeBoost();
+	UTPSGrenadeAddDamage();
 
-	virtual void InitializeDroneAbility(FDroneSkillContext& SkillContext) override;
+	virtual void InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext) override;
 };

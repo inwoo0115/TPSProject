@@ -125,13 +125,6 @@ void ATPSUltimateSkillBase::CastSkill()
     // 스킬 실행
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
-    auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
-    if (EventInterface)
-    {
-        EventInterface->GetEventComponent()->OnUltimateCastEvent.Broadcast();
-    }
-
-
     CurrentGauge = 0.0f;
 
     if (Character)
@@ -166,6 +159,13 @@ void ATPSUltimateSkillBase::LaunchSkill()
         bIsInRange = false;
         return;
     }
+
+    auto EventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+    if (EventInterface)
+    {
+        EventInterface->GetEventComponent()->OnUltimateCastEvent.Broadcast();
+    }
+
 
     auto Character = Cast<ATPSCharacterBase>(OwnerComponent->GetOwner());
 
@@ -269,6 +269,8 @@ void ATPSUltimateSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
         if (FFloatProperty* FloatProp = CastField<FFloatProperty>(FoundProperty))
         {
             float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+
+            UE_LOG(LogTemp, Warning, TEXT("%f"), NewValue);
 
             FloatProp->SetPropertyValue_InContainer(this, NewValue);
             return;

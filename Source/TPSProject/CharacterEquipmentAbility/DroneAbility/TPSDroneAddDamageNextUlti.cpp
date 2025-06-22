@@ -42,5 +42,5 @@ void UTPSDroneAddDamageNextUlti::CancelAbility()
 
 void UTPSDroneAddDamageNextUlti::InitializeAbilityEvent()
 {
-	GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneAddDamageNextUlti::ApplyAbility);
+	DelegateHandle = GetOwnerEventComponent()->OnDroneCastEvent.AddUObject(this, &UTPSDroneAddDamageNextUlti::ApplyAbility);
 }

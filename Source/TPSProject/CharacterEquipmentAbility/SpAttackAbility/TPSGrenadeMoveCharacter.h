@@ -4,21 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
-#include "TPSDroneMoveToGrenade.generated.h"
+#include "TPSGrenadeMoveCharacter.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API UTPSDroneMoveToGrenade : public UTPSEquipmentAbilityBase
+class TPSPROJECT_API UTPSGrenadeMoveCharacter : public UTPSEquipmentAbilityBase
 {
 	GENERATED_BODY()
 	
 public:
-	UTPSDroneMoveToGrenade();
 
-	virtual void InitializeDroneAbility(FDroneSkillContext& SkillContext) override;
-	virtual void ApplyAbility() override;
+	UTPSGrenadeMoveCharacter();
+
+	virtual void InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext) override;
+	virtual void ApplyAbilityWithLocation(FVector Location);
 	virtual void CancelAbility() override;
 	virtual void InitializeAbilityEvent() override;
 };

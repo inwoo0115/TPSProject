@@ -7,7 +7,9 @@
 #include "TPSGameplayEventComponent.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE(FOnHitEvent);
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnHitEvent, FVector);
+
+DECLARE_MULTICAST_DELEGATE(FOnCastEvent);
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStatChangeEvent, float);
 
@@ -28,10 +30,10 @@ public:
 	FOnHitEvent OnSpAttackHitEvent;
 
 	// Drone Cast Event
-	FOnHitEvent OnDroneCastEvent;
+	FOnCastEvent OnDroneCastEvent;
 
 	// Ultimate Cast Event
-	FOnHitEvent OnUltimateCastEvent;
+	FOnCastEvent OnUltimateCastEvent;
 
 	// Hp Change Event
 	FOnStatChangeEvent OnHpChangeEvent;
