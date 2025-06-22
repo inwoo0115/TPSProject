@@ -31,7 +31,10 @@ void ATPSDroneSkillBase::Tick(float DeltaTime)
         if (EventSystem && Character->IsLocallyControlled())
         {
             CurrentCoolTime += DeltaTime;
-
+            if (CurrentCoolTime >= SkillContext.CoolTime)
+            {
+                bCanCast = true;
+            }
             // UI Update
             EventSystem->OnDroneCoolTimeChange.Broadcast(CurrentCoolTime, SkillContext.CoolTime);
         }
@@ -167,10 +170,10 @@ void ATPSDroneSkillBase::LaunchSkill()
 
 
     // Cast Delay
-    GetWorld()->GetTimerManager().SetTimer(CastCooldownHandle, FTimerDelegate::CreateLambda([this]()
+    /*GetWorld()->GetTimerManager().SetTimer(CastCooldownHandle, FTimerDelegate::CreateLambda([this]()
         {
             bCanCast = true;
-        }), SkillContext.CoolTime, false);
+        }), SkillContext.CoolTime, false);*/
 }
 
 bool ATPSDroneSkillBase::GetCanCast()
@@ -212,6 +215,60 @@ void ATPSDroneSkillBase::InitializeAbilities()
 FDroneSkillContext ATPSDroneSkillBase::GetSkillContext() const
 {
 	return SkillContext;
+}
+
+void ATPSDroneSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
+{
+    FString NetModeStr;
+    switch (GetNetMode())
+    {
+    case NM_Client: NetModeStr = TEXT("Client"); break;
+    case NM_ListenServer: NetModeStr = TEXT("ListenServer"); break;
+    case NM_DedicatedServer: NetModeStr = TEXT("DedicatedServer"); break;
+    case NM_Standalone: NetModeStr = TEXT("Standalone"); break;
+    }
+
+    UE_LOG(LogTemp, Warning, TEXT("[ChangeFieldStatByValue] Called on %s (%s), FieldName=%s, DeltaValue=%.2f, HasAuthority=%s"),
+        *GetName(),
+        *NetModeStr,
+        *FieldName.ToString(),
+        Value,
+        HasAuthority() ? TEXT("true") : TEXT("false"));
+
+    // 1) 클래스 내부에서 FieldName을 가진 FProperty 찾기
+    FProperty* FoundProperty = GetClass()->FindPropertyByName(FieldName);
+    if (FoundProperty)
+    {
+        if (FFloatProperty* FloatProp = CastField<FFloatProperty>(FoundProperty))
+        {
+			float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+
+            UE_LOG(LogTemp, Warning, TEXT("[ChangeFieldStatByValue] Found float property: %s. CurrentValue=%.2f -> NewValue=%.2f"),
+                *FoundProperty->GetName(),
+                FloatProp->GetPropertyValue_InContainer(this),
+                NewValue);
+
+            FloatProp->SetPropertyValue_InContainer(this, NewValue);
+            return;
+        }
+    }
+
+    // 2) FDroneSkillContext 내부에서 FieldName을 가진 FProperty 찾기
+    UScriptStruct* ContextStruct = FDroneSkillContext::StaticStruct();
+    FProperty* ContextProp = ContextStruct->FindPropertyByName(FieldName);
+    if (ContextProp)
+    {
+        if (FFloatProperty* FloatProp = CastField<FFloatProperty>(ContextProp))
+        {
+            float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
+			FloatProp->SetPropertyValue_InContainer(&SkillContext, NewValue);
+            return;
+        }
+    }
+    else
+    {
+        UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+    }
 }
 
 void ATPSDroneSkillBase::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const

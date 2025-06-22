@@ -17,6 +17,8 @@ public:
 
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	// 컴포넌트에 특성 적용
 	virtual void InitializeAbilities();
 
@@ -48,6 +50,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	UActorComponent* GetOwnerComponent() const;
 	
+	UFUNCTION()
+	virtual void ChangeFieldStatByValue(FName FieldName, float Value);
 
 protected:
 	// RPC
@@ -62,4 +66,7 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<class UTPSGameplayEventSubsystem> EventSystem;
+
+	// 스탯 변경 델리게이트 핸들러
+	FDelegateHandle OnFieldChangedHandle;
 };

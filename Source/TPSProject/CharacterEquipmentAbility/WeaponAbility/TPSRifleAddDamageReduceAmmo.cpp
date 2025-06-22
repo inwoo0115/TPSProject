@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipmentAbility/TPSRifleAddDamageReduceAmmo.h"
+#include "TPSRifleAddDamageReduceAmmo.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleAddDamageReduceAmmo::UTPSRifleAddDamageReduceAmmo()

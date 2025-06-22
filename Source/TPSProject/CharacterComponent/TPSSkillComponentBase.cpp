@@ -22,8 +22,6 @@ void UTPSSkillComponentBase::Equip(TSubclassOf<ATPSAbilityEquipmentBase> Equipme
 
 	if (Equipment)
 	{
-		Equipment->ClearAbilityDelegates();
-		// 기존 장비 설정 제거
 		Equipment->Destroy();
 	}
 

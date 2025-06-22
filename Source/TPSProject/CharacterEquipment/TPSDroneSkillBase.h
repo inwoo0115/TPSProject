@@ -84,8 +84,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TObjectPtr<class ATPSSkillRangeDecalBase> TargetRange;
 
+	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
 
 protected:
+	UPROPERTY()
 	float CurrentCoolTime = 0.0f;
 
 	FTimerHandle CastCooldownHandle;

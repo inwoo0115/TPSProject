@@ -15,9 +15,6 @@ class TPSPROJECT_API UTPSUltimateComponent : public UTPSSkillComponentBase
 	GENERATED_BODY()
 	
 public:
-	// 장비장착
-	virtual void Equip(TSubclassOf<ATPSAbilityEquipmentBase> EquipmentClass, EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3) override;
-
 	// 스킬 시전 범위 표시 
 	void ShowCastUI();
 

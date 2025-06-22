@@ -27,6 +27,13 @@ void ATPSUltimateSkillBase::BeginPlay()
     }
 }
 
+void ATPSUltimateSkillBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+    Super::EndPlay(EndPlayReason);
+
+    ClearUpdateDelegate();
+}
+
 void ATPSUltimateSkillBase::UpdateGauge(float AddGauge)
 {
     if (CurrentGauge + AddGauge > SkillContext.MaxGauge)

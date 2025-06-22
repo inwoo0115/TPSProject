@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipmentAbility/TPSRifleAddLaserBullet.h"
+#include "TPSRifleAddLaserBullet.h"
 #include "Projectile/TPSProjectileType.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 

@@ -6,6 +6,8 @@
 #include "Engine/ActorChannel.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
+#include "Interface/TPSEventComponentInterface.h"
+#include "CharacterComponent/TPSGameplayEventComponent.h"
 
 ATPSAbilityEquipmentBase::ATPSAbilityEquipmentBase()
 {
@@ -22,10 +24,32 @@ void ATPSAbilityEquipmentBase::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// UI 서브시스템 캐싱
 	auto GamePlayEventSystem = GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>();
 	if (GamePlayEventSystem)
 	{
 		EventSystem = GamePlayEventSystem;
+	}
+
+	// 스탯 변경 델리게이트 바인딩
+	auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+	if (GameplayEventInterface)
+	{
+		OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnFieldChangeEvent.AddUObject(this, &ATPSAbilityEquipmentBase::ChangeFieldStatByValue);
+	}
+}
+
+void ATPSAbilityEquipmentBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason); 
+	
+	ClearAbilityDelegates();
+
+	// 스탯 변경 델리게이트 제거
+	auto GameplayEventInterface = Cast<ITPSEventComponentInterface>(GetOwner());
+	if (GameplayEventInterface)
+	{
+		GameplayEventInterface->GetEventComponent()->OnFieldChangeEvent.Remove(OnFieldChangedHandle);
 	}
 }
 
@@ -71,6 +95,19 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 	}
 
 	AbilitySlot = NewSlot;
+
+	// 서버일 경우 델리게이트 바인딩
+	auto OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn && OwnerPawn->IsLocallyControlled() && HasAuthority())
+	{
+		for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
+		{
+			if (Ability)
+			{
+				Ability->InitializeAbilityEvent();
+			}
+		}
+	}
 }
 
 void ATPSAbilityEquipmentBase::ClearAbilityDelegates()
@@ -90,29 +127,37 @@ UActorComponent* ATPSAbilityEquipmentBase::GetOwnerComponent() const
 	return OwnerComponent;
 }
 
+void ATPSAbilityEquipmentBase::ChangeFieldStatByValue(FName FieldName, float Value)
+{
+}
+
 
 void ATPSAbilityEquipmentBase::OnRep_AbilitySlot()
 {
-	for (UTPSEquipmentAbilityBase* Ability : PreviousSlot)
+	auto OwnerPawn = Cast<APawn>(GetOwner());
+	if (OwnerPawn && OwnerPawn->IsLocallyControlled())
 	{
-		if (Ability)
+		for (UTPSEquipmentAbilityBase* Ability : PreviousSlot)
 		{
-			// 델리게이트가 바인딩 되어 있을 경우 해제
-			Ability->CancelAbility();
+			if (Ability)
+			{
+				// 델리게이트가 바인딩 되어 있을 경우 해제
+				Ability->CancelAbility();
+			}
 		}
-	}
 
-	for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
-	{
-		if (Ability)
+		for (UTPSEquipmentAbilityBase* Ability : AbilitySlot)
 		{
-			// 델리게이트만 조정하게 변경
-			Ability->InitializeAbilityEvent();
+			if (Ability)
+			{
+				// 델리게이트만 조정하게 변경
+				Ability->InitializeAbilityEvent();
+			}
 		}
-	}
 
-	// 어빌리티 변경 업데이트
-	PreviousSlot = AbilitySlot;
+		// 어빌리티 변경 업데이트
+		PreviousSlot = AbilitySlot;
+	}
 }
 
 

@@ -22,7 +22,6 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 
 	if (EquippedWeapon)
 	{
-		EquippedWeapon->ClearAbilityDelegates();
 		// 기존 무기 설정 제거
 		EquippedWeapon->Destroy();
 	}

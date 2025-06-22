@@ -11,6 +11,8 @@ DECLARE_MULTICAST_DELEGATE(FOnHitEvent);
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FOnStatChangeEvent, float);
 
+DECLARE_MULTICAST_DELEGATE_TwoParams(FOnFieldChangeEvent, FName /*Field*/, float /*Value*/);
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class TPSPROJECT_API UTPSGameplayEventComponent : public UActorComponent
 {
@@ -30,5 +32,8 @@ public:
 
 	// Ulti Gauge Event
 	FOnStatChangeEvent OnUltiGaugeUpdateEvent;
+
+	//Field Change Event
+	FOnFieldChangeEvent OnFieldChangeEvent;
 
 };

@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipmentAbility/TPSRifleMaxAmmoAdd.h"
+#include "TPSRifleMaxAmmoAdd.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleMaxAmmoAdd::UTPSRifleMaxAmmoAdd()

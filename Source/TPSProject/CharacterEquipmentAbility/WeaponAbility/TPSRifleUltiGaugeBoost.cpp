@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "CharacterEquipmentAbility/TPSRifleUltiGaugeBoost.h"
+#include "TPSRifleUltiGaugeBoost.h"
 #include "CharacterEquipment/TPSWeaponBase.h"
 
 UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()

@@ -47,6 +47,8 @@ class TPSPROJECT_API ATPSUltimateSkillBase : public ATPSAbilityEquipmentBase
 public:
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
 	virtual void ShowUI();
 
 	virtual void CastSkill();
