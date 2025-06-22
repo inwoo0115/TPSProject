@@ -19,6 +19,11 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
+
+	UPROPERTY(EditAnywhere, Category = "VFX")
+	TObjectPtr<class UNiagaraSystem> ExplosionEffect;
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
@@ -32,5 +37,4 @@ public:
 	// 콜리전 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "Collision")
 	TObjectPtr<class USphereComponent> Collision;
-
 };

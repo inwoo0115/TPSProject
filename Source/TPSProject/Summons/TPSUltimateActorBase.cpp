@@ -3,6 +3,9 @@
 
 #include "Summons/TPSUltimateActorBase.h"
 #include "Components/SphereComponent.h"
+#include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
 ATPSUltimateActorBase::ATPSUltimateActorBase()
@@ -31,6 +34,37 @@ void ATPSUltimateActorBase::BeginPlay()
 	
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);
+}
+
+void ATPSUltimateActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
+{
+	Super::EndPlay(EndPlayReason);
+
+	// 파괴될 때 별도의 DeathEffect 나이아가라 호출
+	if (ExplosionEffect)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			ExplosionEffect,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(1.f),
+			true,
+			true
+		);
+
+		UGameplayStatics::ApplyRadialDamage(
+			GetWorld(),
+			Damage,
+			GetActorLocation(),
+			500,
+			nullptr,               // 기본 DamageType
+			TArray<AActor*>(),     // 무시할 액터들
+			GetOwner(),
+			GetOwner()->GetInstigatorController(),
+			false
+		);
+	}
 }
 
 // Called every frame

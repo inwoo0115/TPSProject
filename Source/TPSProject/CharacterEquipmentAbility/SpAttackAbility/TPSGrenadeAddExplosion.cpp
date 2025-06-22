@@ -29,15 +29,15 @@ void UTPSGrenadeAddExplosion::ApplyAbilityWithLocation(FVector Location)
 {
 	if (!ExplosionEffect) return;
 
-    const int32 NumExplosions = FMath::RandRange(3, 4);  // 3~4개 폭발
-    const float Radius = 200.f;                          // 폭발 퍼질 반경
+    const int32 NumExplosions = FMath::RandRange(4, 5);  // 3~4개 폭발
+    const float Radius = 600.f;                          // 폭발 퍼질 반경
     const float Damage = 20.f;                           // 폭발 데미지
-    const float DamageRadius = 150.f;                    // 피해 반경
+    const float DamageRadius = 200.f;                    // 피해 반경
 
     for (int32 i = 0; i < NumExplosions; i++)
     {
         FVector RandomDir = UKismetMathLibrary::RandomUnitVector();
-        float Distance = FMath::FRandRange(300.f, Radius);
+        float Distance = FMath::FRandRange(100.f, Radius);
         FVector SpawnLocation = Location + RandomDir * Distance;
 
         MulticastRPCApplyAbility(Location);

@@ -8,6 +8,7 @@
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Interface/TPSEventComponentInterface.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 ATPSGrenadeBase::ATPSGrenadeBase()
@@ -50,6 +51,8 @@ void ATPSGrenadeBase::BeginPlay()
 
 void ATPSGrenadeBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
 {
+	MulticastRPCExplosionEffect();
+
 	// 충돌 시 일정 반경 데미지 처리
 	UGameplayStatics::ApplyRadialDamage(
 		GetWorld(),
@@ -72,4 +75,21 @@ void ATPSGrenadeBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 
 	// 충돌 시 파괴
 	Destroy();
+}
+
+void ATPSGrenadeBase::MulticastRPCExplosionEffect_Implementation()
+{
+	// 파괴될 때 별도의 DeathEffect 나이아가라 호출
+	if (ExplosionEffect)
+	{
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			ExplosionEffect,
+			GetActorLocation(),
+			GetActorRotation(),
+			FVector(1.f),
+			true,
+			true
+		);
+	}
 }

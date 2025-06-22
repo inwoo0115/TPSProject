@@ -129,25 +129,66 @@ void ATPSUltimateSkillBase::CastSkill()
 
     if (Character)
     {
+        const int32 NumEffects = FMath::RandRange(5, 6);     // 5~6개 소환
+        const float Radius = 400.0f;                         // 소환 반경
+        const FVector OriginLocation = TargetLocation;       // 중심 위치
+
+        for (int32 i = 0; i < NumEffects; i++)
+        {
+            float RandomDelay = FMath::FRandRange(0.f, 1.5f); // 0~1초 사이
+            FTimerHandle TimerHandle;
+
+            // 람다 캡쳐
+            GetWorld()->GetTimerManager().SetTimer(
+                TimerHandle,
+                [this, OriginLocation, Radius]()
+                {
+                    FVector RandomOffset(FMath::FRandRange(-Radius, Radius),
+                        FMath::FRandRange(-Radius, Radius),
+                        0.f);
+
+                    FVector SpawnLocation = OriginLocation + RandomOffset;
+
+                    FActorSpawnParameters SpawnParams;
+                    SpawnParams.Owner = GetOwner();
+                    SpawnParams.Instigator = GetInstigator();
+
+                    auto Ulti = GetWorld()->SpawnActor<ATPSUltimateActorBase>(
+                        UltimateActorList[SkillContext.CurrentUltimate],
+                        SpawnLocation,
+                        FRotator::ZeroRotator,
+                        SpawnParams
+                    );
+
+                    if (Ulti)
+                    {
+                        Ulti->Damage = SkillContext.Damage;
+                        Ulti->LifeTime = SkillContext.LifeTime;
+                    }
+                },
+                RandomDelay, false
+            );
+        }
+
         // 궁극기 액터 스폰
-        FActorSpawnParameters SpawnParams;
+        /*FActorSpawnParameters SpawnParams;
 
         SpawnParams.Owner = GetOwner();
 
-        SpawnParams.Instigator = GetInstigator();
+        SpawnParams.Instigator = GetInstigator();*/
 
-        auto Ulti = GetWorld()->SpawnActor<ATPSUltimateActorBase>(
+        /*auto Ulti = GetWorld()->SpawnActor<ATPSUltimateActorBase>(
             UltimateActorList[SkillContext.CurrentUltimate],
             TargetLocation,
             FRotator(0, 0, 0),
             SpawnParams
-        );
+        );*/
 
-        if (Ulti)
+        /*if (Ulti)
         {
             Ulti->Damage = SkillContext.Damage;
             Ulti->LifeTime = SkillContext.LifeTime;
-        }
+        }*/
     }
 }
 
