@@ -61,7 +61,8 @@ void UTPSUltiAddNuclear::ApplyNuclearDamage(FVector Location, UNiagaraComponent*
             TArray<AActor*>(),     // 무시할 액터들
             Cast<AActor>(GetOuter()),
             Cast<AActor>(GetOuter())->GetInstigatorController(),
-            false
+            false,
+            ECC_Pawn
         );
     }
 }

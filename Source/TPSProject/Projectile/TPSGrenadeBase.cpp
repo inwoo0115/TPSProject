@@ -66,8 +66,11 @@ void ATPSGrenadeBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 			TArray<AActor*>(),           // 무시할 액터들
 			this,                        // 데미지 유발자
 			GetInstigatorController(),   // Instigator 컨트롤러
-			true                         // 원형 데미지 계산
+			true, // 원형 데미지 계산
+			ECC_Pawn
 		);
+
+
 
 		// 충돌 시 이벤트 호출
 		auto Event = Cast<ITPSEventComponentInterface>(GetOwner());

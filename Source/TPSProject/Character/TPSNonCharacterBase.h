@@ -14,13 +14,13 @@ class TPSPROJECT_API ATPSNonCharacterBase : public ACharacter
 public:
 	ATPSNonCharacterBase();
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere)
 	FText CharacterName;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, EditAnywhere)
 	float CurrentHp = 1000.0f;
 
-	UPROPERTY(Replicated)
+	UPROPERTY(Replicated, EditAnywhere)
 	float MaxHp = 1000.0f;
 protected:
 	// Called when the game starts or when spawned

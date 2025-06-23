@@ -64,7 +64,8 @@ void ATPSUltimateActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 				TArray<AActor*>(),     // 무시할 액터들
 				GetOwner(),
 				GetOwner()->GetInstigatorController(),
-				false
+				false,
+				ECC_Pawn
 			);
 		}
 	}
