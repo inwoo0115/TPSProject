@@ -27,9 +27,6 @@ public:
 	// 재장전
 	void ReloadWeapon();
 
-	// 이펙트
-	void EffectWeapon();
-
 	// 무기 사용 가능
 	bool GetCanLaunchWeapon();
 

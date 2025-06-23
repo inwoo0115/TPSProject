@@ -599,7 +599,6 @@ void ATPSCharacterPlayer::StartAttack()
 	if (HasAuthority() || IsLocallyControlled())
 	{
 		WeaponComponent->FireWeapon();
-		WeaponComponent->EffectWeapon();
 	}
 }
 

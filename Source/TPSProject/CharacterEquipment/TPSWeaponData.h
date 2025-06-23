@@ -51,4 +51,7 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = WeaponInfo)
 	EProjectileType CurrentBullet;
+
+	UPROPERTY(EditAnywhere, Category = WeaponInfo)
+	TObjectPtr<class UNiagaraSystem> MuzzleEffect;
 };

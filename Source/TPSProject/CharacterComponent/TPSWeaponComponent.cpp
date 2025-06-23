@@ -72,11 +72,6 @@ void UTPSWeaponComponent::ReloadWeapon()
 	EquippedWeapon->Reload();
 }
 
-void UTPSWeaponComponent::EffectWeapon()
-{
-	EquippedWeapon->Effect();
-}
-
 bool UTPSWeaponComponent::GetCanLaunchWeapon()
 {
 	return EquippedWeapon->CanFire();

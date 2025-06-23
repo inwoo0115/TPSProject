@@ -42,6 +42,9 @@ struct FWeaponContext
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	EProjectileType CurrentBullet = EProjectileType::BasicBullet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UNiagaraSystem> MuzzleEffect;
 };
 
 
@@ -61,8 +64,6 @@ public:
 	virtual void Fire();
 
 	virtual void Reload();
-
-	virtual void Effect();
 
 	// Getter
 	bool CanReload();

@@ -30,6 +30,9 @@ public:
 
 
 protected:
+	UPROPERTY(EditAnywhere, Category = "VFX")
+	TObjectPtr<class UNiagaraSystem> ExplosionEffect;
+
 	// 메쉬 컴포넌트
 	UPROPERTY(EditDefaultsOnly, Category = "StaticMesh")
 	TObjectPtr<class UStaticMeshComponent> Mesh;

@@ -8,6 +8,8 @@
 #include "Interface/TPSEventComponentInterface.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "NiagaraFunctionLibrary.h"
+
 
 ATPSBulletBase::ATPSBulletBase()
 {
@@ -69,6 +71,22 @@ void ATPSBulletBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPr
 		{
 			Event->GetEventComponent()->OnAttackHitEvent.Broadcast(GetActorLocation());
 		}
+	}
+
+	if (ExplosionEffect)
+	{
+		FRotator EffectRotation = GetActorRotation();
+		EffectRotation.Pitch += 90;
+
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			ExplosionEffect,
+			GetActorLocation(),
+			EffectRotation,
+			FVector(1.f),
+			true,
+			true
+		);
 	}
 	
 	Destroy(); // 충돌 시 발사체 파괴

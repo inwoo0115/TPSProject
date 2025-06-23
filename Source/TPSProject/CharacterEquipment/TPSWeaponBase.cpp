@@ -8,6 +8,7 @@
 #include "Net/UnrealNetwork.h"
 #include "GameInstance/TPSGameplayEventSubsystem.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 
 void ATPSWeaponBase::BeginPlay()
@@ -120,9 +121,22 @@ void ATPSWeaponBase::Fire()
 		if (Projectile)
 		{
 			Projectile->Damage = WeaponContext.Damage;
-			UE_LOG(LogTemp, Warning, TEXT("%f"), Projectile->Damage);
-
 			Projectile->UltiGaugeRatio = WeaponContext.UltiGaugeRatio;
+		}
+
+		// 발사 이펙트 생성
+		ShotRotation.Pitch -= 90.0f;
+		if (WeaponContext.MuzzleEffect)
+		{
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+				GetWorld(),
+				WeaponContext.MuzzleEffect,
+				GetActorLocation(),
+				ShotRotation,
+				FVector(1.f),
+				true,
+				true
+			);
 		}
 
 		// 총이 발사되면 UI 업데이트
@@ -157,11 +171,6 @@ void ATPSWeaponBase::Reload()
 		}), WeaponContext.ReloadTime, false);
 }
 
-void ATPSWeaponBase::Effect()
-{
-	// TODO: 클라이언트에서 이펙트 생성
-
-}
 
 bool ATPSWeaponBase::CanReload()
 {
@@ -200,6 +209,8 @@ void ATPSWeaponBase::SetWeaponContextFromData()
 		WeaponContext.WeaponName = WeaponData->WeaponName;
 
 		WeaponContext.CurrentBullet = WeaponData->CurrentBullet;
+
+		WeaponContext.MuzzleEffect = WeaponData->MuzzleEffect;
 	}
 }
 
