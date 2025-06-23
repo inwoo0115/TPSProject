@@ -35,66 +35,74 @@ void UTPSUltiAddNuclear::ApplyAbilityWithLocation(FVector Location)
 {
 	if (!ExplosionEffect) return;
 
-    ServerRPCApplyAbility(Location);
+	//MulticastRPCApplyAbility(Location);
+	AActor* OwnerActor = Cast<AActor>(GetOuter());
+	if (OwnerActor && OwnerActor->HasAuthority())
+	{
+		ApplyNuclearDamage(Location);
+		MulticastRPCApplyAbility(Location);
+	}
+	
+	if (OwnerActor && !OwnerActor->HasAuthority())
+	{
+		ServerRPCApplyAbility(Location);
+	}
+
 }
 
+void UTPSUltiAddNuclear::ApplyNuclearDamage(FVector Location)
+{
+	// 이 위치를 기준으로 범위 데미지
+
+	// 10초 후 발동
+	FTimerHandle TimerHandle;
+	GetWorld()->GetTimerManager().SetTimer(
+		TimerHandle,
+		[this, Location]() // 람다 캡쳐
+		{
+			// 반드시 GetWorld() 유효성 검사
+			if (!GetWorld()) return;
+
+			UGameplayStatics::ApplyRadialDamage(
+				GetWorld(),
+				300.0f,
+				Location,
+				2000.0f,
+				nullptr,               // 기본 DamageType
+				TArray<AActor*>(),     // 무시할 액터들
+				Cast<AActor>(GetOuter()),
+				Cast<AActor>(GetOuter())->GetInstigatorController(),
+				false,
+				ECC_Pawn
+			);
+		},
+		10.0f,     // 딜레이 초 단위
+		false      // 반복하지 않음
+	);
+
+}
+
+void UTPSUltiAddNuclear::ServerRPCApplyAbility_Implementation(FVector Location)
+{
+	MulticastRPCApplyAbility(Location);
+	ApplyNuclearDamage(Location);
+}
+
+void UTPSUltiAddNuclear::MulticastRPCApplyAbility_Implementation(FVector Location)
+{
+	UNiagaraComponent* SpawnedEffect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+		GetWorld(),
+		ExplosionEffect,
+		Location,
+		FRotator::ZeroRotator,
+		FVector(3.f), // 3배 크기
+		true,         // auto destroy
+		true          // auto activate
+	);
+}
 
 void UTPSUltiAddNuclear::InitializeAbilityEvent()
 {
 	DelegateHandle = GetOwnerEventComponent()->OnUltimateCastEvent.AddUObject(this, &UTPSUltiAddNuclear::ApplyAbilityWithLocation);
 
-}
-
-void UTPSUltiAddNuclear::ApplyNuclearDamage(FVector Location, UNiagaraComponent* Effect)
-{
-    if (Effect)
-    {
-        Effect->DestroyComponent();
-
-        // 이 위치를 기준으로 범위 데미지
-        UGameplayStatics::ApplyRadialDamage(
-            GetWorld(),
-            200.0f,
-            Location,
-            1000.0f,
-            nullptr,               // 기본 DamageType
-            TArray<AActor*>(),     // 무시할 액터들
-            Cast<AActor>(GetOuter()),
-            Cast<AActor>(GetOuter())->GetInstigatorController(),
-            false,
-            ECC_Pawn
-        );
-    }
-}
-
-void UTPSUltiAddNuclear::ServerRPCApplyAbility_Implementation(FVector Location)
-{
-    MulticastRPCApplyAbility(Location);
-}
-
-void UTPSUltiAddNuclear::MulticastRPCApplyAbility_Implementation(FVector Location)
-{
-    UNiagaraComponent* SpawnedEffect = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-        GetWorld(),
-        ExplosionEffect,
-        Location,
-        FRotator::ZeroRotator,
-        FVector(3.f), // 3배 크기
-        true,         // auto destroy
-        true          // auto activate
-    );
-
-    if (SpawnedEffect)
-    {
-        FTimerHandle TimerHandle;
-        GetWorld()->GetTimerManager().SetTimer(
-            TimerHandle,
-            [this, Location, SpawnedEffect]()  // this와 Location, SpawnedEffect 캡쳐
-            {
-                ApplyNuclearDamage(Location, SpawnedEffect);
-            },
-            10.f,  // 10초 후 소멸
-            false
-        );
-    }
 }

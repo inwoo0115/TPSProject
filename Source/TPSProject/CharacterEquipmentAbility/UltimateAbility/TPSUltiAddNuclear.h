@@ -24,7 +24,7 @@ public:
 	virtual void CancelAbility() override;
 	virtual void InitializeAbilityEvent() override;
 
-	void ApplyNuclearDamage(FVector Location, UNiagaraComponent* Effect);
+	void ApplyNuclearDamage(FVector Location);
 
 protected:
 	UPROPERTY()

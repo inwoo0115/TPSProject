@@ -33,8 +33,7 @@ float ATPSNonCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& D
 	if (HasAuthority())
 	{
 		float DamageResult = CalculateDamage(DamageAmount);
-
-		// TODO 임시 궁극기 게이지 테스트 용
+		// 궁극기 게이지
 		auto EventInterface = Cast<ITPSEventComponentInterface>(EventInstigator->GetPawn());
 		if (EventInterface)
 		{
