@@ -5,6 +5,7 @@
 #include "Components/SphereComponent.h"
 #include "Interface/TPSEventComponentInterface.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ATPSDroneActorBase::ATPSDroneActorBase()
@@ -61,14 +62,33 @@ void ATPSDroneActorBase::CheckOverlaps()
 	// 서버에서 오버랩 이벤트 처리
 	if (HasAuthority())
 	{
-		for (AActor* OtherActor : OverlappingActors)
+		if (Power > 0)
 		{
-			auto EventInterface = Cast<ITPSEventComponentInterface>(OtherActor);
-			if (EventInterface && EventInterface->GetEventComponent())
+			for (AActor* OtherActor : OverlappingActors)
 			{
-				// 0.5초마다 +5 체력
-				EventInterface->GetEventComponent()->OnHpChangeEvent.Broadcast(Power);
+				auto EventInterface = Cast<ITPSEventComponentInterface>(OtherActor);
+				if (EventInterface && EventInterface->GetEventComponent())
+				{
+					// 0.5초마다 +5 체력
+					EventInterface->GetEventComponent()->OnHpChangeEvent.Broadcast(Power);
+				}
 			}
+		}
+		else
+		{
+			// 충돌 시 일정 반경 데미지 처리
+			UGameplayStatics::ApplyRadialDamage(
+				GetWorld(),
+				FMath::Abs(Power),             // 데미지 수치
+				GetActorLocation(),          
+				Collision->GetScaledSphereRadius(),
+				UDamageType::StaticClass(),// 데미지타입(없으면 UDamageType::StaticClass())
+				TArray<AActor*>(),           // 무시할 액터들
+				this,                        // 데미지 유발자
+				GetInstigatorController(),   // Instigator 컨트롤러
+				true, // 원형 데미지 계산
+				ECC_Pawn
+			);
 		}
 	}
 }
