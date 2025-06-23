@@ -49,10 +49,7 @@ void UTPSUltiAddNuclear::ApplyNuclearDamage(FVector Location, UNiagaraComponent*
 {
     if (Effect)
     {
-        if (Effect && !Effect->IsPendingKillEnabled())
-        {
-            Effect->DestroyComponent();
-        }
+        Effect->DestroyComponent();
 
         // 이 위치를 기준으로 범위 데미지
         UGameplayStatics::ApplyRadialDamage(

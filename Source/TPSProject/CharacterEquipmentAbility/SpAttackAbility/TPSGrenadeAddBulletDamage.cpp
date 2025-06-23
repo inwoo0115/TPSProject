@@ -19,21 +19,25 @@ void UTPSGrenadeAddBulletDamage::InitializeSpAttackAbility(FSpAttackSkillContext
 
 void UTPSGrenadeAddBulletDamage::ApplyAbilityWithLocation(FVector Location)
 {
-	GetOwnerEventComponent()->OnWeaponFieldChangeEvent.Broadcast(FName(TEXT("Damage")), 10.0f);
+    AActor* Owner = Cast<AActor>(GetOuter());
+    if (Owner && Owner->HasAuthority())
+    {
+        GetOwnerEventComponent()->OnWeaponFieldChangeEvent.Broadcast(FName(TEXT("Damage")), 10.0f);
 
-    FTimerHandle TimerHandle;
-    GetWorld()->GetTimerManager().SetTimer(
-        TimerHandle,
-        [this]()
-        {
-            if (GetOwnerEventComponent())
+        FTimerHandle TimerHandle;
+        GetWorld()->GetTimerManager().SetTimer(
+            TimerHandle,
+            [this]()
             {
-                GetOwnerEventComponent()->OnWeaponFieldChangeEvent.Broadcast(FName(TEXT("Damage")), -10.0f);
-            }
-        },
-        5.0f,
-        false // 단발성 호출
-    );
+                if (GetOwnerEventComponent())
+                {
+                    GetOwnerEventComponent()->OnWeaponFieldChangeEvent.Broadcast(FName(TEXT("Damage")), -10.0f);
+                }
+            },
+            5.0f,
+            false // 단발성 호출
+        );
+    }
 }
 
 void UTPSGrenadeAddBulletDamage::CancelAbility()

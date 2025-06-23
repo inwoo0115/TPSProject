@@ -120,6 +120,8 @@ void ATPSWeaponBase::Fire()
 		if (Projectile)
 		{
 			Projectile->Damage = WeaponContext.Damage;
+			UE_LOG(LogTemp, Warning, TEXT("%f"), Projectile->Damage);
+
 			Projectile->UltiGaugeRatio = WeaponContext.UltiGaugeRatio;
 		}
 
@@ -227,8 +229,16 @@ void ATPSWeaponBase::ChangeFieldStatByValue(FName FieldName, float Value)
 	{
 		if (FFloatProperty* FloatProp = CastField<FFloatProperty>(ContextProp))
 		{
-			float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
-			FloatProp->SetPropertyValue_InContainer(&WeaponContext, NewValue);
+			// 현재 클래스의 WeaponContext 멤버 메모리 가져오기
+			void* WeaponContextAddr = FindFieldChecked<FStructProperty>(GetClass(), TEXT("WeaponContext"))
+				->ContainerPtrToValuePtr<void>(this);
+
+			// 현재 값
+			float CurrentValue = FloatProp->GetPropertyValue_InContainer(WeaponContextAddr);
+			float NewValue = CurrentValue + Value;
+
+			// 수정
+			FloatProp->SetPropertyValue_InContainer(WeaponContextAddr, NewValue);
 			return;
 		}
 	}

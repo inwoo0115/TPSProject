@@ -305,8 +305,16 @@ void ATPSUltimateSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
     {
         if (FFloatProperty* FloatProp = CastField<FFloatProperty>(ContextProp))
         {
-            float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
-            FloatProp->SetPropertyValue_InContainer(&SkillContext, NewValue);
+            // 현재 클래스의 WeaponContext 멤버 메모리 가져오기
+            void* ContextAddr = FindFieldChecked<FStructProperty>(GetClass(), TEXT("SkillContext"))
+                ->ContainerPtrToValuePtr<void>(this);
+
+            // 현재 값
+            float CurrentValue = FloatProp->GetPropertyValue_InContainer(ContextAddr);
+            float NewValue = CurrentValue + Value;
+
+            // 수정
+            FloatProp->SetPropertyValue_InContainer(ContextAddr, NewValue);
             return;
         }
     }

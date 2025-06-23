@@ -53,17 +53,20 @@ void ATPSUltimateActorBase::EndPlay(const EEndPlayReason::Type EndPlayReason)
 			true
 		);
 
-		UGameplayStatics::ApplyRadialDamage(
-			GetWorld(),
-			Damage,
-			GetActorLocation(),
-			500,
-			nullptr,               // 기본 DamageType
-			TArray<AActor*>(),     // 무시할 액터들
-			GetOwner(),
-			GetOwner()->GetInstigatorController(),
-			false
-		);
+		if (HasAuthority())
+		{
+			UGameplayStatics::ApplyRadialDamage(
+				GetWorld(),
+				Damage,
+				GetActorLocation(),
+				500,
+				nullptr,               // 기본 DamageType
+				TArray<AActor*>(),     // 무시할 액터들
+				GetOwner(),
+				GetOwner()->GetInstigatorController(),
+				false
+			);
+		}
 	}
 }
 

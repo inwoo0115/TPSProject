@@ -37,6 +37,7 @@ ATPSGrenadeBase::ATPSGrenadeBase()
 		Mesh->SetCollisionProfileName("NoCollision");
 	}
 
+	LifeTime = 20.0f;
 }
 
 void ATPSGrenadeBase::BeginPlay()
@@ -53,26 +54,28 @@ void ATPSGrenadeBase::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UP
 {
 	MulticastRPCExplosionEffect();
 
-	// 충돌 시 일정 반경 데미지 처리
-	UGameplayStatics::ApplyRadialDamage(
-		GetWorld(),
-		Damage,             // 데미지 수치
-		GetActorLocation(),          // 폭발 지점
-		ExplosionRadius,             // 폭발 반경
-		UDamageType::StaticClass(),// 데미지타입(없으면 UDamageType::StaticClass())
-		TArray<AActor*>(),           // 무시할 액터들
-		this,                        // 데미지 유발자
-		GetInstigatorController(),   // Instigator 컨트롤러
-		true                         // 원형 데미지 계산
-	);
-
-	// 충돌 시 이벤트 호출
-	auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
-	if (Event)
+	if (HasAuthority())
 	{
-		Event->GetEventComponent()->OnSpAttackHitEvent.Broadcast(GetActorLocation());
-	}
+		// 충돌 시 일정 반경 데미지 처리
+		UGameplayStatics::ApplyRadialDamage(
+			GetWorld(),
+			Damage,             // 데미지 수치
+			GetActorLocation(),          // 폭발 지점
+			ExplosionRadius,             // 폭발 반경
+			UDamageType::StaticClass(),// 데미지타입(없으면 UDamageType::StaticClass())
+			TArray<AActor*>(),           // 무시할 액터들
+			this,                        // 데미지 유발자
+			GetInstigatorController(),   // Instigator 컨트롤러
+			true                         // 원형 데미지 계산
+		);
 
+		// 충돌 시 이벤트 호출
+		auto Event = Cast<ITPSEventComponentInterface>(GetOwner());
+		if (Event)
+		{
+			Event->GetEventComponent()->OnSpAttackHitEvent.Broadcast(GetActorLocation());
+		}
+	}
 	// 충돌 시 파괴
 	Destroy();
 }
