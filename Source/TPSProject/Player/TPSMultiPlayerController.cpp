@@ -5,6 +5,9 @@
 #include "Character/TPSCharacterBase.h"
 #include "GameInstance/TPSUiSubsystem.h"
 #include "Widget/TPSHUDWidget.h"
+#include "GameInstance/TPSGameplayEventSubsystem.h"
+
+#include "Character/TPSNonCharacterBase.h"
 
 
 ATPSMultiPlayerController::ATPSMultiPlayerController()
@@ -43,6 +46,27 @@ void ATPSMultiPlayerController::BeginPlay()
 		{
 			HUD->AddToViewport(5);
 			HUD->SetVisibility(ESlateVisibility::Visible);
+		}
+	}
+}
+
+void ATPSMultiPlayerController::SetTarget(AActor* NewTarget)
+{
+	CurrentTarget = NewTarget;
+
+	ClientUpdateTarget(NewTarget);
+}
+
+void ATPSMultiPlayerController::ClientUpdateTarget_Implementation(AActor* Target)
+{
+	auto TargetCharacter = Cast<ATPSNonCharacterBase>(Target);
+	if (TargetCharacter)
+	{
+		auto EventSystem = GetGameInstance()->GetSubsystem<UTPSGameplayEventSubsystem>();
+		if (EventSystem)
+		{
+			EventSystem->OnTargetHPChange.Broadcast(TargetCharacter->CurrentHp, TargetCharacter->MaxHp);
+			EventSystem->OnTargetNameChange.Broadcast(TargetCharacter->CharacterName);
 		}
 	}
 }

@@ -83,5 +83,4 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Cable")
 	TObjectPtr<class UTPSRopeActionComponent> RopeActionComponent;
 
-
 };

@@ -11,6 +11,8 @@ DECLARE_MULTICAST_DELEGATE_TwoParams(FOnStatChange, int32 /*Current*/, int32 /*M
 
 DECLARE_MULTICAST_DELEGATE_TwoParams(FOnCoolTimeChange, float /*Current*/, float /*Max*/);
 
+DECLARE_MULTICAST_DELEGATE_OneParam(FOnTextChange, FText);
+
 
 /**
  * 
@@ -32,4 +34,9 @@ public:
 	FOnCoolTimeChange OnDroneCoolTimeChange;
 	
 	FOnCoolTimeChange OnSpAttackCoolTimeChange;
+
+	// Target Stat Change Event
+	FOnTextChange OnTargetNameChange;
+
+	FOnStatChange OnTargetHPChange;
 };

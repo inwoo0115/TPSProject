@@ -28,6 +28,10 @@ protected:
 
 	void UpdateUltimate(int32 CurrentGauge, int32 MaxGauge);
 
+	void UpdateTargetHP(int32 CurrentHPValue, int32 MaxHPValue);
+
+	void UpdateTargetName(FText NewName);
+
 public:
 	// HP UI
 	UPROPERTY(meta = (BindWidget))
@@ -59,4 +63,19 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* UltimateProgressValue;
+
+	// Enemy UI
+	UPROPERTY(meta = (BindWidget))
+	class UProgressBar* TargetHPBar;
+
+	UPROPERTY(meta = (BindWidget))
+	class UTextBlock* TargetName;
+
+	// Target UI Timer
+	FTimerHandle HPBarHideTimerHandle;
+	FTimerHandle NameHideTimerHandle;
+
+	void HideTargetHPBar();
+
+	void HideTargetName();
 };

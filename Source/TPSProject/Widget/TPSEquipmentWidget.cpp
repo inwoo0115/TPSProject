@@ -69,16 +69,16 @@ void UTPSEquipmentWidget::OnWeapon01Clicked()
 
 void UTPSEquipmentWidget::OnWeapon02Clicked()
 {
-	if (SubWeaponSettingWidgetClass)
-	{
-		// 困连 积己
-		UTPSMainWeaponSettingWidget* Widget = CreateWidget<UTPSMainWeaponSettingWidget>(GetWorld(), MainWeaponSettingWidgetClass);
+	//if (SubWeaponSettingWidgetClass)
+	//{
+	//	// 困连 积己
+	//	UTPSMainWeaponSettingWidget* Widget = CreateWidget<UTPSMainWeaponSettingWidget>(GetWorld(), MainWeaponSettingWidgetClass);
 
-		if (Widget)
-		{
-			Widget->AddToViewport(12);
-		}
-	}
+	//	if (Widget)
+	//	{
+	//		Widget->AddToViewport(12);
+	//	}
+	//}
 }
 
 void UTPSEquipmentWidget::OnSpWeaponClicked()

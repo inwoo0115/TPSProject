@@ -18,7 +18,6 @@
 #include "EnhancedInputSubsystems.h"
 #include "Animation/TPSAnimMontageData.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
-
 #include "Interface/TPSUltiGaugeInterface.h"
 
 // Sets default values

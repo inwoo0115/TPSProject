@@ -12,18 +12,24 @@ class TPSPROJECT_API ATPSNonCharacterBase : public ACharacter
 	GENERATED_BODY()
 
 public:
-	// Sets default values for this character's properties
 	ATPSNonCharacterBase();
 
+	UPROPERTY()
+	FText CharacterName;
+
+	UPROPERTY(Replicated)
+	float CurrentHp = 1000.0f;
+
+	UPROPERTY(Replicated)
+	float MaxHp = 1000.0f;
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
-	// Called to bind functionality to input
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	float CalculateDamage(float Damage);
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
 };

@@ -19,7 +19,13 @@ void UTPSHUDWidget::NativeConstruct()
 		EventSystem->OnUltimateGaugeChange.AddUObject(this, &UTPSHUDWidget::UpdateUltimate);
 		EventSystem->OnSpAttackCoolTimeChange.AddUObject(this, &UTPSHUDWidget::UpdateSpAttack);
 		EventSystem->OnDroneCoolTimeChange.AddUObject(this, &UTPSHUDWidget::UpdateDrone);
+
+		EventSystem->OnTargetNameChange.AddUObject(this, &UTPSHUDWidget::UpdateTargetName);
+		EventSystem->OnTargetHPChange.AddUObject(this, &UTPSHUDWidget::UpdateTargetHP);
 	}
+
+	HideTargetHPBar();
+	HideTargetName();
 }
 
 void UTPSHUDWidget::UpdateHP(int32 CurrentHPValue, int32 MaxHPValue)
@@ -87,5 +93,68 @@ void UTPSHUDWidget::UpdateUltimate(int32 CurrentGauge, int32 MaxGauge)
 			CircularProgress->SetScalarParameterValue("CircularProgress01_Blue", float(CurrentGauge) / float(MaxGauge));
 		}
 
+	}
+}
+
+void UTPSHUDWidget::UpdateTargetHP(int32 CurrentHPValue, int32 MaxHPValue)
+{
+	if (TargetHPBar)
+	{
+		float HPPercent = float(CurrentHPValue) / float(MaxHPValue);
+
+		TargetHPBar->SetPercent(HPPercent);
+
+		// HPBar 보이기
+		TargetHPBar->SetVisibility(ESlateVisibility::Visible);
+
+		// 이전 타이머 클리어
+		GetWorld()->GetTimerManager().ClearTimer(HPBarHideTimerHandle);
+
+		// 5초 후에 숨기도록 타이머 시작
+		GetWorld()->GetTimerManager().SetTimer(
+			HPBarHideTimerHandle,
+			this,
+			&UTPSHUDWidget::HideTargetHPBar,
+			5.0f,
+			false
+		);
+	}
+}
+
+void UTPSHUDWidget::UpdateTargetName(FText NewName)
+{
+	if (TargetName)
+	{
+		TargetName->SetText(NewName);
+
+		TargetName->SetVisibility(ESlateVisibility::Visible);
+
+		// 이전 타이머 클리어
+		GetWorld()->GetTimerManager().ClearTimer(NameHideTimerHandle);
+
+		// 5초 후에 숨기도록 타이머 시작
+		GetWorld()->GetTimerManager().SetTimer(
+			NameHideTimerHandle,
+			this,
+			&UTPSHUDWidget::HideTargetName,
+			5.0f,
+			false
+		);
+	}
+}
+
+void UTPSHUDWidget::HideTargetHPBar()
+{
+	if (TargetHPBar)
+	{
+		TargetHPBar->SetVisibility(ESlateVisibility::Hidden);
+	}
+}
+
+void UTPSHUDWidget::HideTargetName()
+{
+	if (TargetName)
+	{
+		TargetName->SetVisibility(ESlateVisibility::Hidden);
 	}
 }
