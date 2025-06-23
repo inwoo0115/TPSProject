@@ -294,9 +294,6 @@ void ATPSUltimateSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
         if (FFloatProperty* FloatProp = CastField<FFloatProperty>(FoundProperty))
         {
             float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
-
-            UE_LOG(LogTemp, Warning, TEXT("%f"), NewValue);
-
             FloatProp->SetPropertyValue_InContainer(this, NewValue);
             return;
         }

@@ -9,7 +9,7 @@ UTPSDroneGainUltiGauge::UTPSDroneGainUltiGauge()
 {
 	AbilityName = FText::FromString(TEXT("Additional Ulti Guage"));
 
-	AbilityDescription = FText::FromString(TEXT("Add 10% Ultimate Guage"));
+	AbilityDescription = FText::FromString(TEXT("Add 30% Ultimate Guage"));
 }
 
 void UTPSDroneGainUltiGauge::InitializeDroneAbility(FDroneSkillContext& SkillContext)
@@ -19,8 +19,16 @@ void UTPSDroneGainUltiGauge::InitializeDroneAbility(FDroneSkillContext& SkillCon
 
 void UTPSDroneGainUltiGauge::ApplyAbilityWithLocation(FVector Location)
 {
-	ServerRPCApplyAbility();
-	GetOwnerEventComponent()->OnUltimateFieldChangeEvent.Broadcast(FName(TEXT("CurrentGauge")), 10.0f);
+	AActor* Owner = Cast<AActor>(GetOuter());
+	if (Owner && Owner->HasAuthority())
+	{
+		GetOwnerEventComponent()->OnUltiGaugeUpdateEvent.Broadcast(30.0f);
+
+	}
+	else
+	{
+		ServerRPCApplyAbility();
+	}
 }
 
 void UTPSDroneGainUltiGauge::CancelAbility()
@@ -35,5 +43,5 @@ void UTPSDroneGainUltiGauge::InitializeAbilityEvent()
 
 void UTPSDroneGainUltiGauge::ServerRPCApplyAbility_Implementation()
 {
-	GetOwnerEventComponent()->OnUltimateFieldChangeEvent.Broadcast(FName(TEXT("CurrentGauge")), 10.0f);
+	GetOwnerEventComponent()->OnUltiGaugeUpdateEvent.Broadcast(30.0f);
 }

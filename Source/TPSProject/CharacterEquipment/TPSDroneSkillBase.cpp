@@ -254,6 +254,8 @@ void ATPSDroneSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
         {
             float NewValue = FloatProp->GetPropertyValue_InContainer(this) + Value;
 
+            UE_LOG(LogTemp, Warning, TEXT("change field by value : %f"), FloatProp->GetPropertyValue_InContainer(this));
+
             FloatProp->SetPropertyValue_InContainer(this, NewValue);
             return;
         }
