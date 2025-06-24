@@ -72,7 +72,7 @@ void UTPSUltiAddNuclear::ApplyNuclearDamage(FVector Location)
 				TArray<AActor*>(),     // 무시할 액터들
 				Cast<AActor>(GetOuter()),
 				Cast<AActor>(GetOuter())->GetInstigatorController(),
-				false,
+				true,
 				ECC_Pawn
 			);
 		},
