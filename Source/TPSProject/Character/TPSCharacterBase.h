@@ -59,7 +59,8 @@ public:
 
 	virtual UTPSGameplayEventComponent* GetEventComponent() override;
 
-	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, \
+		AActor* DamageCauser) override;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))
