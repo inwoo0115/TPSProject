@@ -27,6 +27,7 @@ void ATPSWeaponBase::BeginPlay()
 	{
 		OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnWeaponFieldChangeEvent.AddUObject(this, &ATPSWeaponBase::ChangeFieldStatByValue);
 	}
+
 }
 
 void ATPSWeaponBase::EndPlay(const EEndPlayReason::Type EndPlayReason)

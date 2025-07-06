@@ -7,6 +7,8 @@
 UENUM(BlueprintType)
 enum class EProjectileType : uint8
 {
+	None UMETA(DisplayName = "None"),
+
 	// Rifle Bullet
 	BasicBullet UMETA(DisplayName = "Basic Bullet"),
 	LaserBullet UMETA(DisplayName = "Laser Bullet"),

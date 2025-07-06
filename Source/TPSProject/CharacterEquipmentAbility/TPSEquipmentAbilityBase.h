@@ -6,7 +6,7 @@
 #include "UObject/NoExportTypes.h"
 #include "TPSEquipmentAbilityBase.generated.h"
 
-class UTPSGameplyaEventComponent;
+class UTPSGameplayEventComponent;
 
 /**
  * 

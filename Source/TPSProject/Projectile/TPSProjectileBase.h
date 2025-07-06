@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Interface/TPSUltiGaugeInterface.h"
+#include "TPSProjectileType.h"
 #include "TPSProjectileBase.generated.h"
 
 
@@ -36,6 +37,9 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
 	float ExplosionRadius = 100.0f;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Projectile")
+	EProjectileType ProjectileType = EProjectileType::None;
 
 protected:
 	// 콜리전 컴포넌트

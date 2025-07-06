@@ -100,11 +100,11 @@ bool ATPSBulletBase::IsNetRelevantFor(const AActor* RealViewer, const AActor* Vi
 		return true;
 	}
 
-	auto Onwer = Cast<APawn>(GetOwner());
-	if (Onwer)
+	auto PawnOwner = Cast<APawn>(GetOwner());
+	if (PawnOwner)
 	{
 		// 이 액터의 오너에게는 리플리케이션 되지 않음
-		return Onwer->GetController() != RealViewer;
+		return PawnOwner->GetController() != RealViewer;
 	}
 
 	return true;

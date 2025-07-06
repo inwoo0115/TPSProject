@@ -4,6 +4,7 @@
 #include "TPSMainGameMode.h"
 #include "Character/TPSCharacterPlayer.h"
 #include "Character/TPSCharacterControlData.h"
+#include "PoolManager/TPSPoolManager.h"
 
 ATPSMainGameMode::ATPSMainGameMode()
 {
@@ -19,5 +20,25 @@ ATPSMainGameMode::ATPSMainGameMode()
 	if (DefaultControllerRef.Class)
 	{
 		PlayerControllerClass = DefaultControllerRef.Class;
+	}
+}
+
+void ATPSMainGameMode::StartPlay()
+{
+	Super::StartPlay();
+
+	UWorld* World = GetWorld();
+	if (!World) return;
+
+	// 오브젝트 풀 생성 및 리플리케이션
+	FActorSpawnParameters Params;
+	Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+	Params.bNoFail = true;
+
+	ATPSPoolManager* PoolManager = World->SpawnActor<ATPSPoolManager>(ATPSPoolManager::StaticClass(), FVector::ZeroVector, FRotator::ZeroRotator, Params);
+	if (PoolManager)
+	{
+		PoolManager->SetReplicates(true);
+		PoolManager->SetReplicateMovement(false);
 	}
 }

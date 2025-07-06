@@ -17,4 +17,5 @@ class TPSPROJECT_API ATPSMainGameMode : public AGameModeBase
 public:
 	ATPSMainGameMode();
 
+	void StartPlay() override;
 };

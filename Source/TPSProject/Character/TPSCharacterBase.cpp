@@ -19,6 +19,8 @@
 #include "Animation/TPSAnimMontageData.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Interface/TPSUltiGaugeInterface.h"
+#include "PoolManager/TPSPoolManager.h"
+
 
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
@@ -119,6 +121,16 @@ void ATPSCharacterBase::BeginPlay()
 		DroneComponent->Equip(TPSGameInstance->DroneSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		SpAttackComponent->Equip(TPSGameInstance->SpAttackSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		UltimateComponent->Equip(TPSGameInstance->UltimateSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
+		
+		// 장비 장착 완료 후 0.1초 뒤 풀 초기화
+		FTimerHandle TimerHandle;
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
+			{
+				if (ATPSPoolManager* PoolManager = ATPSPoolManager::GetInstance(GetWorld()))
+				{
+					PoolManager->InitializePool(GetWorld());
+				}
+			}, 0.2f, false);
 	}
 }
 
