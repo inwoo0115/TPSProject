@@ -58,7 +58,6 @@ void ATPSPoolManager::InitializePool(UWorld* World)
 			{
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-				SpawnParams.Owner = Character;
 
 				ATPSProjectileBase* Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(Pair.Value, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 				if (Projectile)
@@ -66,6 +65,7 @@ void ATPSPoolManager::InitializePool(UWorld* World)
 					Projectile->SetActorHiddenInGame(true);
 					Projectile->SetActorEnableCollision(false);
 					Projectile->SetReplicates(false);
+					Projectile->ProjectileType = Pair.Key;
 					PoolArray.Add(Projectile);
 				}
 			}
@@ -86,7 +86,6 @@ void ATPSPoolManager::InitializePool(UWorld* World)
 			{
 				FActorSpawnParameters SpawnParams;
 				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-				SpawnParams.Owner = Character;
 
 				ATPSProjectileBase* Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(Pair.Value, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
 				if (Projectile)
@@ -94,6 +93,7 @@ void ATPSPoolManager::InitializePool(UWorld* World)
 					Projectile->SetActorHiddenInGame(true);
 					Projectile->SetActorEnableCollision(false);
 					Projectile->SetReplicates(false);
+					Projectile->ProjectileType = Pair.Key;
 					PoolArray.Add(Projectile);
 				}
 			}

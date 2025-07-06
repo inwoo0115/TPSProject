@@ -122,7 +122,7 @@ void ATPSCharacterBase::BeginPlay()
 		SpAttackComponent->Equip(TPSGameInstance->SpAttackSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		UltimateComponent->Equip(TPSGameInstance->UltimateSkillEquipmentClass, EAbilityType::None, EAbilityType::None, EAbilityType::None);
 		
-		// 장비 장착 완료 후 0.1초 뒤 풀 초기화
+		// 장비 장착 완료 후 0.2초 뒤 풀 초기화
 		FTimerHandle TimerHandle;
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle, [this]()
 			{
