@@ -10,7 +10,6 @@
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "NiagaraFunctionLibrary.h"
 
-
 void ATPSWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -27,7 +26,6 @@ void ATPSWeaponBase::BeginPlay()
 	{
 		OnFieldChangedHandle = GameplayEventInterface->GetEventComponent()->OnWeaponFieldChangeEvent.AddUObject(this, &ATPSWeaponBase::ChangeFieldStatByValue);
 	}
-
 }
 
 void ATPSWeaponBase::EndPlay(const EEndPlayReason::Type EndPlayReason)

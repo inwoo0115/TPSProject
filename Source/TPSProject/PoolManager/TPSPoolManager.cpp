@@ -16,9 +16,9 @@ TWeakObjectPtr<ATPSPoolManager> ATPSPoolManager::Instance = nullptr;
 // Sets default values
 ATPSPoolManager::ATPSPoolManager()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	
+
 	// 루트 컴포넌트 생성 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 
@@ -34,7 +34,7 @@ void ATPSPoolManager::BeginPlay()
 	Instance = this;
 }
 
-void ATPSPoolManager::InitializePool(UWorld* World)
+void ATPSPoolManager::InitializePool(UWorld* World, TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList)
 {
 	if (!World) return;
 
@@ -44,58 +44,26 @@ void ATPSPoolManager::InitializePool(UWorld* World)
 	ATPSCharacterBase* Character = Cast<ATPSCharacterBase>(PC->GetPawn());
 	if (!Character) return;
 
-	// 무기 발사체 풀 초기화
-	auto Weapon = Character->WeaponComponent->GetWeapon();
-	if (Weapon)
+
+	for (const TPair<EProjectileType, TSubclassOf<ATPSProjectileBase>>& Pair : ProjectileList)
 	{
-		for (const TPair<EProjectileType, TSubclassOf<ATPSProjectileBase>>& Pair : Weapon->ProjectileList)
+		if (!Pair.Value) continue;
+
+		TArray<ATPSProjectileBase*> PoolArray = ProjectilePool.FindOrAdd(Pair.Key);
+
+		for (int32 i = 0; i < PoolSize; ++i)
 		{
-			if (!Pair.Value) continue;
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
-			TArray<ATPSProjectileBase*> PoolArray = ProjectilePool.FindOrAdd(Pair.Key);
-
-			for (int32 i = 0; i < PoolSize; ++i)
+			ATPSProjectileBase* Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(Pair.Value, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
+			if (Projectile)
 			{
-				FActorSpawnParameters SpawnParams;
-				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-				ATPSProjectileBase* Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(Pair.Value, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-				if (Projectile)
-				{
-					Projectile->SetActorHiddenInGame(true);
-					Projectile->SetActorEnableCollision(false);
-					Projectile->SetReplicates(false);
-					Projectile->ProjectileType = Pair.Key;
-					PoolArray.Add(Projectile);
-				}
-			}
-		}
-	}
-
-	// 수류탄 풀 초기화
-	auto Equipment = Cast<ATPSSpAttackSkillBase>(Character->SpAttackComponent->GetEquipment());
-	if (Equipment)
-	{
-		for (const TPair<EProjectileType, TSubclassOf<ATPSProjectileBase>>& Pair : Equipment->ProjectileList)
-		{
-			if (!Pair.Value) continue;
-
-			TArray<ATPSProjectileBase*> PoolArray = ProjectilePool.FindOrAdd(Pair.Key);
-
-			for (int32 i = 0; i < PoolSize; ++i)
-			{
-				FActorSpawnParameters SpawnParams;
-				SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-				ATPSProjectileBase* Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(Pair.Value, FVector::ZeroVector, FRotator::ZeroRotator, SpawnParams);
-				if (Projectile)
-				{
-					Projectile->SetActorHiddenInGame(true);
-					Projectile->SetActorEnableCollision(false);
-					Projectile->SetReplicates(false);
-					Projectile->ProjectileType = Pair.Key;
-					PoolArray.Add(Projectile);
-				}
+				Projectile->SetActorHiddenInGame(true);
+				Projectile->SetActorEnableCollision(false);
+				Projectile->SetReplicates(false);
+				Projectile->ProjectileType = Pair.Key;
+				PoolArray.Add(Projectile);
 			}
 		}
 	}

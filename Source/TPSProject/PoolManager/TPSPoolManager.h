@@ -24,7 +24,7 @@ public:
 
 	void ReturnProjectile(ATPSProjectileBase* Projectile);
 
-	void InitializePool(UWorld* World);
+	void InitializePool(UWorld* World, TMap<EProjectileType, TSubclassOf<class ATPSProjectileBase>> ProjectileList);
 
 protected:
 	// Called when the game starts or when spawned
@@ -34,5 +34,5 @@ protected:
 
 	TMap<EProjectileType, TArray<ATPSProjectileBase*>> ProjectilePool;
 
-	int32 PoolSize = 100;
+	int32 PoolSize = 10;
 };
