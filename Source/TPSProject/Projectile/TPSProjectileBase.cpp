@@ -26,7 +26,7 @@ ATPSProjectileBase::ATPSProjectileBase()
 	Movement->ProjectileGravityScale = 0.0f;
 
 	// 리플리케이션 설정
-	bReplicates = false;
+	bReplicates = true;
 }
 
 // Called when the game starts or when spawned
