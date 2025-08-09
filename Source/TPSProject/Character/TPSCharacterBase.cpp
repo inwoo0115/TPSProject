@@ -21,7 +21,6 @@
 #include "Interface/TPSUltiGaugeInterface.h"
 
 
-
 // Sets default values
 ATPSCharacterBase::ATPSCharacterBase()
 {

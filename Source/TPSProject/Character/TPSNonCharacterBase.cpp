@@ -7,6 +7,7 @@
 #include "Interface/TPSEventComponentInterface.h"
 #include "Interface/TPSSetTargetInterface.h"
 #include "Net/UnrealNetwork.h"
+#include "AI/TPSAIController.h"
 
 
 // Sets default values
@@ -16,6 +17,10 @@ ATPSNonCharacterBase::ATPSNonCharacterBase()
 	PrimaryActorTick.bCanEverTick = true;
 
 	CharacterName = FText::FromString(TEXT("Target"));
+
+	// AI Controller ¼³Á¤
+	AIControllerClass = ATPSAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 
 	bReplicates = true;
 }

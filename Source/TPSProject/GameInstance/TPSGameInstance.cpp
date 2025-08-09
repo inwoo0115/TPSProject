@@ -37,4 +37,7 @@ void UTPSGameInstance::Init()
 	{
 		UltimateSkillEquipmentClass = SoftClass_Ulti.LoadSynchronous();
 	}
+
+	// 인벤토리 데이터 로드
+	// LoadInventoryData();
 }
