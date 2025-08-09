@@ -11,15 +11,6 @@ UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 {
 	NodeName = TEXT("Attack");
 
-	//ConstructorHelpers::FObjectFinder<ATPSProjectileBase> ProjectileClass(TEXT("/Game/TPSProject/Blueprints/Projectile/BP_RifleBullet.BP_RifleBullet"));
-	//if (ProjectileClass.Object)
-	//{
-	//	DefaultProjectile = ProjectileClass.Object;
-	//}
-	//else
-	//{
-	//	DefaultProjectile = nullptr;
-	//}
 	ConstructorHelpers::FClassFinder<ATPSProjectileBase> ProjectileClass(TEXT("/Game/TPSProject/Blueprints/Projectile/BP_RifleBullet.BP_RifleBullet_C"));
 	if (ProjectileClass.Succeeded())
 	{
@@ -53,8 +44,6 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	{
 		StartLocation = ControllingPawn->GetActorLocation();
 	}
-
-
 
 	// 총구 위치에서 타겟 방향 계산
 	FVector MuzzleLocation = StartLocation + ControllingPawn->GetActorForwardVector() * 50.0f;

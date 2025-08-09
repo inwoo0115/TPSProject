@@ -67,11 +67,6 @@ void UBTService_CheckInRange::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	DrawDebugLine(World, StartLocation, EndLocation, LineColor, false, 1.0f, 0, 2.0f);
 
 	bool bHasLineOfSight = false;
-	if (bHit)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Line of sight to target actor %s"), *TargetActor->GetName());
-
-	}
 
 	if (bHit && HitResult.GetActor() == TargetActor)
 	{
