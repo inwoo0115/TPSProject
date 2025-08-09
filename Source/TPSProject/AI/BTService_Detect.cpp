@@ -72,14 +72,16 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 			APawn* ChosenPawn = Candidates[RandomIndex];
 
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), ChosenPawn);
+			OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("TargetActorLocation"), ChosenPawn->GetActorLocation());
 		}
 		else
 		{
 			OwnerComp.GetBlackboardComponent()->ClearValue(TEXT("TargetActor"));
+			OwnerComp.GetBlackboardComponent()->ClearValue(TEXT("TargetActorLocation"));
 		}
 	}
 	else
 	{
-		OwnerComp.GetBlackboardComponent()->ClearValue(TEXT("TargetActor"));
+		OwnerComp.GetBlackboardComponent()->ClearValue(TEXT("TargetActorLocation"));
 	}
 }
