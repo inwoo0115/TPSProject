@@ -17,6 +17,9 @@ class TPSPROJECT_API ATPSAIController : public AAIController
 public:
 	ATPSAIController(const FObjectInitializer& ObjectInitializer);
 
+	void StartCustomTurnTo(FRotator TargetRotation);
+
+	virtual void Tick(float DeltaSeconds) override;
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
@@ -25,4 +28,12 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBlackboardComponent* BlackboardComponent;
+
+	//virtual void UpdateControlRotation(float DeltaTime, bool bUpdatePawn = true) override;
+
+	UPROPERTY()
+	bool bIsCustomTurning = false;
+
+	UPROPERTY()
+	FRotator DesiredControlRotation;
 };

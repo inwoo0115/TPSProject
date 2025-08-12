@@ -47,4 +47,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
 	FVector Axis;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
+	FRotator AimOffsetAxis;
 };

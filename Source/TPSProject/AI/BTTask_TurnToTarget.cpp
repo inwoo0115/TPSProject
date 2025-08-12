@@ -9,6 +9,7 @@
 UBTTask_TurnToTarget::UBTTask_TurnToTarget()
 {
 	NodeName = TEXT("Turn");
+	bNotifyTick = true; // Enable ticking for this task
 }
 
 EBTNodeResult::Type UBTTask_TurnToTarget::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
@@ -27,16 +28,16 @@ EBTNodeResult::Type UBTTask_TurnToTarget::ExecuteTask(UBehaviorTreeComponent& Ow
 		return EBTNodeResult::Failed;
 	}
 
-	float TurnSpeed = 1.0f;
+	float TurnSpeed = 3.0f;
 	FVector LookVector = TargetPawn->GetActorLocation() - ControllingPawn->GetActorLocation();
 	LookVector.Z = 0.0f;
 	FRotator TargetRot = FRotationMatrix::MakeFromX(LookVector).Rotator();
-	ControllingPawn->SetActorRotation(FMath::RInterpTo(ControllingPawn->GetActorRotation(), TargetRot, GetWorld()->GetDeltaSeconds(), TurnSpeed));
 
 	// Set focus on the target pawn
 	ATPSAIController* AIController = Cast<ATPSAIController>(OwnerComp.GetAIOwner());
 	if (AIController)
 	{
+		AIController->StartCustomTurnTo(TargetRot);
 		AIController->SetFocus(TargetPawn);
 	}
 

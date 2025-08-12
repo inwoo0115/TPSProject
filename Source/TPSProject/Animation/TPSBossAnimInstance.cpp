@@ -27,6 +27,7 @@ void UTPSBossAnimInstance::NativeUpdateAnimation(float DeltaSceonds)
 		Velocity = Owner->GetVelocity().Length();
 		bIsFalling = Movement->IsFalling();
 		Axis = Owner->GetActorTransform().InverseTransformVector(Owner->GetVelocity().GetSafeNormal(0.0001));
+		AimOffsetAxis = Owner->GetActorTransform().InverseTransformRotation(Owner->GetControlRotation().Quaternion()).Rotator();
 		bIsMontagePlaying = Montage_IsPlaying(nullptr);
 		if (Owner->GetController())
 		{
