@@ -55,11 +55,11 @@ void UBTService_CheckInRange::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 	Params.AddIgnoredActor(OwnerPawn);
 	Params.bReturnPhysicalMaterial = false;
 
-	bool bHit = World->LineTraceSingleByChannel(
+	bool bHit = World->LineTraceSingleByProfile(
 		HitResult,
 		StartLocation,
 		EndLocation,
-		ECC_Visibility,
+		TEXT("BlockAll"),
 		Params
 	);
 
