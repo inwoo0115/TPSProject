@@ -6,6 +6,7 @@
 #include "Projectile/TPSProjectileBase.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "TPSAIController.h"
+#include "Math/UnrealMathUtility.h"
 
 UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 {
@@ -16,22 +17,43 @@ UBTTask_Attack::UBTTask_Attack(const FObjectInitializer& ObjectInitializer)
 	{
 		DefaultProjectile = ProjectileClass.Class;
 	}
+
+	bNotifyTick = true;
 }
 
 EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	EBTNodeResult::Type Result = Super::ExecuteTask(OwnerComp, NodeMemory);
 
+	AttackCoolTime = 0.0f;
+
+	return EBTNodeResult::InProgress;
+}
+
+void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
+	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
+
+	AttackCoolTime += DeltaSeconds;
+	if (AttackCoolTime > 0.2f)
+	{
+		Fire(OwnerComp, NodeMemory, DeltaSeconds);
+		AttackCoolTime = 0.0f;
+	}
+}
+
+void UBTTask_Attack::Fire(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
+{
 	APawn* ControllingPawn = Cast<APawn>(OwnerComp.GetAIOwner()->GetPawn());
 	if (nullptr == ControllingPawn)
 	{
-		return EBTNodeResult::Failed;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 
 	APawn* TargetPawn = Cast<APawn>(OwnerComp.GetBlackboardComponent()->GetValueAsObject(TEXT("TargetActor")));
 	if (nullptr == TargetPawn)
 	{
-		return EBTNodeResult::Failed;
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 
 	FName SocketName = TEXT("Muzzle_01");
@@ -55,12 +77,17 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 	SpawnParams.Owner = ControllingPawn;
 	SpawnParams.Instigator = ControllingPawn;
+	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+	// 정규분포 기반 랜덤 방향
+	float HalfAngleRad = FMath::DegreesToRadians(5.0f);
+	FVector RandomDir = FMath::VRandCone(ShotDirection, HalfAngleRad, HalfAngleRad);
 
 	// 총알 클래스 생성
 	auto Projectile = GetWorld()->SpawnActor<ATPSProjectileBase>(
 		DefaultProjectile,
 		MuzzleLocation,
-		ShotRotation,
+		RandomDir.Rotation(),
 		SpawnParams
 	);
 
@@ -68,11 +95,13 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 	if (Projectile)
 	{
 		Projectile->Damage = 10.0f;
-		return EBTNodeResult::Succeeded;
-		UE_LOG(LogTemp, Warning, TEXT("Projectile Spawned Successfully!"));
+		UE_LOG(LogTemp, Warning, TEXT("Projectile spawned"));
+		//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 	else
 	{
-		return EBTNodeResult::Failed;
+		UE_LOG(LogTemp, Error, TEXT("Projectile spawn failed"));
+
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 	}
 }

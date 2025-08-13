@@ -59,7 +59,7 @@ void UBTService_CheckInRange::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		HitResult,
 		StartLocation,
 		EndLocation,
-		TEXT("BlockAll"),
+		TEXT("ProjectileProfile"),
 		Params
 	);
 

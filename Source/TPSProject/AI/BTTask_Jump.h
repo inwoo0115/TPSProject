@@ -4,27 +4,22 @@
 
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
-#include "BTTask_Attack.generated.h"
+#include "BTTask_Jump.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class TPSPROJECT_API UBTTask_Attack : public UBTTaskNode
+class TPSPROJECT_API UBTTask_Jump : public UBTTaskNode
 {
 	GENERATED_BODY()
-
+	
 public:
-	UBTTask_Attack(const FObjectInitializer& ObjectInitializer);
+	UBTTask_Jump(const FObjectInitializer& ObjectInitializer);
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 
 	virtual void TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-	void Fire(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds);
-
-protected:
-	TSubclassOf<class ATPSProjectileBase> DefaultProjectile;
-
-	float AttackCoolTime = 0.0f;
+	bool bIsJumping = false;
 };
