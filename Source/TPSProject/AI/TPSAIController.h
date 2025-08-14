@@ -20,6 +20,8 @@ public:
 	void StartCustomTurnTo(FRotator TargetRotation);
 
 	virtual void Tick(float DeltaSeconds) override;
+
+	void StopBehaviorTree();
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 

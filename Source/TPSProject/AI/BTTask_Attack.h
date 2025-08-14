@@ -27,4 +27,6 @@ protected:
 	TSubclassOf<class ATPSProjectileBase> DefaultProjectile;
 
 	float AttackCoolTime = 0.0f;
+
+	float AttackContinueTime = 3.0f;
 };

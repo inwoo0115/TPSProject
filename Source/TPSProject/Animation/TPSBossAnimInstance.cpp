@@ -44,5 +44,6 @@ void UTPSBossAnimInstance::NativeUpdateAnimation(float DeltaSceonds)
 				Pitch = ControlRotation.Pitch;
 			}
 		}
+		bIsDead = Owner->GetIsDead();
 	}
 }

@@ -28,7 +28,7 @@ public:
 
 	FRotator GetCurrentControllerRotation() const { return CurrentControllerRotation; };
 
-	virtual void Tick(float DeltaSeconds);
+	virtual void Tick(float DeltaSeconds) override;
 protected:
 	// SpInteraction Actor Check
 	void CheckSpInteraction();

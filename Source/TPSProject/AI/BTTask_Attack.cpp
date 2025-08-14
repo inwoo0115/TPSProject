@@ -27,6 +27,8 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 	AttackCoolTime = 0.0f;
 
+	AttackContinueTime = 3.0f;
+
 	return EBTNodeResult::InProgress;
 }
 
@@ -35,10 +37,16 @@ void UBTTask_Attack::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 	Super::TickTask(OwnerComp, NodeMemory, DeltaSeconds);
 
 	AttackCoolTime += DeltaSeconds;
+	AttackContinueTime -= DeltaSeconds;
 	if (AttackCoolTime > 0.2f)
 	{
 		Fire(OwnerComp, NodeMemory, DeltaSeconds);
 		AttackCoolTime = 0.0f;
+	}
+
+	if (AttackContinueTime < 0.0f)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }
 
@@ -95,8 +103,6 @@ void UBTTask_Attack::Fire(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, 
 	if (Projectile)
 	{
 		Projectile->Damage = 10.0f;
-		UE_LOG(LogTemp, Warning, TEXT("Projectile spawned"));
-		//FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 	else
 	{

@@ -9,11 +9,19 @@
 UENUM(BlueprintType)
 enum class EMontageType : uint8
 {
+	// Character Montage
 	Attack UMETA(DisplayName = "Attack"),
 	RopeAction UMETA(DisplayName = "RopeAction"),
 	SpAttack UMETA(DisplayName = "SpAttack"),
 	Reload UMETA(DisplayName = "Reload"),
-	Ultimate UMETA(DisplayName = "Ultimate")
+	Ultimate UMETA(DisplayName = "Ultimate"),
+	Dead UMETA(DisplayName = "Dead"),
+
+	// Boss Montage
+	SkillCast UMETA(DisplayName = "SkillCast"),
+	UltiCast UMETA(DisplayName = "UltiCast"),
+	LevelStart UMETA(DisplayName = "LevelStart"),
+	LevelEnd UMETA(DisplayName = "LevelEnd")
 };
 
 UENUM(BlueprintType)

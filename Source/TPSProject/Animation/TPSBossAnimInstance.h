@@ -50,4 +50,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
 	FRotator AimOffsetAxis;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Character")
+	bool bIsDead;
 };

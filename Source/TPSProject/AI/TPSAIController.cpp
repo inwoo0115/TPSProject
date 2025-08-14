@@ -14,7 +14,6 @@ ATPSAIController::ATPSAIController(const FObjectInitializer& ObjectInitializer)
 
 
 	bAllowStrafe = true;
-	//bSetControlRotationFromPawnOrientation = true;
 }
 
 void ATPSAIController::StartCustomTurnTo(FRotator TargetRotation)
@@ -47,6 +46,18 @@ void ATPSAIController::Tick(float DeltaSeconds)
   
 }
 
+void ATPSAIController::StopBehaviorTree()
+{
+    if (BossBehaviorTree)
+    {
+        UBehaviorTreeComponent* BTComp = Cast<UBehaviorTreeComponent>(BrainComponent);
+        if (BTComp)
+        {
+            BTComp->StopTree();
+        }
+    }
+}
+
 void ATPSAIController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -56,26 +67,3 @@ void ATPSAIController::OnPossess(APawn* InPawn)
 		RunBehaviorTree(BossBehaviorTree);
 	}
 }
-
-//void ATPSAIController::UpdateControlRotation(float DeltaTime, bool bUpdatePawn)
-//{
-    //if (bIsCustomTurning)
-    //{
-        // 현재 ControlRotation
-    //FRotator CurrentRotation = GetControlRotation();
-
-    //FRotator NewRotation = FMath::RInterpTo(CurrentRotation, DesiredControlRotation, DeltaTime, 1.0f);
-
-    //SetControlRotation(NewRotation);
-
-        // 목표에 거의 도달하면 보간 종료
-    //    if (NewRotation.Equals(DesiredControlRotation, 1.0f))
-    //    {
-    //        bIsCustomTurning = false;
-    //    }
-    //}
-    //else
-    //{
-    //Super::UpdateControlRotation(DeltaTime, bUpdatePawn);
-    //}
-//}
