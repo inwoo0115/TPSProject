@@ -34,6 +34,9 @@ public:
 	bool GetIsDead();
 
 protected:
+	UPROPERTY(EditAnywhere, Category = Projectile)
+	TSubclassOf<class ATPSProjectileBase> ProjectileClass;
+
 	float SkillCoolTime = 5.0f;
 	float UltiCoolTime = 5.0f;
 
