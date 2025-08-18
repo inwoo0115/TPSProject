@@ -37,8 +37,16 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 	TSubclassOf<class ATPSProjectileBase> ProjectileClass;
 
+	UPROPERTY(EditAnywhere, Category = Decal)
+	TSubclassOf<class ATPSSkillRangeDecalBase> DecalClass;
+
+	UPROPERTY(EditAnywhere, Category = Decal)
+	TObjectPtr<class ATPSSkillRangeDecalBase> SkillDecal;
+
 	float SkillCoolTime = 5.0f;
 	float UltiCoolTime = 5.0f;
+
+	float UltiElapsedTime = 0.0f;
 
 	bool bIsDead = false;
 };

@@ -6,6 +6,8 @@
 #include "AI/TPSAIController.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Projectile/TPSHommingMissile.h"
+#include "Summons/TPSSkillRangeDecalBase.h"
+#include "Components/DecalComponent.h"
 
 ATPSBossCharacter::ATPSBossCharacter(const FObjectInitializer& ObjectInitializer)
 {
@@ -28,6 +30,13 @@ ATPSBossCharacter::ATPSBossCharacter(const FObjectInitializer& ObjectInitializer
 	{
 		ProjectileClass = ProjectileBPClass.Class;
 	}
+
+	// Decal
+	static ConstructorHelpers::FClassFinder<ATPSSkillRangeDecalBase> DecalBPClass(TEXT("/Game/TPSProject/Blueprints/Decal/BP_BossSkillDecal.BP_BossSkillDecal_C"));
+	if (DecalBPClass.Class)
+	{
+		DecalClass = DecalBPClass.Class;
+	}
 }
 
 void ATPSBossCharacter::Tick(float DeltaSeconds)
@@ -45,6 +54,27 @@ void ATPSBossCharacter::Tick(float DeltaSeconds)
 			AICon->StopBehaviorTree();
 			bIsDead = true;
 			PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::LevelEnd]);
+		}
+	}
+
+	if (SkillDecal)
+	{
+		UltiElapsedTime += DeltaSeconds;
+		float Alpha = FMath::Clamp(UltiElapsedTime / 1.5f, 0.f, 1.f);
+		float CurrentScale = FMath::Lerp(0.0f, 2000.0f, Alpha);
+		SkillDecal->RangeDecal->DecalSize = FVector(1.0f, 50.0f, CurrentScale);
+		
+		FVector NewLocation = GetActorLocation() + FRotator(0, SkillDecal->GetActorRotation().Yaw, 0).Vector() * (500.f + (CurrentScale * 0.5f)) + FVector(0.0f, 0.0f, -250.0f);
+		SkillDecal->SetActorLocation(NewLocation);
+		
+		SkillDecal->RangeDecal->MarkRenderStateDirty();
+		
+		if (UltiElapsedTime >= 1.5f)
+		{
+			SkillDecal->RangeDecal->SetVisibility(false);
+			SkillDecal->Destroy();
+			SkillDecal = nullptr;
+			UltiElapsedTime = 0.0f;
 		}
 	}
 }
@@ -116,6 +146,16 @@ void ATPSBossCharacter::CastUlti()
 {
 	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::UltiCast]);
 	UltiCoolTime = 0.0f;
+	FVector SpawnLocation = GetActorLocation() + FRotator(0, GetControlRotation().Yaw, 0).Vector() * 100.f + FVector(0.0f, 0.0f, -250.0f);
+	FRotator SpawnRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
+
+	SkillDecal = GetWorld()->SpawnActor<ATPSSkillRangeDecalBase>(
+		DecalClass,
+		SpawnLocation,
+		SpawnRotation
+	);
+	SkillDecal->RangeDecal->DecalSize = FVector(1.0f, 50.0f, 0.0f);
+	SkillDecal->RangeDecal->MarkRenderStateDirty();
 }
 
 float ATPSBossCharacter::GetSkillCoolTime()
