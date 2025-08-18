@@ -8,6 +8,7 @@
 #include "Projectile/TPSHommingMissile.h"
 #include "Summons/TPSSkillRangeDecalBase.h"
 #include "Components/DecalComponent.h"
+#include "NiagaraFunctionLibrary.h"
 
 ATPSBossCharacter::ATPSBossCharacter(const FObjectInitializer& ObjectInitializer)
 {
@@ -147,12 +148,12 @@ void ATPSBossCharacter::CastUlti()
 	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::UltiCast]);
 	UltiCoolTime = 0.0f;
 	FVector SpawnLocation = GetActorLocation() + FRotator(0, GetControlRotation().Yaw, 0).Vector() * 100.f + FVector(0.0f, 0.0f, -250.0f);
-	FRotator SpawnRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
+	EffectSpawnRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
 
 	SkillDecal = GetWorld()->SpawnActor<ATPSSkillRangeDecalBase>(
 		DecalClass,
 		SpawnLocation,
-		SpawnRotation
+		EffectSpawnRotation
 	);
 	SkillDecal->RangeDecal->DecalSize = FVector(1.0f, 50.0f, 0.0f);
 	SkillDecal->RangeDecal->MarkRenderStateDirty();
@@ -171,4 +172,27 @@ float ATPSBossCharacter::GetUltiCoolTime()
 bool ATPSBossCharacter::GetIsDead()
 {
 	return bIsDead;
+}
+
+void ATPSBossCharacter::SpawnExplosion()
+{
+	if (ExplosionEffect)
+	{
+		FVector BossLocation = GetActorLocation();
+
+		float StepDistance = 400.f;
+
+		for (int i = 1; i <= 8; i++)
+		{
+			FVector SpawnLocation = BossLocation + EffectSpawnRotation.Vector() * (StepDistance * i);
+			SpawnLocation.Z += 200.f;
+
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+				GetWorld(),
+				ExplosionEffect,
+				SpawnLocation,
+				FRotator(0.0f, 0.0f, 0.0f)
+			);
+		}
+	}
 }

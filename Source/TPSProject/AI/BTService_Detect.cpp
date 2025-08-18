@@ -73,6 +73,15 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject(TEXT("TargetActor"), ChosenPawn);
 			OwnerComp.GetBlackboardComponent()->SetValueAsVector(TEXT("TargetActorLocation"), ChosenPawn->GetActorLocation());
+			FVector Distance = ChosenPawn->GetActorLocation() - OwnerPawn->GetActorLocation();
+			if (Distance.Length() < 4000.0f)
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsOnRange"), true);
+			}
+			else
+			{
+				OwnerComp.GetBlackboardComponent()->SetValueAsBool(TEXT("IsOnRange"), false);
+			}
 		}
 		else
 		{

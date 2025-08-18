@@ -8,7 +8,7 @@
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Interface/TPSEventComponentInterface.h"
 #include "Kismet/GameplayStatics.h"
-
+#include "NiagaraFunctionLibrary.h"
 
 ATPSHommingMissile::ATPSHommingMissile()
 {
@@ -98,22 +98,21 @@ void ATPSHommingMissile::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		}
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Missile Hit: %s"), *OtherActor->GetName());
-	//if (ExplosionEffect)
-	//{
-	//	FRotator EffectRotation = GetActorRotation();
-	//	EffectRotation.Pitch += 90;
+	if (ExplosionEffect)
+	{
+		FRotator EffectRotation = GetActorRotation();
+		EffectRotation.Pitch += 90;
 
-	//	UNiagaraFunctionLibrary::SpawnSystemAtLocation(
-	//		GetWorld(),
-	//		ExplosionEffect,
-	//		GetActorLocation(),
-	//		EffectRotation,
-	//		FVector(1.f),
-	//		true,
-	//		true
-	//	);
-	//}
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			ExplosionEffect,
+			GetActorLocation(),
+			EffectRotation,
+			FVector(1.f),
+			true,
+			true
+		);
+	}
 
 	Destroy(); // 충돌 시 발사체 파괴
 }

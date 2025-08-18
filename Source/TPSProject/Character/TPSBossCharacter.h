@@ -33,6 +33,7 @@ public:
 
 	bool GetIsDead();
 
+	void SpawnExplosion();
 protected:
 	UPROPERTY(EditAnywhere, Category = Projectile)
 	TSubclassOf<class ATPSProjectileBase> ProjectileClass;
@@ -42,6 +43,11 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Decal)
 	TObjectPtr<class ATPSSkillRangeDecalBase> SkillDecal;
+
+	UPROPERTY(EditAnywhere, Category = Effect)
+	TObjectPtr<class UNiagaraSystem> ExplosionEffect;
+
+	FRotator EffectSpawnRotation;
 
 	float SkillCoolTime = 5.0f;
 	float UltiCoolTime = 5.0f;

@@ -45,4 +45,7 @@ public:
 private:
 	void EnableHoming();
 	USceneComponent* TargetComponent;
+
+	UPROPERTY(EditAnywhere, Category = "VFX")
+	TObjectPtr<class UNiagaraSystem> ExplosionEffect;
 };
