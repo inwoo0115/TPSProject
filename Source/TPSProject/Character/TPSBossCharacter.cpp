@@ -9,6 +9,8 @@
 #include "Summons/TPSSkillRangeDecalBase.h"
 #include "Components/DecalComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Engine/OverlapResult.h"
 
 ATPSBossCharacter::ATPSBossCharacter(const FObjectInitializer& ObjectInitializer)
 {
@@ -93,7 +95,7 @@ void ATPSBossCharacter::CastSkill()
 
 	FVector SocketLocation = GetMesh()->GetSocketLocation(TEXT("head"));
 
-	FVector BoxExtent = FVector(30.f, 30.f, 30.f);
+	FVector BoxExtent = FVector(40.f, 40.f, 40.f);
 	FVector BoxCenter = SocketLocation + FVector(0.0f, 0.0f, 100.0f);
 
 	TArray<FVector> SpawnLocations;
@@ -194,5 +196,41 @@ void ATPSBossCharacter::SpawnExplosion()
 				FRotator(0.0f, 0.0f, 0.0f)
 			);
 		}
+
+
+		FVector HalfExtents(3000.f * 0.5f, 300.f * 0.5f, 300.f * 0.5f);
+		FVector BoxCenter = BossLocation + EffectSpawnRotation.Vector() * HalfExtents.X;
+
+		TArray<FOverlapResult> Overlaps;
+		FCollisionShape CollisionBox = FCollisionShape::MakeBox(HalfExtents);
+
+		bool bHit = GetWorld()->OverlapMultiByChannel(
+			Overlaps,
+			BoxCenter,
+			EffectSpawnRotation.Quaternion(),
+			ECC_Pawn,
+			CollisionBox
+		);
+
+		for (auto& Result : Overlaps)
+		{
+			AActor* HitActor = Result.GetActor();
+			if (HitActor && HitActor != this)
+			{
+				UGameplayStatics::ApplyDamage(HitActor, 50.f, GetController(), this, UDamageType::StaticClass());
+			}
+		}
+
+		DrawDebugBox(
+			GetWorld(),
+			BoxCenter,
+			HalfExtents,
+			EffectSpawnRotation.Quaternion(),
+			FColor::Green,
+			false,      // 지속 여부
+			5.f,        // 지속 시간
+			0,
+			5.f         // 선 두께
+		);
 	}
 }

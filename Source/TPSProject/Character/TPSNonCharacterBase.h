@@ -32,4 +32,5 @@ protected:
 
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
+	TObjectPtr<class UNiagaraComponent> DamageNumber;
 };

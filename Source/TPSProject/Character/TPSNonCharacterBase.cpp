@@ -8,7 +8,11 @@
 #include "Interface/TPSSetTargetInterface.h"
 #include "Net/UnrealNetwork.h"
 #include "AI/TPSAIController.h"
-
+#include "NiagaraFunctionLibrary.h"
+#include "NiagaraComponent.h"
+#include "NiagaraDataInterfaceArrayFloat.h"
+#include "NiagaraSystemInstance.h"
+#include "NiagaraDataInterfaceArrayFunctionLibrary.h"
 
 // Sets default values
 ATPSNonCharacterBase::ATPSNonCharacterBase()
@@ -21,6 +25,17 @@ ATPSNonCharacterBase::ATPSNonCharacterBase()
 	// AI Controller 설정
 	AIControllerClass = ATPSAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	DamageNumber = CreateDefaultSubobject<UNiagaraComponent>(TEXT("NiagaraComp"));
+
+	DamageNumber->SetupAttachment(RootComponent);
+
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> NiagaraSystemAsset(TEXT("/Game/LyraAsset/Effect/NS_DamageNumbers.NS_DamageNumbers"));
+	if (NiagaraSystemAsset.Succeeded())
+	{
+		DamageNumber->SetAsset(NiagaraSystemAsset.Object);
+	}
+
 
 	bReplicates = true;
 }
@@ -37,6 +52,11 @@ float ATPSNonCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& D
 	// 데미지 판정은 서버에서만
 	if (HasAuthority())
 	{
+		if (CurrentHp <= 0.0f)
+		{
+			return 0.0f;
+		}
+
 		float DamageResult = CalculateDamage(DamageAmount);
 		// 궁극기 게이지
 		auto EventInterface = Cast<ITPSEventComponentInterface>(EventInstigator->GetPawn());
@@ -53,6 +73,25 @@ float ATPSNonCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& D
 		if (TargetInterface)
 		{
 			TargetInterface->SetTarget(this);
+		}
+
+		TArray<FVector4> DamageValues;
+		DamageValues.Add(FVector4(GetActorLocation() + FVector(0.0f, 0.0f, 200.0f), DamageResult));
+
+		UNiagaraComponent* NiagaraComp = UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			DamageNumber->GetAsset(),
+			GetActorLocation(),
+			FRotator::ZeroRotator,
+			FVector(1.f),
+			true
+		);
+
+		if (NiagaraComp)
+		{
+			UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector4(NiagaraComp, TEXT("User.DamageInfo"),DamageValues);
+			NiagaraComp->ResetSystem();
+			NiagaraComp->Activate(true);
 		}
 
 		return DamageResult;

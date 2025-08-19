@@ -23,6 +23,8 @@ public:
 
 	FTimerHandle HomingTimerHandle;
 
+	FTimerHandle DisableHomingTimerHandle;
+
 	// À¯µµÅº °î·ü Ãß°¡
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Homing")
 	float CurveDuration = 0.5f; // ·£´ý °î¼± Áö¼Ó ½Ã°£
@@ -41,11 +43,12 @@ public:
 	// Owner¸¦ Á¦¿ÜÇÏ°í ³ª¸ÓÁö Replication
 	virtual bool IsNetRelevantFor(const AActor* RealViewer, const AActor* ViewTarget, const FVector& SrcLocation) const override;
 
-
-private:
-	void EnableHoming();
-	USceneComponent* TargetComponent;
-
 	UPROPERTY(EditAnywhere, Category = "VFX")
 	TObjectPtr<class UNiagaraSystem> ExplosionEffect;
+private:
+	void EnableHoming();
+
+	void DisableHoming();
+
+	USceneComponent* TargetComponent;
 };

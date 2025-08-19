@@ -43,6 +43,9 @@ void ATPSHommingMissile::BeginPlay()
 	// 일정 시간 후 유도 활성화
 	GetWorldTimerManager().SetTimer(HomingTimerHandle, this, &ATPSHommingMissile::EnableHoming, 1.0f, false);
 
+	// 일정 시간 후 유도 해제
+	GetWorldTimerManager().SetTimer(DisableHomingTimerHandle, this, &ATPSHommingMissile::DisableHoming, 5.0f, false);
+
 
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(10.0f);
@@ -61,7 +64,7 @@ void ATPSHommingMissile::ApplyRandomCurve()
 	if (!Movement) return;
 
 	// 초기 방향 + 랜덤 오프셋 적용
-	FVector NewVelocity = Movement->Velocity + RandomCurveOffset * 0.02f; // delta time scaling
+	FVector NewVelocity = Movement->Velocity + RandomCurveOffset * 0.2f; // delta time scaling
 	NewVelocity = NewVelocity.GetClampedToMaxSize(Movement->MaxSpeed);
 	Movement->Velocity = NewVelocity;
 
@@ -140,5 +143,14 @@ void ATPSHommingMissile::EnableHoming()
 	{
 		Movement->bIsHomingProjectile = true;
 		Movement->HomingTargetComponent = TargetComponent;
+	}
+}
+
+void ATPSHommingMissile::DisableHoming()
+{
+	if (TargetComponent && Movement)
+	{
+		Movement->bIsHomingProjectile = false;
+		Movement->HomingTargetComponent = nullptr;
 	}
 }

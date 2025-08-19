@@ -33,13 +33,13 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 	float SearchRadius = 5000.0f;
 	TArray<FOverlapResult> OverlapResults;
 	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(OwnerPawn); // 자기 자신 무시
+	QueryParams.AddIgnoredActor(OwnerPawn);
 
 	bool bOverlap = World->OverlapMultiByObjectType(
 		OverlapResults,
 		OwnerLocation,
 		FQuat::Identity,
-		FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn), // Pawn만 검색
+		FCollisionObjectQueryParams(ECollisionChannel::ECC_Pawn),
 		FCollisionShape::MakeSphere(SearchRadius),
 		QueryParams
 	);
