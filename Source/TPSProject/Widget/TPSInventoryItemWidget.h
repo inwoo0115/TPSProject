@@ -19,7 +19,7 @@ public:
     class UImage* ItemIcon;
 
     UPROPERTY(meta = (BindWidget))
-    UWidget* HoverWidget; // 툴팁이나 상세정보 위젯
+    class UTPSItemInfoWidget* HoverWidget;
 
     UPROPERTY(meta = (BindWidgetAnim), Transient)
     UWidgetAnimation* FadeInAnimation;
@@ -29,6 +29,4 @@ public:
 protected:
     virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
     virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
-    virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
 };

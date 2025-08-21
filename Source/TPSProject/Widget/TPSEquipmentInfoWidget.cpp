@@ -13,6 +13,9 @@
 #include "CharacterEquipment/TPSSpAttackSkillBase.h"
 #include "Components/Image.h"
 #include "Components/TextBlock.h"
+#include "TPSInventoryItemWidget.h"
+#include "TPSItemInfoWidget.h"
+#include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
 
 void UTPSEquipmentInfoWidget::InitializeWeaponInfo()
 {
@@ -68,34 +71,100 @@ void UTPSEquipmentInfoWidget::SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, F
 
 void UTPSEquipmentInfoWidget::SetAbilities(TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> List)
 {
-	if (List.Find(EAbilityType::Group1Ability1))
+	if (List.Contains(EAbilityType::Group1Ability1))
 	{
-		
+		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group1Ability1];
+
+		if (AbilityClass)
+		{
+			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+
+			if (AbilityCDO && Ability1_1 && Ability1_1->HoverWidget)
+			{
+				Ability1_1->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
+				Ability1_1->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
+			}
+		}
 	}
 
-	if (List.Find(EAbilityType::Group1Ability2))
+	if (List.Contains(EAbilityType::Group1Ability2))
 	{
+		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group1Ability2];
 
+		if (AbilityClass)
+		{
+			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+
+			if (AbilityCDO && Ability1_2 && Ability1_2->HoverWidget)
+			{
+				Ability1_2->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
+				Ability1_2->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
+			}
+		}
 	}
 
-	if (List.Find(EAbilityType::Group2Ability1))
+	if (List.Contains(EAbilityType::Group2Ability2))
 	{
+		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group2Ability2];
 
+		if (AbilityClass)
+		{
+			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+
+			if (AbilityCDO && Ability2_2 && Ability2_2->HoverWidget)
+			{
+				Ability2_2->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
+				Ability2_2->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
+			}
+		}
 	}
 
-	if (List.Find(EAbilityType::Group2Ability2))
+	if (List.Contains(EAbilityType::Group2Ability1))
 	{
+		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group2Ability1];
 
+		if (AbilityClass)
+		{
+			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+
+			if (AbilityCDO && Ability2_1 && Ability2_1->HoverWidget)
+			{
+				Ability2_1->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
+				Ability2_1->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
+			}
+		}
 	}
 
-	if (List.Find(EAbilityType::Group3Ability1))
+	if (List.Contains(EAbilityType::Group3Ability1))
 	{
+		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group3Ability1];
 
+		if (AbilityClass)
+		{
+			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+
+			if (AbilityCDO && Ability3_1 && Ability3_1->HoverWidget)
+			{
+				Ability3_1->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
+				Ability3_1->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
+			}
+		}
 	}
 
-	if (List.Find(EAbilityType::Group3Ability2))
+	if (List.Contains(EAbilityType::Group3Ability2))
 	{
+		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group3Ability2];
 
+		if (AbilityClass)
+		{
+			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+
+			if (AbilityCDO && Ability3_2 && Ability3_2->HoverWidget)
+			{
+				Ability3_2->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
+				Ability3_2->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
+			}
+		}
 	}
 }
 

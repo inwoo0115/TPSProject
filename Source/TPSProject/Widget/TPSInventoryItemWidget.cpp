@@ -5,6 +5,7 @@
 #include "TPSInventoryItemWidget.h"
 #include "Components/Widget.h"
 #include "Components/CanvasPanelSlot.h"
+#include "TPSItemInfoWidget.h" 
 
 void UTPSInventoryItemWidget::NativeConstruct()
 {
@@ -22,7 +23,6 @@ void UTPSInventoryItemWidget::NativeOnMouseEnter(const FGeometry& InGeometry, co
 
     if (HoverWidget)
     {
-        HoverWidget->SetRenderTranslation(InMouseEvent.GetScreenSpacePosition());
         HoverWidget->SetVisibility(ESlateVisibility::Visible);
 
         if (FadeInAnimation)
@@ -40,21 +40,4 @@ void UTPSInventoryItemWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEve
     {
         HoverWidget->SetVisibility(ESlateVisibility::Hidden);
     }
-}
-
-FReply UTPSInventoryItemWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
-{
-    FReply Reply = Super::NativeOnMouseMove(InGeometry, InMouseEvent);
-
-    if (HoverWidget)
-    {
-        // CanvasPanelSlot이 있어야 위치 변경 가능
-        if (UCanvasPanelSlot* CanvasSlot = Cast<UCanvasPanelSlot>(HoverWidget->Slot))
-        {
-            FVector2D MousePos = InMouseEvent.GetScreenSpacePosition();
-            CanvasSlot->SetPosition(MousePos + FVector2D(10.f, 10.f)); // 마우스 커서 + 오프셋
-        }
-    }
-
-    return Reply;
 }

@@ -5,6 +5,7 @@
 #include "Components/Button.h"
 #include "Character/TPSCharacterBase.h"
 #include "TPSEquipmentInfoWidget.h"
+#include "Gameinstance/TPSUiSubsystem.h"
 
 void UTPSInventoryWidget::NativeConstruct()
 {
@@ -19,7 +20,11 @@ void UTPSInventoryWidget::NativeConstruct()
 
 void UTPSInventoryWidget::OnCloseWindowClicked()
 {
-	RemoveFromParent();
+	auto UIsubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
+	if (UIsubsystem)
+	{
+		UIsubsystem->HideCurrentUI();
+	}
 }
 
 void UTPSInventoryWidget::UpdateEquipmentInfo()
