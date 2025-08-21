@@ -30,6 +30,11 @@ void UTPSUiSubsystem::Initialize(FSubsystemCollectionBase& Collection)
     TSoftClassPtr<UUserWidget> SoftClass_Equipment(FSoftClassPath(TEXT("/Game/TPSProject/Widget/WB_Equipment.WB_Equipment_C")));
     // map 추가
     LoadWidget(EUIType::Equipment, SoftClass_Equipment);
+
+    // 경로 저장
+    TSoftClassPtr<UUserWidget> SoftClass_Inventory(FSoftClassPath(TEXT("/Game/TPSProject/Widget/WB_Inventory.WB_Inventory_C")));
+    // map 추가
+    LoadWidget(EUIType::Inventory, SoftClass_Inventory);
 }
 
 void UTPSUiSubsystem::ShowUI(EUIType Type)
