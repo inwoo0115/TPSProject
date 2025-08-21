@@ -10,6 +10,8 @@ UTPSGrenadeAddBulletDamage::UTPSGrenadeAddBulletDamage()
 	AbilityName = FText::FromString(TEXT("Add Bullet Damage"));
 	AbilityDescription = FText::FromString(TEXT("Add Additional Damage on Weapon Attack for 5 seconds"));
 
+    AbilityType = EAbilityType::SpAttackAbility;
+
 }
 
 void UTPSGrenadeAddBulletDamage::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)

@@ -11,6 +11,8 @@ UTPSGrenadeMoveCharacter::UTPSGrenadeMoveCharacter()
 {
 	AbilityName = FText::FromString(TEXT("Hyper-Kinetic Position Reverser"));
 	AbilityDescription = FText::FromString(TEXT("Move Character to Grenade Hit Location"));
+
+	AbilityType = EAbilityType::SpAttackAbility;
 }
 
 void UTPSGrenadeMoveCharacter::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)

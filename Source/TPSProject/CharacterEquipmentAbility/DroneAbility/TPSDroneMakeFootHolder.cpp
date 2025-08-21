@@ -10,6 +10,8 @@ UTPSDroneMakeFootHolder::UTPSDroneMakeFootHolder()
 	AbilityName = FText::FromString(TEXT("Foot Holder"));
 
 	AbilityDescription = FText::FromString(TEXT("You can walk over Drone!"));
+
+	AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneMakeFootHolder::InitializeDroneAbility(FDroneSkillContext& SkillContext)

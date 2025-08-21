@@ -9,6 +9,8 @@ UTPSDroneMoreLifeTime::UTPSDroneMoreLifeTime()
 	AbilityName = FText::FromString(TEXT("More LifeTime"));
 
 	AbilityDescription = FText::FromString(TEXT("Add 5 seconde to Drone Lifetime"));
+
+	AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneMoreLifeTime::InitializeDroneAbility(FDroneSkillContext& SkillContext)

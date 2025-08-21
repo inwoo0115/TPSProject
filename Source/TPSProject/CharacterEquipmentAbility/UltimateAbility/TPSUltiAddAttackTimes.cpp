@@ -10,6 +10,8 @@ UTPSUltiAddAttackTimes::UTPSUltiAddAttackTimes()
 	AbilityName = FText::FromString(TEXT("More Attack"));
 	AbilityDescription = FText::FromString(TEXT("Add Additional 10 Ultimate Attacks"));
 
+	AbilityType = EAbilityType::UltimateAbility;
+
 }
 
 void UTPSUltiAddAttackTimes::InitializeUltimateAbility(FUltimateSkillContext& SkillContext)

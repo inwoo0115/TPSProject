@@ -8,6 +8,7 @@ UTPSRifleMaxAmmoAdd::UTPSRifleMaxAmmoAdd()
 {
 	AbilityName = FText::FromString(TEXT("I Can do this All Day"));
 	AbilityDescription = FText::FromString(TEXT("Add 50 Ammo"));
+	AbilityType = EAbilityType::WeaponAbility;
 }
 
 void UTPSRifleMaxAmmoAdd::InitializeWeaponAbility(FWeaponContext& WeaponContext)

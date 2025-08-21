@@ -35,7 +35,7 @@ void UTPSMainWeaponSettingWidget::EquipBySelectWidget(EAbilityType Ability1, EAb
 		if (TPSGameInstance)
 		{
 			Pawn->WeaponComponent->EquipWeapon(
-				TPSGameInstance->WeaponClass1,
+				TPSGameInstance->WeaponClass,
 				Ability1,
 				Ability2,
 				Ability3

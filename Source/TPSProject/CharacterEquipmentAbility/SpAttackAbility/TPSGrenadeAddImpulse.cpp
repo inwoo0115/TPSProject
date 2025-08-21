@@ -13,6 +13,8 @@ UTPSGrenadeAddImpulse::UTPSGrenadeAddImpulse()
 	AbilityName = FText::FromString(TEXT("Impulse Grenade"));
 	AbilityDescription = FText::FromString(TEXT("Add Impulse to Center Location of Explosion"));
 
+    AbilityType = EAbilityType::SpAttackAbility;
+
 }
 
 void UTPSGrenadeAddImpulse::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)

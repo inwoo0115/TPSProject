@@ -9,6 +9,8 @@ UTPSDroneAddDamageNextUlti::UTPSDroneAddDamageNextUlti()
 {
 	AbilityName = FText::FromString(TEXT("Make Ulti Stronger"));
 	AbilityDescription = FText::FromString(TEXT("Add More Damage to Ultimate in 3 second"));
+
+    AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneAddDamageNextUlti::InitializeDroneAbility(FDroneSkillContext& SkillContext)

@@ -13,5 +13,10 @@ enum class EAbilityType : uint8
 	Group2Ability1 UMETA(DisplayName = "Group2Ability1"),
 	Group2Ability2 UMETA(DisplayName = "Group2Ability2"),
 	Group3Ability1 UMETA(DisplayName = "Group3Ability1"),
-	Group3Ability2 UMETA(DisplayName = "Group3Ability2")
+	Group3Ability2 UMETA(DisplayName = "Group3Ability2"),
+
+	WeaponAbility UMETA(DisplayName = "WeaponAbility"),
+	SpAttackAbility UMETA(DisplayName = "SpAttackAbility"),
+	UltimateAbility UMETA(DisplayName = "UltimateAbility"),
+	DroneAbility UMETA(DisplayName = "DroneAbility")
 };

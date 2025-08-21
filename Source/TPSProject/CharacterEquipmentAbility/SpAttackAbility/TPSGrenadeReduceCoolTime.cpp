@@ -8,6 +8,8 @@ UTPSGrenadeReduceCoolTime::UTPSGrenadeReduceCoolTime()
 {
 	AbilityName = FText::FromString(TEXT("Reduce Cool Time"));
 	AbilityDescription = FText::FromString(TEXT("Reduce Cool Time -3.0 second"));
+
+	AbilityType = EAbilityType::SpAttackAbility;
 }
 
 void UTPSGrenadeReduceCoolTime::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)

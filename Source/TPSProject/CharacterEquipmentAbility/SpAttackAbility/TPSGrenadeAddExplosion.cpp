@@ -18,6 +18,8 @@ UTPSGrenadeAddExplosion::UTPSGrenadeAddExplosion()
     {
         ExplosionEffect = Explosion.Object;
     }
+
+    AbilityType = EAbilityType::SpAttackAbility;
 }
 
 void UTPSGrenadeAddExplosion::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)

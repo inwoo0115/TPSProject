@@ -8,6 +8,8 @@ UTPSGrenadeAddDamage::UTPSGrenadeAddDamage()
 {
 	AbilityName = FText::FromString(TEXT("Add Damage"));
 	AbilityDescription = FText::FromString(TEXT("Add More 10 Damage "));
+
+	AbilityType = EAbilityType::SpAttackAbility;
 }
 
 void UTPSGrenadeAddDamage::InitializeSpAttackAbility(FSpAttackSkillContext& SkillContext)

@@ -10,6 +10,8 @@ UTPSDroneCoolResetOnUlti::UTPSDroneCoolResetOnUlti()
 	AbilityName = FText::FromString(TEXT("Cool Reset"));
 
 	AbilityDescription = FText::FromString(TEXT("CoolTime Reset by Casting Ultimate"));
+
+	AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneCoolResetOnUlti::InitializeDroneAbility(FDroneSkillContext& SkillContext)

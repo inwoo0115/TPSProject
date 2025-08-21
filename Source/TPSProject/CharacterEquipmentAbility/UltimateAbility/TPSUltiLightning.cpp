@@ -7,6 +7,8 @@ UTPSUltiLightning::UTPSUltiLightning()
 {
 	AbilityName = FText::FromString(TEXT("Thor : God of Thunder"));
 	AbilityDescription = FText::FromString(TEXT("Change to Lightning Ultimate"));
+
+	AbilityType = EAbilityType::UltimateAbility;
 }
 
 void UTPSUltiLightning::InitializeUltimateAbility(FUltimateSkillContext& SkillContext)

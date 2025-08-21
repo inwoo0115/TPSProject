@@ -19,13 +19,12 @@ class TPSPROJECT_API UTPSGameInstance : public UGameInstance
 	GENERATED_BODY()
 	
 public:
+	UTPSGameInstance();
+
 	virtual void Init() override;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class ATPSWeaponBase> WeaponClass1;
-
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
-	TSubclassOf<class ATPSWeaponBase> WeaponClass2;
+	TSubclassOf<class ATPSWeaponBase> WeaponClass;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class ATPSDroneSkillBase> DroneSkillEquipmentClass;
@@ -35,4 +34,14 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly)
 	TSubclassOf<class ATPSUltimateSkillBase> UltimateSkillEquipmentClass;
+
+	void LoadPlayerData();
+
+	void LoadDataFromSave();
+
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+	UDataTable* EquipmentDataTable;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Data")
+	UDataTable* AbilityDataTable;
 };

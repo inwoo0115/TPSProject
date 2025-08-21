@@ -8,6 +8,8 @@ UTPSRifleDamageBoost::UTPSRifleDamageBoost()
 {
 	AbilityName = FText::FromString(TEXT("More Power"));
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 20%"));
+
+	AbilityType = EAbilityType::WeaponAbility;
 }
 
 void UTPSRifleDamageBoost::InitializeWeaponAbility(FWeaponContext& WeaponContext)

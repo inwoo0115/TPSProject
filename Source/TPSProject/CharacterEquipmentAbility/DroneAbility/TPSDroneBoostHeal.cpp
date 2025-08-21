@@ -10,6 +10,8 @@ UTPSDroneBoostHeal::UTPSDroneBoostHeal()
 	AbilityName = FText::FromString(TEXT("More Heal"));
 
 	AbilityDescription = FText::FromString(TEXT("Add 10 Heal per Seconds"));
+
+	AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneBoostHeal::InitializeDroneAbility(FDroneSkillContext& SkillContext)

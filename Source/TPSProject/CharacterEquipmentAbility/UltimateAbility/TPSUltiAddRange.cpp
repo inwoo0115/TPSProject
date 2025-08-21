@@ -8,6 +8,8 @@ UTPSUltiAddRange::UTPSUltiAddRange()
 {
 	AbilityName = FText::FromString(TEXT("More Range"));
 	AbilityDescription = FText::FromString(TEXT("Add Additional Ultimate Range"));
+
+	AbilityType = EAbilityType::UltimateAbility;
 }
 
 void UTPSUltiAddRange::InitializeUltimateAbility(FUltimateSkillContext& SkillContext)

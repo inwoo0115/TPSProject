@@ -9,6 +9,8 @@ UTPSRifleAddDamageReduceAmmo::UTPSRifleAddDamageReduceAmmo()
 	AbilityName = FText::FromString(TEXT("Selection and Concentration"));
 
 	AbilityDescription = FText::FromString(TEXT("Damage Boost 30% and Lose 10 Ammo"));
+
+	AbilityType = EAbilityType::WeaponAbility;
 }
 
 void UTPSRifleAddDamageReduceAmmo::InitializeWeaponAbility(FWeaponContext& WeaponContext)

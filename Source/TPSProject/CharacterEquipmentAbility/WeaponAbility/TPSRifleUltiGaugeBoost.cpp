@@ -8,6 +8,8 @@ UTPSRifleUltiGaugeBoost::UTPSRifleUltiGaugeBoost()
 {
 	AbilityName = FText::FromString(TEXT("U.R.F Mode"));
 	AbilityDescription = FText::FromString(TEXT("Get Additional Ultimate Gauege"));
+
+	AbilityType = EAbilityType::WeaponAbility;
 }
 
 void UTPSRifleUltiGaugeBoost::InitializeWeaponAbility(FWeaponContext& WeaponContext)

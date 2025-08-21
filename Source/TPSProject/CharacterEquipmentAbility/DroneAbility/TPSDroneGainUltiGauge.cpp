@@ -10,6 +10,8 @@ UTPSDroneGainUltiGauge::UTPSDroneGainUltiGauge()
 	AbilityName = FText::FromString(TEXT("Additional Ulti Guage"));
 
 	AbilityDescription = FText::FromString(TEXT("Add 30% Ultimate Guage"));
+
+	AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneGainUltiGauge::InitializeDroneAbility(FDroneSkillContext& SkillContext)

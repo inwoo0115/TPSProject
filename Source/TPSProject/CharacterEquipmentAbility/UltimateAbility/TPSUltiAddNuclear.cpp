@@ -19,6 +19,8 @@ UTPSUltiAddNuclear::UTPSUltiAddNuclear()
 	{
 		ExplosionEffect = Explosion.Object;
 	}
+
+	AbilityType = EAbilityType::UltimateAbility;
 }
 
 void UTPSUltiAddNuclear::InitializeUltimateAbility(FUltimateSkillContext& SkillContext)

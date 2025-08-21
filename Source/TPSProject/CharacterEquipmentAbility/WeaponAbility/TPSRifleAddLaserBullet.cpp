@@ -9,6 +9,8 @@ UTPSRifleAddLaserBullet::UTPSRifleAddLaserBullet()
 {
 	AbilityName = FText::FromString(TEXT("LaserMode"));
 	AbilityDescription = FText::FromString(TEXT("Change to Laser Bullet when Attack"));
+
+	AbilityType = EAbilityType::WeaponAbility;
 }
 
 void UTPSRifleAddLaserBullet::InitializeWeaponAbility(FWeaponContext& WeaponContext)

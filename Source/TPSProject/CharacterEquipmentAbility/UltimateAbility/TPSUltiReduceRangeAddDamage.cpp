@@ -8,6 +8,8 @@ UTPSUltiReduceRangeAddDamage::UTPSUltiReduceRangeAddDamage()
 {
 	AbilityName = FText::FromString(TEXT("Concentrate"));
 	AbilityDescription = FText::FromString(TEXT("Reduce Range and Add Damage"));
+
+	AbilityType = EAbilityType::UltimateAbility;
 }
 
 void UTPSUltiReduceRangeAddDamage::InitializeUltimateAbility(FUltimateSkillContext& SkillContext)

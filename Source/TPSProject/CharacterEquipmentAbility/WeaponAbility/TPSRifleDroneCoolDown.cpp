@@ -9,6 +9,8 @@ UTPSRifleDroneCoolDown::UTPSRifleDroneCoolDown()
 {
 	AbilityName = FText::FromString(TEXT("More Droner"));
 	AbilityDescription = FText::FromString(TEXT("Cooldown Drone Skill when attack"));
+
+	AbilityType = EAbilityType::WeaponAbility;
 }
 
 void UTPSRifleDroneCoolDown::InitializeWeaponAbility(FWeaponContext& WeaponContext)

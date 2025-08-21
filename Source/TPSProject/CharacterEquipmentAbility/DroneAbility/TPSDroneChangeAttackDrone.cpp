@@ -10,6 +10,8 @@ UTPSDroneChangeAttackDrone::UTPSDroneChangeAttackDrone()
 	AbilityName = FText::FromString(TEXT("Attack Drone"));
 
 	AbilityDescription = FText::FromString(TEXT("Drone is Attacking"));
+
+	AbilityType = EAbilityType::DroneAbility;
 }
 
 void UTPSDroneChangeAttackDrone::InitializeDroneAbility(FDroneSkillContext& SkillContext)

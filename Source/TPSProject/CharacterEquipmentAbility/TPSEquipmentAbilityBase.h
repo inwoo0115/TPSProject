@@ -4,7 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "UObject/NoExportTypes.h"
+#include "TPSAbilityType.h"
 #include "TPSEquipmentAbilityBase.generated.h"
+
 
 class UTPSGameplayEventComponent;
 
@@ -51,6 +53,7 @@ public:
 
 	FText AbilityDescription;
 
+	EAbilityType AbilityType = EAbilityType::None;
 protected:
 	UFUNCTION()
 	UTPSGameplayEventComponent* GetOwnerEventComponent() const;
