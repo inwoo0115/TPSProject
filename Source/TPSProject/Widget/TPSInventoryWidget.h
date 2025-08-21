@@ -43,7 +43,7 @@ public:
 	void UpdateInventoryInfo();
 
 	UFUNCTION()
-	void InitializeWidget(ESlateVisibility Visibility);
+	void InitializeWidget(ESlateVisibility NewVisibility);
 
 
 

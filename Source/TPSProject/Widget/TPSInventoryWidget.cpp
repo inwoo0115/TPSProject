@@ -53,14 +53,12 @@ void UTPSInventoryWidget::UpdateInventoryInfo()
 	{
 		return;
 	}
-
-
 }
 
 
-void UTPSInventoryWidget::InitializeWidget(ESlateVisibility Visibility)
+void UTPSInventoryWidget::InitializeWidget(ESlateVisibility NewVisibility)
 {
-	if (Visibility != ESlateVisibility::Visible)
+	if (NewVisibility != ESlateVisibility::Visible)
 	{
 		return;
 	}

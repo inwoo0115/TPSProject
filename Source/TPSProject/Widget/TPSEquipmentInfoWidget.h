@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "TPSEquipmentInfoWidget.generated.h"
 
 /**
@@ -16,22 +17,22 @@ class TPSPROJECT_API UTPSEquipmentInfoWidget : public UUserWidget
 	
 public:
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Ability1_1;
+	class UTPSInventoryItemWidget* Ability1_1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Ability1_2;
+	class UTPSInventoryItemWidget* Ability1_2;
 
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Ability2_1;
+	class UTPSInventoryItemWidget* Ability2_1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Ability2_2;
+	class UTPSInventoryItemWidget* Ability2_2;
 
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Ability3_1;
+	class UTPSInventoryItemWidget* Ability3_1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UWidget* Ability3_2;
+	class UTPSInventoryItemWidget* Ability3_2;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* EquipmentName;
@@ -46,6 +47,10 @@ public:
 	void InitializeUltimateInfo();
 
 	void InitializeSpAttackInfo();
+
+	void SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, FText ContextName);
+
+	void SetAbilities(TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> List);
 
 protected:
 	virtual void NativeConstruct() override;
