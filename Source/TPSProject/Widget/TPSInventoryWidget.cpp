@@ -6,6 +6,12 @@
 #include "Character/TPSCharacterBase.h"
 #include "TPSEquipmentInfoWidget.h"
 #include "Gameinstance/TPSUiSubsystem.h"
+#include "GameInstance/TPSGameInstance.h"
+#include "Components/GridPanel.h"
+#include "Item/TPSAbilityItem.h"
+#include "TPSInventoryItemWidget.h"
+#include "TPSItemInfoWidget.h"
+#include "Components/TextBlock.h"
 
 void UTPSInventoryWidget::NativeConstruct()
 {
@@ -16,6 +22,20 @@ void UTPSInventoryWidget::NativeConstruct()
 
 	OnVisibilityChanged.AddDynamic(this, &UTPSInventoryWidget::InitializeWidget);
 
+}
+
+FReply UTPSInventoryWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
+	{
+		return FReply::Handled();
+	}
+	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+	{
+
+		return FReply::Handled();
+	}
+	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
 }
 
 void UTPSInventoryWidget::OnCloseWindowClicked()
@@ -57,6 +77,39 @@ void UTPSInventoryWidget::UpdateInventoryInfo()
 	if (!InventoryGrid)
 	{
 		return;
+	}
+
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetWorld()->GetGameInstance());
+	if (!GI)
+	{
+		return;
+	}
+
+	InventoryGrid->ClearChildren();
+	int32 Index = 0;
+	for (UTPSAbilityItem* Item : GI->AbilityInventory)
+	{
+		if (!Item) continue;
+
+		// InventoryItemWidget 생성
+		UTPSInventoryItemWidget* ItemWidget = nullptr;
+
+		if (InventoryItemWidgetClass)
+		{
+			ItemWidget = CreateWidget<UTPSInventoryItemWidget>(this, InventoryItemWidgetClass);
+		}
+
+		if (!ItemWidget) continue;
+
+		// HoverWidget 세팅
+		if (ItemWidget->HoverWidget)
+		{
+			ItemWidget->HoverWidget->ItemNameText->SetText(Item->GetAbilityNameText());
+			ItemWidget->HoverWidget->ItemInfoText->SetText(Item->GetAbilityDescriptionText());
+		}
+
+		UGridSlot* GridSlot = InventoryGrid->AddChildToGrid(ItemWidget, Index / 5, Index % 5);
+		Index++;
 	}
 }
 

@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "GameData/TPSAbilityData.h"
 #include "GameData/TPSEquipmentData.h"
+#include "Item/TPSAbilityItem.h"
 
 UTPSGameInstance::UTPSGameInstance()
 {
@@ -113,6 +114,17 @@ void UTPSGameInstance::LoadDataFromSave()
 
 	if (LoadedData && AbilityDataTable)
 	{
+		TArray<FName> RowNames = AbilityDataTable->GetRowNames();
 
+		for (const FName& RowName : RowNames)
+		{
+			FTPSAbilityData* ABData = AbilityDataTable->FindRow<FTPSAbilityData>(RowName, TEXT(""));
+			if (ABData)
+			{
+				UTPSAbilityItem* NewItem = NewObject<UTPSAbilityItem>(this, UTPSAbilityItem::StaticClass());
+				NewItem->InitItem(RowName, ABData->AbilityClass);
+				AbilityInventory.Add(NewItem);
+			}
+		}
 	}
 }

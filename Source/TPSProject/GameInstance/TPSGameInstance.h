@@ -44,4 +44,6 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	UDataTable* AbilityDataTable;
+
+	TArray<class UTPSAbilityItem*> AbilityInventory;
 };

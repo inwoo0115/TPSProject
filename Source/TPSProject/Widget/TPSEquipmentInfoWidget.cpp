@@ -173,3 +173,18 @@ void UTPSEquipmentInfoWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 }
+
+FReply UTPSEquipmentInfoWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
+	{
+	
+		return FReply::Handled();
+	}
+	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+	{
+
+		return FReply::Handled();
+	}
+	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
+}

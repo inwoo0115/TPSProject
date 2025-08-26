@@ -54,4 +54,6 @@ public:
 
 protected:
 	virtual void NativeConstruct() override;
+
+	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 };
