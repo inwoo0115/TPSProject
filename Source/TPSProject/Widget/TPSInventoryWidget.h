@@ -46,13 +46,12 @@ public:
 	void InitializeWidget(ESlateVisibility NewVisibility);
 
 
-
 protected:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	TSubclassOf<class UTPSInventoryItemWidget> InventoryItemWidgetClass;
 
-	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
+	UFUNCTION()
+	void HandleItemClicked(class UTPSInventoryItemWidget* Item); 
 };

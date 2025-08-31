@@ -17,22 +17,22 @@ class TPSPROJECT_API UTPSEquipmentInfoWidget : public UUserWidget
 	
 public:
 	UPROPERTY(meta = (BindWidget))
-	class UTPSInventoryItemWidget* Ability1_1;
+	class UTPSEquipmentInfoSlotWidget* Slot1_1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTPSInventoryItemWidget* Ability1_2;
+	class UTPSEquipmentInfoSlotWidget* Slot1_2;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTPSInventoryItemWidget* Ability2_1;
+	class UTPSEquipmentInfoSlotWidget* Slot2_1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTPSInventoryItemWidget* Ability2_2;
+	class UTPSEquipmentInfoSlotWidget* Slot2_2;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTPSInventoryItemWidget* Ability3_1;
+	class UTPSEquipmentInfoSlotWidget* Slot3_1;
 
 	UPROPERTY(meta = (BindWidget))
-	class UTPSInventoryItemWidget* Ability3_2;
+	class UTPSEquipmentInfoSlotWidget* Slot3_2;
 
 	UPROPERTY(meta = (BindWidget))
 	class UTextBlock* EquipmentName;
@@ -50,9 +50,14 @@ public:
 
 	void SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, FText ContextName);
 
-	void SetAbilities(TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> List);
+	void SetAbilities(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> List);
+
+	void SetSlotColor(bool Active);
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
+	TSubclassOf<class UTPSInventoryItemWidget> InventoryItemWidgetClass;
+
 	virtual void NativeConstruct() override;
 
 	virtual FReply NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;

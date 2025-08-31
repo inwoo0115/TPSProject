@@ -45,5 +45,18 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	UDataTable* AbilityDataTable;
 
+	// 개인 인벤토리
 	TArray<class UTPSAbilityItem*> AbilityInventory;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> WeaponAbilityList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> DroneAbilityList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> SpAttackAbilityList;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> UltimateAbilityList;
 };

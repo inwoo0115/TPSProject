@@ -9,7 +9,11 @@
 #include "Blueprint/WidgetLayoutLibrary.h"
 #include "Layout/Geometry.h"             
 #include "Components/ScrollBox.h"
+#include "Components/TextBlock.h"
+#include "Components/Image.h"
 #include "Blueprint/SlateBlueprintLibrary.h"
+#include "Item/TPSAbilityItem.h"
+
 
 void UTPSInventoryItemWidget::NativeConstruct()
 {
@@ -73,11 +77,26 @@ FVector2D UTPSInventoryItemWidget::GetWidgetPosition()
     return NewPos;
 }
 
+void UTPSInventoryItemWidget::SetShowTooltip(bool Input)
+{
+    bShowTooltip = Input;
+}
+
+void UTPSInventoryItemWidget::SetWidgetInfo(UTPSAbilityItem* Item)
+{
+    HoverWidget->ItemNameText->SetText(Item->GetAbilityNameText());
+    HoverWidget->ItemInfoText->SetText(Item->GetAbilityDescriptionText());
+    HoverWidget->ItemIcon->SetBrushFromTexture(Item->GetItemImage());
+    ItemIcon->SetBrushFromTexture(Item->GetItemImage());
+    AbilityItem = DuplicateObject<UTPSAbilityItem>(Item, GetTransientPackage());
+    SetShowTooltip(true);
+}
+
 void UTPSInventoryItemWidget::NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
     Super::NativeOnMouseEnter(InGeometry, InMouseEvent);
 
-    if (HoverWidget)
+    if (HoverWidget && bShowTooltip)
     {
         FVector2D NewPos = GetWidgetPosition();
 
@@ -98,7 +117,7 @@ void UTPSInventoryItemWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEve
 {
     Super::NativeOnMouseLeave(InMouseEvent);
 
-    if (HoverWidget)
+    if (HoverWidget && bShowTooltip)
     {
         bIsHover = false;
         HoverWidget->SetVisibility(ESlateVisibility::Hidden);
@@ -107,7 +126,7 @@ void UTPSInventoryItemWidget::NativeOnMouseLeave(const FPointerEvent& InMouseEve
 
 FReply UTPSInventoryItemWidget::NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
-    if (bIsHover && HoverWidget)
+    if (bIsHover && HoverWidget && bShowTooltip)
     {
         FVector2D NewPos = GetWidgetPosition();
 
@@ -115,4 +134,16 @@ FReply UTPSInventoryItemWidget::NativeOnMouseMove(const FGeometry& InGeometry, c
     }
 
     return Super::NativeOnMouseMove(InGeometry, InMouseEvent);
+}
+
+FReply UTPSInventoryItemWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+    Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+
+    if (OnItemClicked.IsBound())
+    {
+        OnItemClicked.Broadcast(this);
+    }
+
+    return FReply::Handled();
 }

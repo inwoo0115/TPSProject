@@ -3,6 +3,16 @@
 
 #include "Item/TPSAbilityItem.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "Components/Image.h"
+
+UTPSAbilityItem::UTPSAbilityItem()
+{
+	static ConstructorHelpers::FObjectFinder<UTexture2D> TextureObj(TEXT("/Game/DARK_SCIFI_UI/Textures/ExampleIcons/T_Icon_Bullets.T_Icon_Bullets"));
+	if (TextureObj.Succeeded())
+	{
+		ItemImage = TextureObj.Object;
+	}
+}
 
 void UTPSAbilityItem::InitItem(const FName& InName, TSubclassOf<UTPSEquipmentAbilityBase> InClass)
 {
@@ -30,3 +40,19 @@ FText UTPSAbilityItem::GetAbilityDescriptionText() const
 	}
 	return FText::GetEmpty();
 }
+
+EAbilityType UTPSAbilityItem::GetAbilityType() const
+{
+	if (AbilityClass)
+	{
+		const UTPSEquipmentAbilityBase* DefaultObj = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+		return DefaultObj->AbilityType;
+	}
+	return EAbilityType::None;
+}
+
+UTexture2D* UTPSAbilityItem::GetItemImage()
+{
+	return ItemImage;
+}
+

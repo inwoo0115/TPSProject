@@ -6,6 +6,9 @@
 #include "Blueprint/UserWidget.h"
 #include "TPSInventoryItemWidget.generated.h"
 
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnItemClicked, UTPSInventoryItemWidget*, Item);
+
 /**
  * 
  */
@@ -28,10 +31,23 @@ public:
 
     FVector2D GetWidgetPosition();
 
+    void SetShowTooltip(bool Input);
+
+    void SetWidgetInfo(class UTPSAbilityItem *Item);
+
+    UPROPERTY()
+    class UTPSAbilityItem* AbilityItem;
+
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnItemClicked OnItemClicked;
+
 protected:
     virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
     virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
     virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
+    virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
     bool bIsHover = false;
+    bool bShowTooltip = false;
 };

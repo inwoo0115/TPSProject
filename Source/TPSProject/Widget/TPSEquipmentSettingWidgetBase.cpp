@@ -171,11 +171,17 @@ void UTPSEquipmentSettingWidgetBase::InitializeWidget(const ATPSAbilityEquipment
 	int32 Index = 0;
 	for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : CurrentEquipment->AbilityList)
 	{
-		if (!Pair.Value) continue;
+		if (!Pair.Value)
+		{
+			ButtonToAbilityMap.Add(Buttons[Index], EAbilityType::None);
+			++Index;
+			continue;
+		}
+
 		//인스턴스 생성
 		UTPSEquipmentAbilityBase* AbilityCDO = Pair.Value->GetDefaultObject<UTPSEquipmentAbilityBase>();
-		if (!AbilityCDO) continue;
-		if (Buttons.IsValidIndex(Index) && TextBlocks.IsValidIndex(Index))
+
+		if (AbilityCDO && Buttons.IsValidIndex(Index) && TextBlocks.IsValidIndex(Index))
 		{
 			// 1. 텍스트 블록에 이름 바인딩
 			TextBlocks[Index]->SetText(AbilityCDO->AbilityName);
@@ -189,10 +195,10 @@ void UTPSEquipmentSettingWidgetBase::InitializeWidget(const ATPSAbilityEquipment
 			// 3. 버튼에 Enum 바인딩
 			ButtonToAbilityMap.Add(Buttons[Index], Pair.Key);
 		}
+
 		// 현재 선택된 특성 표시
 		for (UTPSEquipmentAbilityBase* Ability : CurrentEquipment->AbilitySlot)
 		{
-			// 객체 자체 비교는 좀 그렇긴 함 TODO: 추후에 데이터로 관리
 			if (AbilityCDO->GetClass() == Ability->GetClass())
 			{
 				ToggleRowSelection(Buttons[Index], (Index / 2) + 1);

@@ -12,6 +12,8 @@
 #include "TPSInventoryItemWidget.h"
 #include "TPSItemInfoWidget.h"
 #include "Components/TextBlock.h"
+#include "Components/Image.h"
+#include "CharacterEquipmentAbility/TPSAbilityType.h"
 
 void UTPSInventoryWidget::NativeConstruct()
 {
@@ -24,18 +26,26 @@ void UTPSInventoryWidget::NativeConstruct()
 
 }
 
-FReply UTPSInventoryWidget::NativeOnMouseButtonUp(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+void UTPSInventoryWidget::HandleItemClicked(UTPSInventoryItemWidget* Item)
 {
-	if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
-	{
-		return FReply::Handled();
-	}
-	if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
-	{
+	EAbilityType Type = Item->AbilityItem->GetAbilityType();
 
-		return FReply::Handled();
+	if (Type == EAbilityType::WeaponAbility)
+	{
+		WeaponInfo->SetSlotColor(true);
 	}
-	return Super::NativeOnMouseButtonUp(InGeometry, InMouseEvent);
+	else if (Type == EAbilityType::DroneAbility)
+	{
+		DroneInfo->SetSlotColor(true);
+	}
+	else if (Type == EAbilityType::SpAttackAbility)
+	{
+		SpAttackInfo->SetSlotColor(true);
+	}
+	else if (Type == EAbilityType::UltimateAbility)
+	{
+		UltimateInfo->SetSlotColor(true);
+	}
 }
 
 void UTPSInventoryWidget::OnCloseWindowClicked()
@@ -73,7 +83,6 @@ void UTPSInventoryWidget::UpdateEquipmentInfo()
 void UTPSInventoryWidget::UpdateInventoryInfo()
 {
 	// Game Instance에서 아이템 (어빌리티, 텍스트, 이미지) 배열을 불러와서 Grid Panel 자식으로 추가
-
 	if (!InventoryGrid)
 	{
 		return;
@@ -102,11 +111,8 @@ void UTPSInventoryWidget::UpdateInventoryInfo()
 		if (!ItemWidget) continue;
 
 		// HoverWidget 세팅
-		if (ItemWidget->HoverWidget)
-		{
-			ItemWidget->HoverWidget->ItemNameText->SetText(Item->GetAbilityNameText());
-			ItemWidget->HoverWidget->ItemInfoText->SetText(Item->GetAbilityDescriptionText());
-		}
+		ItemWidget->SetWidgetInfo(Item);
+		ItemWidget->OnItemClicked.AddDynamic(this, &UTPSInventoryWidget::HandleItemClicked);
 
 		UGridSlot* GridSlot = InventoryGrid->AddChildToGrid(ItemWidget, Index / 5, Index % 5);
 		Index++;

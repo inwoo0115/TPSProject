@@ -11,11 +11,15 @@
 #include "CharacterEquipment/TPSDroneSkillBase.h"
 #include "CharacterEquipment/TPSUltimateSkillBase.h"
 #include "CharacterEquipment/TPSSpAttackSkillBase.h"
-#include "Components/Image.h"
-#include "Components/TextBlock.h"
 #include "TPSInventoryItemWidget.h"
 #include "TPSItemInfoWidget.h"
 #include "CharacterEquipmentAbility/TPSEquipmentAbilityBase.h"
+#include "GameInstance/TPSGameInstance.h"
+#include "Item/TPSAbilityItem.h"
+#include "Components/CanvasPanel.h"
+#include "Components/TextBlock.h"
+#include "Components/Image.h"
+#include "TPSEquipmentInfoSlotWidget.h"
 
 void UTPSEquipmentInfoWidget::InitializeWeaponInfo()
 {
@@ -24,7 +28,8 @@ void UTPSEquipmentInfoWidget::InitializeWeaponInfo()
 	FWeaponContext Context = Pawn->WeaponComponent->GetWeapon()->GetWeaponContext();
 
 	SetImageAndText(Context.WeaponIcon, Context.WeaponName);
-	SetAbilities(Pawn->WeaponComponent->GetWeapon()->AbilityList);
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	SetAbilities(GI->WeaponAbilityList);
 }
 
 void UTPSEquipmentInfoWidget::InitializeDroneInfo()
@@ -34,7 +39,8 @@ void UTPSEquipmentInfoWidget::InitializeDroneInfo()
 	const ATPSDroneSkillBase* Equipment = Cast<ATPSDroneSkillBase>(Pawn->DroneComponent->GetEquipment());
 
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
-	SetAbilities(Equipment->AbilityList);
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	SetAbilities(GI->DroneAbilityList);
 }
 
 void UTPSEquipmentInfoWidget::InitializeUltimateInfo()
@@ -44,7 +50,8 @@ void UTPSEquipmentInfoWidget::InitializeUltimateInfo()
 	const ATPSUltimateSkillBase* Equipment = Cast<ATPSUltimateSkillBase>(Pawn->UltimateComponent->GetEquipment());
 
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
-	SetAbilities(Equipment->AbilityList);
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	SetAbilities(GI->UltimateAbilityList);
 }
 
 void UTPSEquipmentInfoWidget::InitializeSpAttackInfo()
@@ -54,7 +61,8 @@ void UTPSEquipmentInfoWidget::InitializeSpAttackInfo()
 	const ATPSSpAttackSkillBase* Equipment = Cast<ATPSSpAttackSkillBase>(Pawn->SpAttackComponent->GetEquipment());
 
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
-	SetAbilities(Equipment->AbilityList);
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	SetAbilities(GI->SpAttackAbilityList);
 }
 
 void UTPSEquipmentInfoWidget::SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, FText ContextName)
@@ -69,103 +77,59 @@ void UTPSEquipmentInfoWidget::SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, F
 	EquipmentName->SetText(ContextName);
 }
 
-void UTPSEquipmentInfoWidget::SetAbilities(TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> List)
+void UTPSEquipmentInfoWidget::SetAbilities(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> List)
 {
 	if (List.Contains(EAbilityType::Group1Ability1))
 	{
-		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group1Ability1];
+		UTPSAbilityItem* Item = List[EAbilityType::Group1Ability1];
 
-		if (AbilityClass)
-		{
-			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
-
-			if (AbilityCDO && Ability1_1 && Ability1_1->HoverWidget)
-			{
-				Ability1_1->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
-				Ability1_1->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
-			}
-		}
+		Slot1_1->UpdateSlot(Item);
 	}
 
 	if (List.Contains(EAbilityType::Group1Ability2))
 	{
-		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group1Ability2];
+		UTPSAbilityItem* Item = List[EAbilityType::Group1Ability2];
 
-		if (AbilityClass)
-		{
-			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
-
-			if (AbilityCDO && Ability1_2 && Ability1_2->HoverWidget)
-			{
-				Ability1_2->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
-				Ability1_2->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
-			}
-		}
-	}
-
-	if (List.Contains(EAbilityType::Group2Ability2))
-	{
-		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group2Ability2];
-
-		if (AbilityClass)
-		{
-			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
-
-			if (AbilityCDO && Ability2_2 && Ability2_2->HoverWidget)
-			{
-				Ability2_2->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
-				Ability2_2->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
-			}
-		}
+		Slot1_2->UpdateSlot(Item);
 	}
 
 	if (List.Contains(EAbilityType::Group2Ability1))
 	{
-		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group2Ability1];
+		UTPSAbilityItem* Item = List[EAbilityType::Group2Ability1];
 
-		if (AbilityClass)
-		{
-			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
+		Slot2_1->UpdateSlot(Item);
+	}
 
-			if (AbilityCDO && Ability2_1 && Ability2_1->HoverWidget)
-			{
-				Ability2_1->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
-				Ability2_1->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
-			}
-		}
+	if (List.Contains(EAbilityType::Group2Ability2))
+	{
+		UTPSAbilityItem* Item = List[EAbilityType::Group2Ability2];
+
+		Slot2_2->UpdateSlot(Item);
 	}
 
 	if (List.Contains(EAbilityType::Group3Ability1))
 	{
-		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group3Ability1];
+		UTPSAbilityItem* Item = List[EAbilityType::Group3Ability1];
 
-		if (AbilityClass)
-		{
-			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
-
-			if (AbilityCDO && Ability3_1 && Ability3_1->HoverWidget)
-			{
-				Ability3_1->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
-				Ability3_1->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
-			}
-		}
+		Slot3_1->UpdateSlot(Item);
 	}
 
 	if (List.Contains(EAbilityType::Group3Ability2))
 	{
-		TSubclassOf<UTPSEquipmentAbilityBase> AbilityClass = List[EAbilityType::Group3Ability2];
+		UTPSAbilityItem* Item = List[EAbilityType::Group3Ability2];
 
-		if (AbilityClass)
-		{
-			UTPSEquipmentAbilityBase* AbilityCDO = AbilityClass->GetDefaultObject<UTPSEquipmentAbilityBase>();
-
-			if (AbilityCDO && Ability3_2 && Ability3_2->HoverWidget)
-			{
-				Ability3_2->HoverWidget->ItemNameText->SetText(AbilityCDO->AbilityName);
-				Ability3_2->HoverWidget->ItemInfoText->SetText(AbilityCDO->AbilityDescription);
-			}
-		}
+		Slot3_2->UpdateSlot(Item);
 	}
+}
+
+void UTPSEquipmentInfoWidget::SetSlotColor(bool Active)
+{
+	Slot1_1->SetColor(Active);
+	Slot1_2->SetColor(Active);
+	Slot2_1->SetColor(Active);
+	Slot2_2->SetColor(Active);
+	Slot3_1->SetColor(Active);
+	Slot3_2->SetColor(Active);
 }
 
 
