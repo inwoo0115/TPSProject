@@ -81,6 +81,35 @@ void UTPSEquipmentInfoWidget::UpdateWeaponInfoData()
 	AddSlotItemToData(GI->WeaponAbilityList, Slot2_2, EAbilityType::Group2Ability2);
 	AddSlotItemToData(GI->WeaponAbilityList, Slot3_1, EAbilityType::Group3Ability1);
 	AddSlotItemToData(GI->WeaponAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+
+	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
+	if (!Pawn) return;
+
+	Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(EAbilityType::Group1Ability1, nullptr);
+	Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(EAbilityType::Group1Ability2, nullptr);
+	Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(EAbilityType::Group2Ability1, nullptr);
+	Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(EAbilityType::Group2Ability2, nullptr);
+	Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(EAbilityType::Group3Ability1, nullptr);
+	Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(EAbilityType::Group3Ability2, nullptr);
+
+	for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->WeaponAbilityList)
+	{
+		EAbilityType AbilityType = Pair.Key;
+		UTPSAbilityItem* Item = Pair.Value;
+
+		if (Item && Item->AbilityClass)
+		{
+			Pawn->WeaponComponent->EquippedWeapon->AbilityList.Add(AbilityType, Item->AbilityClass);
+		}
+	}
+
+	// 장착된 특성 초기화
+	Pawn->WeaponComponent->EquipWeapon(
+		GI->WeaponClass,
+		EAbilityType::None,
+		EAbilityType::None,
+		EAbilityType::None
+	);
 }
 
 void UTPSEquipmentInfoWidget::UpdateDroneInfoData()
@@ -94,6 +123,37 @@ void UTPSEquipmentInfoWidget::UpdateDroneInfoData()
 	AddSlotItemToData(GI->DroneAbilityList, Slot2_2, EAbilityType::Group2Ability2);
 	AddSlotItemToData(GI->DroneAbilityList, Slot3_1, EAbilityType::Group3Ability1);
 	AddSlotItemToData(GI->DroneAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+
+	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
+	if (!Pawn) return;
+
+	Pawn->DroneComponent->Equipment->AbilityList.Empty();
+
+	Pawn->DroneComponent->Equipment->AbilityList.Add(EAbilityType::Group1Ability1, nullptr);
+	Pawn->DroneComponent->Equipment->AbilityList.Add(EAbilityType::Group1Ability2, nullptr);
+	Pawn->DroneComponent->Equipment->AbilityList.Add(EAbilityType::Group2Ability1, nullptr);
+	Pawn->DroneComponent->Equipment->AbilityList.Add(EAbilityType::Group2Ability2, nullptr);
+	Pawn->DroneComponent->Equipment->AbilityList.Add(EAbilityType::Group3Ability1, nullptr);
+	Pawn->DroneComponent->Equipment->AbilityList.Add(EAbilityType::Group3Ability2, nullptr);
+
+	for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->DroneAbilityList)
+	{
+		EAbilityType AbilityType = Pair.Key;
+		UTPSAbilityItem* Item = Pair.Value;
+
+		if (Item && Item->AbilityClass)
+		{
+			Pawn->DroneComponent->Equipment->AbilityList.Add(AbilityType, Item->AbilityClass);
+		}
+	}
+
+	// 장착된 특성 초기화
+	Pawn->DroneComponent->Equip(
+		GI->DroneSkillEquipmentClass,
+		EAbilityType::None,
+		EAbilityType::None,
+		EAbilityType::None
+	);
 }
 
 void UTPSEquipmentInfoWidget::UpdateUltimateInfoData()
@@ -107,6 +167,36 @@ void UTPSEquipmentInfoWidget::UpdateUltimateInfoData()
 	AddSlotItemToData(GI->UltimateAbilityList, Slot2_2, EAbilityType::Group2Ability2);
 	AddSlotItemToData(GI->UltimateAbilityList, Slot3_1, EAbilityType::Group3Ability1);
 	AddSlotItemToData(GI->UltimateAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+
+	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
+	if (!Pawn) return;
+
+	Pawn->UltimateComponent->Equipment->AbilityList.Empty();
+	Pawn->UltimateComponent->Equipment->AbilityList.Add(EAbilityType::Group1Ability1, nullptr);
+	Pawn->UltimateComponent->Equipment->AbilityList.Add(EAbilityType::Group1Ability2, nullptr);
+	Pawn->UltimateComponent->Equipment->AbilityList.Add(EAbilityType::Group2Ability1, nullptr);
+	Pawn->UltimateComponent->Equipment->AbilityList.Add(EAbilityType::Group2Ability2, nullptr);
+	Pawn->UltimateComponent->Equipment->AbilityList.Add(EAbilityType::Group3Ability1, nullptr);
+	Pawn->UltimateComponent->Equipment->AbilityList.Add(EAbilityType::Group3Ability2, nullptr);
+
+	for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->UltimateAbilityList)
+	{
+		EAbilityType AbilityType = Pair.Key;
+		UTPSAbilityItem* Item = Pair.Value;
+
+		if (Item && Item->AbilityClass)
+		{
+			Pawn->UltimateComponent->Equipment->AbilityList.Add(AbilityType, Item->AbilityClass);
+		}
+	}
+
+	// 장착된 특성 초기화
+	Pawn->UltimateComponent->Equip(
+		GI->UltimateSkillEquipmentClass,
+		EAbilityType::None,
+		EAbilityType::None,
+		EAbilityType::None
+	);
 }
 
 void UTPSEquipmentInfoWidget::UpdateSpAttackInfoData()
@@ -120,6 +210,36 @@ void UTPSEquipmentInfoWidget::UpdateSpAttackInfoData()
 	AddSlotItemToData(GI->SpAttackAbilityList, Slot2_2, EAbilityType::Group2Ability2);
 	AddSlotItemToData(GI->SpAttackAbilityList, Slot3_1, EAbilityType::Group3Ability1);
 	AddSlotItemToData(GI->SpAttackAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+
+	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
+	if (!Pawn) return;
+
+	Pawn->SpAttackComponent->Equipment->AbilityList.Empty();
+	Pawn->SpAttackComponent->Equipment->AbilityList.Add(EAbilityType::Group1Ability1, nullptr);
+	Pawn->SpAttackComponent->Equipment->AbilityList.Add(EAbilityType::Group1Ability2, nullptr);
+	Pawn->SpAttackComponent->Equipment->AbilityList.Add(EAbilityType::Group2Ability1, nullptr);
+	Pawn->SpAttackComponent->Equipment->AbilityList.Add(EAbilityType::Group2Ability2, nullptr);
+	Pawn->SpAttackComponent->Equipment->AbilityList.Add(EAbilityType::Group3Ability1, nullptr);
+	Pawn->SpAttackComponent->Equipment->AbilityList.Add(EAbilityType::Group3Ability2, nullptr);
+
+	for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->SpAttackAbilityList)
+	{
+		EAbilityType AbilityType = Pair.Key;
+		UTPSAbilityItem* Item = Pair.Value;
+
+		if (Item && Item->AbilityClass)
+		{
+			Pawn->SpAttackComponent->Equipment->AbilityList.Add(AbilityType, Item->AbilityClass);
+		}
+	}
+
+	// 장착된 특성 초기화
+	Pawn->SpAttackComponent->Equip(
+		GI->SpAttackSkillEquipmentClass,
+		EAbilityType::None,
+		EAbilityType::None,
+		EAbilityType::None
+	);
 }
 
 void UTPSEquipmentInfoWidget::AddSlotItemToData(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>>& List, UTPSEquipmentInfoSlotWidget* InfoSlot, EAbilityType Type)

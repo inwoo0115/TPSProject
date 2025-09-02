@@ -95,6 +95,9 @@ public:
 
 	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
 
+	// 현재 장착 중인 특성 불러오기
+	virtual void InitializeAbilityListFromInventory() override;
+
 protected:
 
 	// 사격 딜레이 타이머

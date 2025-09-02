@@ -28,10 +28,13 @@ public:
 	// 데이터 에셋에서 특성 초기화
 	void InitializeAbilitiesFromDataAsset(EAbilityType Ability1, EAbilityType Ability2, EAbilityType Ability3);
 
+	// 현재 장착 중인 특성 불러오기
+	virtual void InitializeAbilityListFromInventory();
+
 	// 특성 델리게이트 해제
 	void ClearAbilityDelegates();
 
-	// 사용가능한 전체 특성 배열
+	// 장착 특성
 	UPROPERTY(ReplicatedUsing = OnRep_AbilitySlot)
 	TArray<class UTPSEquipmentAbilityBase*> AbilitySlot;
 
@@ -43,7 +46,7 @@ public:
 	UFUNCTION()
 	void OnRep_AbilitySlot();
 
-	// 특성 목록
+	// 사용가능한 전체 특성 목록
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	TMap<EAbilityType, TSubclassOf<class UTPSEquipmentAbilityBase>> AbilityList;
 

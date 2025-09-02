@@ -194,6 +194,7 @@ void UTPSInventoryWidget::OnCloseWindowClicked()
 		}
 	}
 
+	// 장착 특성 업데이트
 	if (WeaponInfo)
 	{
 		WeaponInfo->UpdateWeaponInfoData();

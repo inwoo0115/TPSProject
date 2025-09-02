@@ -9,6 +9,8 @@
 #include "Summons/TPSSkillRangeDecalBase.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Interface/TPSEventComponentInterface.h"
+#include "GameInstance/TPSGameInstance.h"
+#include "Item/TPSAbilityItem.h"
 
 void ATPSDroneSkillBase::BeginPlay()
 {
@@ -283,6 +285,24 @@ void ATPSDroneSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+    }
+}
+
+void ATPSDroneSkillBase::InitializeAbilityListFromInventory()
+{
+    UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+    if (GI)
+    {
+        for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->DroneAbilityList)
+        {
+            EAbilityType AbilityType = Pair.Key;
+            UTPSAbilityItem* Item = Pair.Value;
+
+            if (Item && Item->AbilityClass)
+            {
+                AbilityList.Add(AbilityType, Item->AbilityClass);
+            }
+        }
     }
 }
 

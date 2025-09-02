@@ -53,7 +53,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 	TArray<UTPSEquipmentAbilityBase*> NewSlot;
 
 	// Ability1
-	if (AbilityList.Contains(Ability1))
+	if (AbilityList.Contains(Ability1) && AbilityList[Ability1] && Ability1 != EAbilityType::None)
 	{
 		UTPSEquipmentAbilityBase* NewAbility1 = NewObject<UTPSEquipmentAbilityBase>(GetOwner(), AbilityList[Ability1]);
 		if (NewAbility1)
@@ -62,7 +62,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 		}
 	}
 	// Ability2
-	if (AbilityList.Contains(Ability2))
+	if (AbilityList.Contains(Ability2) && AbilityList[Ability2] && Ability2 != EAbilityType::None)
 	{
 		UTPSEquipmentAbilityBase* NewAbility2 = NewObject<UTPSEquipmentAbilityBase>(GetOwner(), AbilityList[Ability2]);
 		if (NewAbility2)
@@ -71,7 +71,7 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 		}
 	}
 	// Ability3
-	if (AbilityList.Contains(Ability3))
+	if (AbilityList.Contains(Ability3) && AbilityList[Ability3] && Ability3 != EAbilityType::None)
 	{
 		UTPSEquipmentAbilityBase* NewAbility3 = NewObject<UTPSEquipmentAbilityBase>(GetOwner(), AbilityList[Ability3]);
 		if (NewAbility3)
@@ -94,6 +94,11 @@ void ATPSAbilityEquipmentBase::InitializeAbilitiesFromDataAsset(EAbilityType Abi
 			}
 		}
 	}
+}
+
+void ATPSAbilityEquipmentBase::InitializeAbilityListFromInventory()
+{
+	// 게임 인스턴스에서 데이터 불러오기
 }
 
 void ATPSAbilityEquipmentBase::ClearAbilityDelegates()

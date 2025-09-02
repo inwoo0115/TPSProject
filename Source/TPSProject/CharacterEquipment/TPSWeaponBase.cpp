@@ -9,6 +9,8 @@
 #include "GameInstance/TPSGameplayEventSubsystem.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "NiagaraFunctionLibrary.h"
+#include "GameInstance/TPSGameInstance.h"
+#include "Item/TPSAbilityItem.h"
 
 void ATPSWeaponBase::BeginPlay()
 {
@@ -187,8 +189,6 @@ void ATPSWeaponBase::SetWeaponContextFromData()
 	{
 		ProjectileList = WeaponData->ProjectileList;
 
-		AbilityList = WeaponData->AbilityList;
-
 		WeaponContext.Damage = WeaponData->Damage;
 
 		WeaponContext.AttackRatio = WeaponData->AttackRatio;
@@ -210,6 +210,8 @@ void ATPSWeaponBase::SetWeaponContextFromData()
 		WeaponContext.CurrentBullet = WeaponData->CurrentBullet;
 
 		WeaponContext.MuzzleEffect = WeaponData->MuzzleEffect;
+
+		AbilityList = WeaponData->AbilityList;
 	}
 }
 
@@ -255,6 +257,24 @@ void ATPSWeaponBase::ChangeFieldStatByValue(FName FieldName, float Value)
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+	}
+}
+
+void ATPSWeaponBase::InitializeAbilityListFromInventory()
+{
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	if (GI)
+	{
+		for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->WeaponAbilityList)
+		{
+			EAbilityType AbilityType = Pair.Key;
+			UTPSAbilityItem* Item = Pair.Value;
+
+			if (Item && Item->AbilityClass)
+			{
+				AbilityList.Add(AbilityType, Item->AbilityClass);
+			}
+		}
 	}
 }
 

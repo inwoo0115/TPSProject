@@ -48,6 +48,7 @@ public:
 	UDataTable* AbilityDataTable;
 
 	// 개인 인벤토리
+	UPROPERTY()
 	TArray<class UTPSAbilityItem*> AbilityInventory;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

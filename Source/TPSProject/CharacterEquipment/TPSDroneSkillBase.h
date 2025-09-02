@@ -91,6 +91,10 @@ public:
 	UPROPERTY()
 	float CurrentCoolTime = 0.0f;
 
+
+	// 현재 장착 중인 특성 불러오기
+	virtual void InitializeAbilityListFromInventory() override;
+
 protected:
 	FTimerHandle CastCooldownHandle;
 

@@ -28,12 +28,12 @@ public:
 
 	class UTexture2D* GetItemImage();
 
+	UPROPERTY()
+	TSubclassOf<class UTPSEquipmentAbilityBase> AbilityClass;
+
 protected:
 	UPROPERTY()
 	FName AbilityName;
-
-	UPROPERTY()
-	TSubclassOf<class UTPSEquipmentAbilityBase> AbilityClass;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UTexture2D> ItemImage;

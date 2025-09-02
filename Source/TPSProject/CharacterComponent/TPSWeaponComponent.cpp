@@ -37,6 +37,7 @@ void UTPSWeaponComponent::EquipWeapon(TSubclassOf<ATPSWeaponBase> WeaponClass, E
 
 		// 무기 초기화
 		EquippedWeapon->InitializeComponent(this);
+		EquippedWeapon->InitializeAbilityListFromInventory();
 		EquippedWeapon->InitializeAbilitiesFromDataAsset(Ability1, Ability2, Ability3);
 		EquippedWeapon->InitializeAbilities();
 

@@ -8,6 +8,8 @@
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Net/UnrealNetwork.h"
 #include "TPSUltimateSkillData.h"
+#include "GameInstance/TPSGameInstance.h"
+#include "Item/TPSAbilityItem.h"
 
 void ATPSUltimateSkillBase::BeginPlay()
 {
@@ -321,6 +323,24 @@ void ATPSUltimateSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+    }
+}
+
+void ATPSUltimateSkillBase::InitializeAbilityListFromInventory()
+{
+    UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+    if (GI)
+    {
+        for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->UltimateAbilityList)
+        {
+            EAbilityType AbilityType = Pair.Key;
+            UTPSAbilityItem* Item = Pair.Value;
+
+            if (Item && Item->AbilityClass)
+            {
+                AbilityList.Add(AbilityType, Item->AbilityClass);
+            }
+        }
     }
 }
 

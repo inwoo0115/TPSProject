@@ -52,7 +52,6 @@ protected:
     virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
     virtual void NativeOnMouseLeave(const FPointerEvent& InMouseEvent) override;
     virtual FReply NativeOnMouseMove(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
-
     virtual FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
     bool bIsHover = false;

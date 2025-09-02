@@ -92,6 +92,9 @@ public:
 	virtual void ChangeFieldStatByValue(FName FieldName, float Value) override;
 
 
+	// 현재 장착 중인 특성 불러오기
+	virtual void InitializeAbilityListFromInventory() override;
+
 protected:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category = "SkillEquipment")
 	FUltimateSkillContext SkillContext;

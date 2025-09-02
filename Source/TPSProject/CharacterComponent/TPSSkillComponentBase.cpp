@@ -36,6 +36,7 @@ void UTPSSkillComponentBase::Equip(TSubclassOf<ATPSAbilityEquipmentBase> Equipme
 
 		// 장비 초기화
 		Equipment->InitializeComponent(this);
+		Equipment->InitializeAbilityListFromInventory();
 		Equipment->InitializeAbilitiesFromDataAsset(Ability1, Ability2, Ability3);
 		Equipment->InitializeAbilities();
 

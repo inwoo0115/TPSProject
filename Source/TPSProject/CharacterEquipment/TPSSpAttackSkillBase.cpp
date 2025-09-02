@@ -7,6 +7,8 @@
 #include "Net/UnrealNetwork.h"
 #include "TPSSpAttackSkillData.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
+#include "GameInstance/TPSGameInstance.h"
+#include "Item/TPSAbilityItem.h"
 
 void ATPSSpAttackSkillBase::BeginPlay()
 {
@@ -203,6 +205,24 @@ void ATPSSpAttackSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
     else
     {
         UE_LOG(LogTemp, Warning, TEXT("No matching field named %s found in class or SkillContext"), *FieldName.ToString());
+    }
+}
+
+void ATPSSpAttackSkillBase::InitializeAbilityListFromInventory()
+{
+    UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+    if (GI)
+    {
+        for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->SpAttackAbilityList)
+        {
+            EAbilityType AbilityType = Pair.Key;
+            UTPSAbilityItem* Item = Pair.Value;
+
+            if (Item && Item->AbilityClass)
+            {
+                AbilityList.Add(AbilityType, Item->AbilityClass);
+            }
+        }
     }
 }
 
