@@ -30,6 +30,7 @@ void UTPSEquipmentInfoWidget::InitializeWeaponInfo()
 	SetImageAndText(Context.WeaponIcon, Context.WeaponName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
 	SetAbilities(GI->WeaponAbilityList);
+	SetSlotType(EAbilityType::WeaponAbility);
 }
 
 void UTPSEquipmentInfoWidget::InitializeDroneInfo()
@@ -41,6 +42,7 @@ void UTPSEquipmentInfoWidget::InitializeDroneInfo()
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
 	SetAbilities(GI->DroneAbilityList);
+	SetSlotType(EAbilityType::DroneAbility);
 }
 
 void UTPSEquipmentInfoWidget::InitializeUltimateInfo()
@@ -52,6 +54,7 @@ void UTPSEquipmentInfoWidget::InitializeUltimateInfo()
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
 	SetAbilities(GI->UltimateAbilityList);
+	SetSlotType(EAbilityType::UltimateAbility);
 }
 
 void UTPSEquipmentInfoWidget::InitializeSpAttackInfo()
@@ -63,6 +66,7 @@ void UTPSEquipmentInfoWidget::InitializeSpAttackInfo()
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
 	SetAbilities(GI->SpAttackAbilityList);
+	SetSlotType(EAbilityType::SpAttackAbility);
 }
 
 void UTPSEquipmentInfoWidget::SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, FText ContextName)
@@ -130,6 +134,16 @@ void UTPSEquipmentInfoWidget::SetSlotColor(bool Active)
 	Slot2_2->SetColor(Active);
 	Slot3_1->SetColor(Active);
 	Slot3_2->SetColor(Active);
+}
+
+void UTPSEquipmentInfoWidget::SetSlotType(EAbilityType AbilityType)
+{
+	Slot1_1->SlotType = AbilityType;
+	Slot1_2->SlotType = AbilityType;
+	Slot2_1->SlotType = AbilityType;
+	Slot2_2->SlotType = AbilityType;
+	Slot3_1->SlotType = AbilityType;
+	Slot3_2->SlotType = AbilityType;
 }
 
 

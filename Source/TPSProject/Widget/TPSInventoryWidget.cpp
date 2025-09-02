@@ -14,6 +14,7 @@
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
 #include "CharacterEquipmentAbility/TPSAbilityType.h"
+#include "TPSEquipmentInfoSlotWidget.h"
 
 void UTPSInventoryWidget::NativeConstruct()
 {
@@ -24,6 +25,69 @@ void UTPSInventoryWidget::NativeConstruct()
 
 	OnVisibilityChanged.AddDynamic(this, &UTPSInventoryWidget::InitializeWidget);
 
+	if (WeaponInfo)
+	{
+		if (WeaponInfo->Slot1_1)
+			WeaponInfo->Slot1_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (WeaponInfo->Slot1_2)
+			WeaponInfo->Slot1_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (WeaponInfo->Slot2_1)
+			WeaponInfo->Slot2_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (WeaponInfo->Slot2_2)
+			WeaponInfo->Slot2_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (WeaponInfo->Slot3_1)
+			WeaponInfo->Slot3_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (WeaponInfo->Slot3_2)
+			WeaponInfo->Slot3_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+	}
+
+	if (DroneInfo)
+	{
+		if (DroneInfo->Slot1_1)
+			DroneInfo->Slot1_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (DroneInfo->Slot1_2)
+			DroneInfo->Slot1_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (DroneInfo->Slot2_1)
+			DroneInfo->Slot2_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (DroneInfo->Slot2_2)
+			DroneInfo->Slot2_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (DroneInfo->Slot3_1)
+			DroneInfo->Slot3_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (DroneInfo->Slot3_2)
+			DroneInfo->Slot3_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+	}
+
+	if (SpAttackInfo)
+	{
+		if (SpAttackInfo->Slot1_1)
+			SpAttackInfo->Slot1_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (SpAttackInfo->Slot1_2)
+			SpAttackInfo->Slot1_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (SpAttackInfo->Slot2_1)
+			SpAttackInfo->Slot2_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (SpAttackInfo->Slot2_2)
+			SpAttackInfo->Slot2_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (SpAttackInfo->Slot3_1)
+			SpAttackInfo->Slot3_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (SpAttackInfo->Slot3_2)
+			SpAttackInfo->Slot3_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+	}
+
+	if (UltimateInfo)
+	{
+		if (UltimateInfo->Slot1_1)
+			UltimateInfo->Slot1_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (UltimateInfo->Slot1_2)
+			UltimateInfo->Slot1_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (UltimateInfo->Slot2_1)
+			UltimateInfo->Slot2_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (UltimateInfo->Slot2_2)
+			UltimateInfo->Slot2_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (UltimateInfo->Slot3_1)
+			UltimateInfo->Slot3_1->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+		if (UltimateInfo->Slot3_2)
+			UltimateInfo->Slot3_2->OnSlotClicked.AddDynamic(this, &UTPSInventoryWidget::HandleSlotClicked);
+	}
 }
 
 void UTPSInventoryWidget::HandleItemClicked(UTPSInventoryItemWidget* Item)
@@ -33,24 +97,65 @@ void UTPSInventoryWidget::HandleItemClicked(UTPSInventoryItemWidget* Item)
 	if (Type == EAbilityType::WeaponAbility)
 	{
 		WeaponInfo->SetSlotColor(true);
+		DroneInfo->SetSlotColor(false);
+		SpAttackInfo->SetSlotColor(false);
+		UltimateInfo->SetSlotColor(false);
 	}
 	else if (Type == EAbilityType::DroneAbility)
 	{
 		DroneInfo->SetSlotColor(true);
+		WeaponInfo->SetSlotColor(false);
+		SpAttackInfo->SetSlotColor(false);
+		UltimateInfo->SetSlotColor(false);
 	}
 	else if (Type == EAbilityType::SpAttackAbility)
 	{
 		SpAttackInfo->SetSlotColor(true);
+		WeaponInfo->SetSlotColor(false);
+		DroneInfo->SetSlotColor(false);
+		UltimateInfo->SetSlotColor(false);
 	}
 	else if (Type == EAbilityType::UltimateAbility)
 	{
 		UltimateInfo->SetSlotColor(true);
+		WeaponInfo->SetSlotColor(false);
+		DroneInfo->SetSlotColor(false);
+		SpAttackInfo->SetSlotColor(false);
 	}
+
+	PendingItem = Item;
+}
+
+void UTPSInventoryWidget::HandleSlotClicked(UTPSEquipmentInfoSlotWidget* SlotWidget)
+{
+	if (PendingItem && !SlotWidget->Ability && SlotWidget->SlotType == PendingItem->AbilityItem->GetAbilityType())
+	{
+		SlotWidget->UpdateSlot(PendingItem->AbilityItem);
+		PendingItem->RemoveFromParent();
+		PendingItem = nullptr;
+	}
+
+	WeaponInfo->SetSlotColor(false);
+	DroneInfo->SetSlotColor(false);
+	SpAttackInfo->SetSlotColor(false);
+	UltimateInfo->SetSlotColor(false);
+}
+
+FReply UTPSInventoryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
+{
+	Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+
+	WeaponInfo->SetSlotColor(false);
+	DroneInfo->SetSlotColor(false);
+	SpAttackInfo->SetSlotColor(false);
+	UltimateInfo->SetSlotColor(false);
+
+	return FReply::Handled();
 }
 
 void UTPSInventoryWidget::OnCloseWindowClicked()
 {
-	auto UIsubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
+	UTPSUiSubsystem* UIsubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
 	if (UIsubsystem)
 	{
 		UIsubsystem->HideCurrentUI();

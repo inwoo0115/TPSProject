@@ -54,4 +54,12 @@ protected:
 
 	UFUNCTION()
 	void HandleItemClicked(class UTPSInventoryItemWidget* Item); 
+
+	UFUNCTION()
+	void HandleSlotClicked(class UTPSEquipmentInfoSlotWidget* SlotWidget);
+
+	FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
+
+	UPROPERTY()
+	UTPSInventoryItemWidget* PendingItem;
 };

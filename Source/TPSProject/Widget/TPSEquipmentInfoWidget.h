@@ -54,6 +54,8 @@ public:
 
 	void SetSlotColor(bool Active);
 
+	void SetSlotType(EAbilityType AbilityType);
+
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Inventory")
 	TSubclassOf<class UTPSInventoryItemWidget> InventoryItemWidgetClass;

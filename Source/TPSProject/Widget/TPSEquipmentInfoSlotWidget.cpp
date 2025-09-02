@@ -21,13 +21,18 @@ void UTPSEquipmentInfoSlotWidget::SetColor(bool Active)
     }
     else
     {
-        SlotImage->SetColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.5f));
+        SlotImage->SetColorAndOpacity(FLinearColor(1.f, 1.f, 1.f, 0.3f));
     }
 }
 
 FReply UTPSEquipmentInfoSlotWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent)
 {
     Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
+
+    if (OnSlotClicked.IsBound())
+    {
+        OnSlotClicked.Broadcast(this);
+    }
 
     return FReply::Handled();
 }

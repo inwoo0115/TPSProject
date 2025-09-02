@@ -4,7 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "CharacterEquipmentAbility/TPSAbilityType.h"
 #include "TPSEquipmentInfoSlotWidget.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnSlotClicked, UTPSEquipmentInfoSlotWidget*, Slot);
 
 /**
  * 
@@ -15,7 +18,6 @@ class TPSPROJECT_API UTPSEquipmentInfoSlotWidget : public UUserWidget
 	GENERATED_BODY()
 	
 public:
-
 	UPROPERTY(meta = (BindWidget))
 	class UImage* SlotImage;
 
@@ -28,6 +30,10 @@ public:
 
 	void SetColor(bool Active);
 
+	UPROPERTY(BlueprintAssignable, Category = "Event")
+	FOnSlotClicked OnSlotClicked;
+
+	EAbilityType SlotType;
 protected:
 	FReply NativeOnMouseButtonDown(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
 
