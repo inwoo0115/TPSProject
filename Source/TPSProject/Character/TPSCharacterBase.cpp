@@ -112,7 +112,6 @@ void ATPSCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// TODO: 추후 데이터에서 장비 장착
 	auto TPSGameInstance = Cast<UTPSGameInstance>(GetGameInstance());
 	if (IsLocallyControlled() && TPSGameInstance)
 	{

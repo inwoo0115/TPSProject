@@ -11,6 +11,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "GameInstance/TPSGameInstance.h"
 #include "Item/TPSAbilityItem.h"
+#include "Player/TPSMultiPlayerController.h"
 
 void ATPSWeaponBase::BeginPlay()
 {
@@ -262,7 +263,33 @@ void ATPSWeaponBase::ChangeFieldStatByValue(FName FieldName, float Value)
 
 void ATPSWeaponBase::InitializeAbilityListFromInventory()
 {
+	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwner());
+	if (!Pawn)
+	{
+		return;
+	}
+
+	ATPSMultiPlayerController* PC = Cast<ATPSMultiPlayerController>(Pawn->GetController());
+
+	// 멀티 플레이 환경 일 경우
+	if (PC)
+	{
+		for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : PC->WeaponAbilityList)
+		{
+			EAbilityType AbilityType = Pair.Key;
+			UTPSAbilityItem* Item = Pair.Value;
+
+			if (Item && Item->AbilityClass)
+			{
+				AbilityList.Add(AbilityType, Item->AbilityClass);
+			}
+		}
+		return;
+	}
+
+	// 싱글 플레이 환경 일 경우
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+
 	if (GI)
 	{
 		for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : GI->WeaponAbilityList)

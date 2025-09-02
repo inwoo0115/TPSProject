@@ -10,6 +10,7 @@
 #include "TPSUltimateSkillData.h"
 #include "GameInstance/TPSGameInstance.h"
 #include "Item/TPSAbilityItem.h"
+#include "Player/TPSMultiPlayerController.h"
 
 void ATPSUltimateSkillBase::BeginPlay()
 {
@@ -328,6 +329,30 @@ void ATPSUltimateSkillBase::ChangeFieldStatByValue(FName FieldName, float Value)
 
 void ATPSUltimateSkillBase::InitializeAbilityListFromInventory()
 {
+    ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwner());
+    if (!Pawn)
+    {
+        return;
+    }
+
+    ATPSMultiPlayerController* PC = Cast<ATPSMultiPlayerController>(Pawn->GetController());
+
+    // 멀티 플레이 환경 일 경우
+    if (PC)
+    {
+        for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : PC->UltimateAbilityList)
+        {
+            EAbilityType AbilityType = Pair.Key;
+            UTPSAbilityItem* Item = Pair.Value;
+
+            if (Item && Item->AbilityClass)
+            {
+                AbilityList.Add(AbilityType, Item->AbilityClass);
+            }
+        }
+        return;
+    }
+
     UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
     if (GI)
     {
