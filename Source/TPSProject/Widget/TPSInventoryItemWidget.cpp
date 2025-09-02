@@ -73,13 +73,23 @@ FVector2D UTPSInventoryItemWidget::GetWidgetPosition()
         // 오른쪽 하단: 위젯 우하단 = 마우스 위치
         NewPos += FVector2D(-WidgetSize.X - 5.f, -WidgetSize.Y - 5.f);
     }
-
+    
     return NewPos;
 }
 
 void UTPSInventoryItemWidget::SetShowTooltip(bool Input)
 {
     bShowTooltip = Input;
+}
+
+void UTPSInventoryItemWidget::SetIsEquipped(bool Equipped)
+{
+    bIsEquipped = Equipped;
+}
+
+bool UTPSInventoryItemWidget::GetIsEquipped()
+{
+    return bIsEquipped;
 }
 
 void UTPSInventoryItemWidget::SetWidgetInfo(UTPSAbilityItem* Item)
@@ -140,9 +150,20 @@ FReply UTPSInventoryItemWidget::NativeOnMouseButtonDown(const FGeometry& InGeome
 {
     Super::NativeOnMouseButtonDown(InGeometry, InMouseEvent);
 
-    if (OnItemClicked.IsBound())
+
+    if (InMouseEvent.GetEffectingButton() == EKeys::LeftMouseButton)
     {
-        OnItemClicked.Broadcast(this);
+        if (OnItemClicked.IsBound())
+        {
+            OnItemClicked.Broadcast(this);
+        }
+    }
+    else if (InMouseEvent.GetEffectingButton() == EKeys::RightMouseButton)
+    {
+        if (OnEquippedItemClicked.IsBound())
+        {
+            OnEquippedItemClicked.Broadcast(this);
+        }
     }
 
     return FReply::Handled();

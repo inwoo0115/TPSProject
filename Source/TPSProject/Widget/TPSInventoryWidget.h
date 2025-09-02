@@ -28,10 +28,10 @@ public:
 	class UTPSEquipmentInfoWidget* DroneInfo;
 
 	UPROPERTY(meta = (BindWidget))
-	class UButton* CloseWindowButton;
+	class UWrapBox* InventoryGrid;
 
 	UPROPERTY(meta = (BindWidget))
-	class UGridPanel* InventoryGrid;
+	class UButton* CloseWindowButton;
 
 	UFUNCTION()
 	void OnCloseWindowClicked();
@@ -45,6 +45,11 @@ public:
 	UFUNCTION()
 	void InitializeWidget(ESlateVisibility NewVisibility);
 
+	UFUNCTION()
+	void AddInventoryInfo(class UTPSAbilityItem* Item);
+
+	UFUNCTION()
+	void HandleItemRightClicked(class UTPSInventoryItemWidget* Item);
 
 protected:
 	virtual void NativeConstruct() override;
@@ -53,7 +58,7 @@ protected:
 	TSubclassOf<class UTPSInventoryItemWidget> InventoryItemWidgetClass;
 
 	UFUNCTION()
-	void HandleItemClicked(class UTPSInventoryItemWidget* Item); 
+	void HandleItemLeftClicked(class UTPSInventoryItemWidget* Item); 
 
 	UFUNCTION()
 	void HandleSlotClicked(class UTPSEquipmentInfoSlotWidget* SlotWidget);
@@ -62,4 +67,5 @@ protected:
 
 	UPROPERTY()
 	UTPSInventoryItemWidget* PendingItem;
+
 };

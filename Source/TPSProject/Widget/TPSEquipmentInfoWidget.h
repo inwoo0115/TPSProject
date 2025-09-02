@@ -40,17 +40,27 @@ public:
 	UPROPERTY(meta = (BindWidget))
 	class UImage* EquipmentIcon;
 
-	void InitializeWeaponInfo();
+	void InitializeWeaponInfo(class UTPSInventoryWidget* Inventory);
 
-	void InitializeDroneInfo();
+	void InitializeDroneInfo(class UTPSInventoryWidget* Inventory);
 
-	void InitializeUltimateInfo();
+	void InitializeUltimateInfo(class UTPSInventoryWidget* Inventory);
 
-	void InitializeSpAttackInfo();
+	void InitializeSpAttackInfo(class UTPSInventoryWidget* Inventory);
+
+	void UpdateWeaponInfoData();
+
+	void UpdateDroneInfoData();
+
+	void UpdateUltimateInfoData();
+
+	void UpdateSpAttackInfoData();
+
+	void AddSlotItemToData(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>>& List, UTPSEquipmentInfoSlotWidget* InfoSlot, EAbilityType Type);
 
 	void SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, FText ContextName);
 
-	void SetAbilities(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> List);
+	void SetAbilities(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> List, UTPSInventoryWidget* Inventory);
 
 	void SetSlotColor(bool Active);
 

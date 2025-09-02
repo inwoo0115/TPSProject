@@ -5,12 +5,27 @@
 #include "TPSInventoryItemWidget.h"
 #include "Components/CanvasPanel.h"
 #include "Components/Image.h"
+#include "TPSInventoryWidget.h"
 
-void UTPSEquipmentInfoSlotWidget::UpdateSlot(UTPSAbilityItem* Item)
+void UTPSEquipmentInfoSlotWidget::UpdateSlot(UTPSAbilityItem* Item, UTPSInventoryWidget* Inventory)
 {
+    if (Ability)
+    {
+        Ability->RemoveFromParent();
+    }
+
     Ability = CreateWidget<UTPSInventoryItemWidget>(this, InventoryItemWidgetClass);
     Ability->SetWidgetInfo(Item);
     AbilitySlot->AddChild(Ability);
+    Ability->SetIsEquipped(true);
+
+    Ability->OnEquippedItemClicked.AddDynamic(Inventory, &UTPSInventoryWidget::HandleItemRightClicked);
+    Ability->OnEquippedItemClicked.AddDynamic(this, &UTPSEquipmentInfoSlotWidget::RemoveSlot);
+}
+
+void UTPSEquipmentInfoSlotWidget::RemoveSlot(UTPSInventoryItemWidget* Item)
+{
+    Ability = nullptr;
 }
 
 void UTPSEquipmentInfoSlotWidget::SetColor(bool Active)

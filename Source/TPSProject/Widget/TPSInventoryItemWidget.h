@@ -33,6 +33,10 @@ public:
 
     void SetShowTooltip(bool Input);
 
+    void SetIsEquipped(bool Equipped);
+
+    bool GetIsEquipped();
+
     void SetWidgetInfo(class UTPSAbilityItem *Item);
 
     UPROPERTY()
@@ -40,6 +44,9 @@ public:
 
     UPROPERTY(BlueprintAssignable, Category = "Event")
     FOnItemClicked OnItemClicked;
+
+    UPROPERTY(BlueprintAssignable, Category = "Event")
+    FOnItemClicked OnEquippedItemClicked;
 
 protected:
     virtual void NativeOnMouseEnter(const FGeometry& InGeometry, const FPointerEvent& InMouseEvent) override;
@@ -50,4 +57,5 @@ protected:
 
     bool bIsHover = false;
     bool bShowTooltip = false;
+    bool bIsEquipped = false;
 };

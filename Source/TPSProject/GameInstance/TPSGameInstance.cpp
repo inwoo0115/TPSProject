@@ -128,3 +128,12 @@ void UTPSGameInstance::LoadDataFromSave()
 		}
 	}
 }
+
+void UTPSGameInstance::ResetInventory()
+{
+	AbilityInventory.Empty();
+	WeaponAbilityList.Empty();
+	DroneAbilityList.Empty();
+	SpAttackAbilityList.Empty();
+	UltimateAbilityList.Empty();
+}

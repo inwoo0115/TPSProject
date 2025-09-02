@@ -20,8 +20,9 @@
 #include "Components/TextBlock.h"
 #include "Components/Image.h"
 #include "TPSEquipmentInfoSlotWidget.h"
+#include "TPSInventoryWidget.h"
 
-void UTPSEquipmentInfoWidget::InitializeWeaponInfo()
+void UTPSEquipmentInfoWidget::InitializeWeaponInfo(UTPSInventoryWidget* Inventory)
 {
 	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
 
@@ -29,11 +30,11 @@ void UTPSEquipmentInfoWidget::InitializeWeaponInfo()
 
 	SetImageAndText(Context.WeaponIcon, Context.WeaponName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
-	SetAbilities(GI->WeaponAbilityList);
+	SetAbilities(GI->WeaponAbilityList, Inventory);
 	SetSlotType(EAbilityType::WeaponAbility);
 }
 
-void UTPSEquipmentInfoWidget::InitializeDroneInfo()
+void UTPSEquipmentInfoWidget::InitializeDroneInfo(UTPSInventoryWidget* Inventory)
 {
 	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
 
@@ -41,11 +42,11 @@ void UTPSEquipmentInfoWidget::InitializeDroneInfo()
 
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
-	SetAbilities(GI->DroneAbilityList);
+	SetAbilities(GI->DroneAbilityList, Inventory);
 	SetSlotType(EAbilityType::DroneAbility);
 }
 
-void UTPSEquipmentInfoWidget::InitializeUltimateInfo()
+void UTPSEquipmentInfoWidget::InitializeUltimateInfo(UTPSInventoryWidget* Inventory)
 {
 	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
 
@@ -53,11 +54,11 @@ void UTPSEquipmentInfoWidget::InitializeUltimateInfo()
 
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
-	SetAbilities(GI->UltimateAbilityList);
+	SetAbilities(GI->UltimateAbilityList, Inventory);
 	SetSlotType(EAbilityType::UltimateAbility);
 }
 
-void UTPSEquipmentInfoWidget::InitializeSpAttackInfo()
+void UTPSEquipmentInfoWidget::InitializeSpAttackInfo(UTPSInventoryWidget* Inventory)
 {
 	ATPSCharacterBase* Pawn = Cast<ATPSCharacterBase>(GetOwningPlayerPawn());
 
@@ -65,9 +66,71 @@ void UTPSEquipmentInfoWidget::InitializeSpAttackInfo()
 
 	SetImageAndText(Equipment->GetSkillContext().SkillEquipmentIcon, Equipment->GetSkillContext().SkillEquipmentName);
 	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
-	SetAbilities(GI->SpAttackAbilityList);
+	SetAbilities(GI->SpAttackAbilityList, Inventory);
 	SetSlotType(EAbilityType::SpAttackAbility);
 }
+
+void UTPSEquipmentInfoWidget::UpdateWeaponInfoData()
+{
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	if (!GI) return;
+
+	AddSlotItemToData(GI->WeaponAbilityList, Slot1_1, EAbilityType::Group1Ability1);
+	AddSlotItemToData(GI->WeaponAbilityList, Slot1_2, EAbilityType::Group1Ability2);
+	AddSlotItemToData(GI->WeaponAbilityList, Slot2_1, EAbilityType::Group2Ability1);
+	AddSlotItemToData(GI->WeaponAbilityList, Slot2_2, EAbilityType::Group2Ability2);
+	AddSlotItemToData(GI->WeaponAbilityList, Slot3_1, EAbilityType::Group3Ability1);
+	AddSlotItemToData(GI->WeaponAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+}
+
+void UTPSEquipmentInfoWidget::UpdateDroneInfoData()
+{
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	if (!GI) return;
+
+	AddSlotItemToData(GI->DroneAbilityList, Slot1_1, EAbilityType::Group1Ability1);
+	AddSlotItemToData(GI->DroneAbilityList, Slot1_2, EAbilityType::Group1Ability2);
+	AddSlotItemToData(GI->DroneAbilityList, Slot2_1, EAbilityType::Group2Ability1);
+	AddSlotItemToData(GI->DroneAbilityList, Slot2_2, EAbilityType::Group2Ability2);
+	AddSlotItemToData(GI->DroneAbilityList, Slot3_1, EAbilityType::Group3Ability1);
+	AddSlotItemToData(GI->DroneAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+}
+
+void UTPSEquipmentInfoWidget::UpdateUltimateInfoData()
+{
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	if (!GI) return;
+
+	AddSlotItemToData(GI->UltimateAbilityList, Slot1_1, EAbilityType::Group1Ability1);
+	AddSlotItemToData(GI->UltimateAbilityList, Slot1_2, EAbilityType::Group1Ability2);
+	AddSlotItemToData(GI->UltimateAbilityList, Slot2_1, EAbilityType::Group2Ability1);
+	AddSlotItemToData(GI->UltimateAbilityList, Slot2_2, EAbilityType::Group2Ability2);
+	AddSlotItemToData(GI->UltimateAbilityList, Slot3_1, EAbilityType::Group3Ability1);
+	AddSlotItemToData(GI->UltimateAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+}
+
+void UTPSEquipmentInfoWidget::UpdateSpAttackInfoData()
+{
+	UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+	if (!GI) return;
+
+	AddSlotItemToData(GI->SpAttackAbilityList, Slot1_1, EAbilityType::Group1Ability1);
+	AddSlotItemToData(GI->SpAttackAbilityList, Slot1_2, EAbilityType::Group1Ability2);
+	AddSlotItemToData(GI->SpAttackAbilityList, Slot2_1, EAbilityType::Group2Ability1);
+	AddSlotItemToData(GI->SpAttackAbilityList, Slot2_2, EAbilityType::Group2Ability2);
+	AddSlotItemToData(GI->SpAttackAbilityList, Slot3_1, EAbilityType::Group3Ability1);
+	AddSlotItemToData(GI->SpAttackAbilityList, Slot3_2, EAbilityType::Group3Ability2);
+}
+
+void UTPSEquipmentInfoWidget::AddSlotItemToData(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>>& List, UTPSEquipmentInfoSlotWidget* InfoSlot, EAbilityType Type)
+{
+	if (InfoSlot->Ability && InfoSlot->Ability->AbilityItem)
+	{
+		UTPSAbilityItem* NewCopy = DuplicateObject<UTPSAbilityItem>(InfoSlot->Ability->AbilityItem, this);
+		List.Add(Type, NewCopy);
+	}
+}
+
 
 void UTPSEquipmentInfoWidget::SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, FText ContextName)
 {
@@ -81,48 +144,48 @@ void UTPSEquipmentInfoWidget::SetImageAndText(TSoftObjectPtr<UTexture2D> Icon, F
 	EquipmentName->SetText(ContextName);
 }
 
-void UTPSEquipmentInfoWidget::SetAbilities(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> List)
+void UTPSEquipmentInfoWidget::SetAbilities(TMap<EAbilityType, TObjectPtr<class UTPSAbilityItem>> List, UTPSInventoryWidget* Inventory)
 {
 	if (List.Contains(EAbilityType::Group1Ability1))
 	{
 		UTPSAbilityItem* Item = List[EAbilityType::Group1Ability1];
 
-		Slot1_1->UpdateSlot(Item);
+		Slot1_1->UpdateSlot(Item, Inventory);
 	}
 
 	if (List.Contains(EAbilityType::Group1Ability2))
 	{
 		UTPSAbilityItem* Item = List[EAbilityType::Group1Ability2];
 
-		Slot1_2->UpdateSlot(Item);
+		Slot1_2->UpdateSlot(Item, Inventory);
 	}
 
 	if (List.Contains(EAbilityType::Group2Ability1))
 	{
 		UTPSAbilityItem* Item = List[EAbilityType::Group2Ability1];
 
-		Slot2_1->UpdateSlot(Item);
+		Slot2_1->UpdateSlot(Item, Inventory);
 	}
 
 	if (List.Contains(EAbilityType::Group2Ability2))
 	{
 		UTPSAbilityItem* Item = List[EAbilityType::Group2Ability2];
 
-		Slot2_2->UpdateSlot(Item);
+		Slot2_2->UpdateSlot(Item, Inventory);
 	}
 
 	if (List.Contains(EAbilityType::Group3Ability1))
 	{
 		UTPSAbilityItem* Item = List[EAbilityType::Group3Ability1];
 
-		Slot3_1->UpdateSlot(Item);
+		Slot3_1->UpdateSlot(Item, Inventory);
 	}
 
 	if (List.Contains(EAbilityType::Group3Ability2))
 	{
 		UTPSAbilityItem* Item = List[EAbilityType::Group3Ability2];
 
-		Slot3_2->UpdateSlot(Item);
+		Slot3_2->UpdateSlot(Item, Inventory);
 	}
 }
 

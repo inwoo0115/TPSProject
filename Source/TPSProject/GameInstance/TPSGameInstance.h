@@ -39,6 +39,8 @@ public:
 
 	void LoadDataFromSave();
 
+	void ResetInventory();
+
 	UPROPERTY(EditDefaultsOnly, Category = "Data")
 	UDataTable* EquipmentDataTable;
 

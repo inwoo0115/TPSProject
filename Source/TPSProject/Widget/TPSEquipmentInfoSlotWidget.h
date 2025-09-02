@@ -26,7 +26,10 @@ public:
 
 	class UTPSInventoryItemWidget* Ability;
 
-	void UpdateSlot(class UTPSAbilityItem* Item);
+	void UpdateSlot(class UTPSAbilityItem* Item, class UTPSInventoryWidget* Inventory);
+
+	UFUNCTION()
+	void RemoveSlot(UTPSInventoryItemWidget* Item);
 
 	void SetColor(bool Active);
 

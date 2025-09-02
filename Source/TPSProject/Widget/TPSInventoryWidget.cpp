@@ -7,7 +7,8 @@
 #include "TPSEquipmentInfoWidget.h"
 #include "Gameinstance/TPSUiSubsystem.h"
 #include "GameInstance/TPSGameInstance.h"
-#include "Components/GridPanel.h"
+#include "Components/WrapBox.h"
+#include "Components/WrapBoxSlot.h"
 #include "Item/TPSAbilityItem.h"
 #include "TPSInventoryItemWidget.h"
 #include "TPSItemInfoWidget.h"
@@ -90,7 +91,7 @@ void UTPSInventoryWidget::NativeConstruct()
 	}
 }
 
-void UTPSInventoryWidget::HandleItemClicked(UTPSInventoryItemWidget* Item)
+void UTPSInventoryWidget::HandleItemLeftClicked(UTPSInventoryItemWidget* Item)
 {
 	EAbilityType Type = Item->AbilityItem->GetAbilityType();
 
@@ -126,15 +127,25 @@ void UTPSInventoryWidget::HandleItemClicked(UTPSInventoryItemWidget* Item)
 	PendingItem = Item;
 }
 
+void UTPSInventoryWidget::HandleItemRightClicked(UTPSInventoryItemWidget* Item)
+{
+	if (!PendingItem && Item->GetIsEquipped())
+	{
+		AddInventoryInfo(Item->AbilityItem);
+		Item->HoverWidget->SetVisibility(ESlateVisibility::Hidden);
+		Item->RemoveFromParent();
+	}
+}
+
 void UTPSInventoryWidget::HandleSlotClicked(UTPSEquipmentInfoSlotWidget* SlotWidget)
 {
 	if (PendingItem && !SlotWidget->Ability && SlotWidget->SlotType == PendingItem->AbilityItem->GetAbilityType())
 	{
-		SlotWidget->UpdateSlot(PendingItem->AbilityItem);
+		SlotWidget->UpdateSlot(PendingItem->AbilityItem, this);
 		PendingItem->RemoveFromParent();
 		PendingItem = nullptr;
 	}
-
+	
 	WeaponInfo->SetSlotColor(false);
 	DroneInfo->SetSlotColor(false);
 	SpAttackInfo->SetSlotColor(false);
@@ -150,15 +161,54 @@ FReply UTPSInventoryWidget::NativeOnMouseButtonDown(const FGeometry& InGeometry,
 	SpAttackInfo->SetSlotColor(false);
 	UltimateInfo->SetSlotColor(false);
 
+	PendingItem = nullptr;
+
 	return FReply::Handled();
 }
 
 void UTPSInventoryWidget::OnCloseWindowClicked()
 {
+	// UI 제거
 	UTPSUiSubsystem* UIsubsystem = GetGameInstance()->GetSubsystem<UTPSUiSubsystem>();
 	if (UIsubsystem)
 	{
 		UIsubsystem->HideCurrentUI();
+	}
+
+	// Game Instance에 인벤토리 정보 업데이트
+	UTPSGameInstance* GameInstance = Cast<UTPSGameInstance>(GetGameInstance());
+	if (!GameInstance) return;
+
+	GameInstance->ResetInventory();
+
+	// 인벤토리 업데이트
+	if (InventoryGrid)
+	{
+		for (UWidget* Child : InventoryGrid->GetAllChildren())
+		{
+			if (UTPSInventoryItemWidget* ItemWidget = Cast<UTPSInventoryItemWidget>(Child))
+			{
+				UTPSAbilityItem* NewCopy = DuplicateObject<UTPSAbilityItem>(ItemWidget->AbilityItem, this);
+				GameInstance->AbilityInventory.Add(NewCopy);
+			}
+		}
+	}
+
+	if (WeaponInfo)
+	{
+		WeaponInfo->UpdateWeaponInfoData();
+	}
+	if (DroneInfo)
+	{
+		DroneInfo->UpdateDroneInfoData();
+	}
+	if (SpAttackInfo)
+	{
+		SpAttackInfo->UpdateSpAttackInfoData();
+	}
+	if (UltimateInfo)
+	{
+		UltimateInfo->UpdateUltimateInfoData();
 	}
 }
 
@@ -166,22 +216,22 @@ void UTPSInventoryWidget::UpdateEquipmentInfo()
 {
 	if (WeaponInfo)
 	{
-		WeaponInfo->InitializeWeaponInfo();
+		WeaponInfo->InitializeWeaponInfo(this);
 	}
 
 	if (DroneInfo)
 	{
-		DroneInfo->InitializeDroneInfo();
+		DroneInfo->InitializeDroneInfo(this);
 	}
 
 	if (SpAttackInfo)
 	{
-		SpAttackInfo->InitializeSpAttackInfo();
+		SpAttackInfo->InitializeSpAttackInfo(this);
 	}
 
 	if (UltimateInfo)
 	{
-		UltimateInfo->InitializeUltimateInfo();
+		UltimateInfo->InitializeUltimateInfo(this);
 	}
 }
 
@@ -205,21 +255,7 @@ void UTPSInventoryWidget::UpdateInventoryInfo()
 	{
 		if (!Item) continue;
 
-		// InventoryItemWidget 생성
-		UTPSInventoryItemWidget* ItemWidget = nullptr;
-
-		if (InventoryItemWidgetClass)
-		{
-			ItemWidget = CreateWidget<UTPSInventoryItemWidget>(this, InventoryItemWidgetClass);
-		}
-
-		if (!ItemWidget) continue;
-
-		// HoverWidget 세팅
-		ItemWidget->SetWidgetInfo(Item);
-		ItemWidget->OnItemClicked.AddDynamic(this, &UTPSInventoryWidget::HandleItemClicked);
-
-		UGridSlot* GridSlot = InventoryGrid->AddChildToGrid(ItemWidget, Index / 5, Index % 5);
+		AddInventoryInfo(Item);
 		Index++;
 	}
 }
@@ -237,4 +273,21 @@ void UTPSInventoryWidget::InitializeWidget(ESlateVisibility NewVisibility)
 
 	// 인벤토리 업데이트
 	UpdateInventoryInfo();
+}
+
+void UTPSInventoryWidget::AddInventoryInfo(UTPSAbilityItem* Item)
+{
+	// InventoryItemWidget 생성
+	UTPSInventoryItemWidget* ItemWidget = nullptr;
+
+	if (InventoryItemWidgetClass)
+	{
+		ItemWidget = CreateWidget<UTPSInventoryItemWidget>(this, InventoryItemWidgetClass);
+	}
+	if (!ItemWidget) return;
+
+	// HoverWidget 세팅
+	ItemWidget->SetWidgetInfo(Item);
+	ItemWidget->OnItemClicked.AddDynamic(this, &UTPSInventoryWidget::HandleItemLeftClicked);
+	InventoryGrid->AddChildToWrapBox(ItemWidget);
 }
