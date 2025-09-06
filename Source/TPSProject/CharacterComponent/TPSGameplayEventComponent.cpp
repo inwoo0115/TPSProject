@@ -10,7 +10,6 @@ UTPSGameplayEventComponent::UTPSGameplayEventComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	SetIsReplicatedByDefault(true);
-
 }
 
 

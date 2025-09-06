@@ -32,6 +32,8 @@ public:
 	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSAbilityEquipmentBase> Equipment;
 
+	virtual void InitEquipmentAbilityList();
+
 protected:
 	// RPC
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

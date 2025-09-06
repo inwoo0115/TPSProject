@@ -32,3 +32,12 @@ bool UTPSSpAttackSkillComponent::GetCanCastSkill()
 
 	return false;
 }
+
+void UTPSSpAttackSkillComponent::InitEquipmentAbilityList()
+{
+	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->InitializeAbilityListFromInventory();
+	}
+}

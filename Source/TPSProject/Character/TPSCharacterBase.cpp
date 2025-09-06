@@ -236,3 +236,11 @@ float ATPSCharacterBase::TakeDamage(float DamageAmount, FDamageEvent const& Dama
 	}
 	return 0.0f;
 }
+
+void ATPSCharacterBase::InitializeEquipmentAbilityList()
+{
+	WeaponComponent->InitEquipmentAbilityList();
+	DroneComponent->InitEquipmentAbilityList();
+	SpAttackComponent->InitEquipmentAbilityList();
+	UltimateComponent->InitEquipmentAbilityList();
+}

@@ -83,6 +83,11 @@ bool UTPSWeaponComponent::GetCanReloadWeapon()
 	return EquippedWeapon->CanReload();
 }
 
+void UTPSWeaponComponent::InitEquipmentAbilityList()
+{
+	EquippedWeapon->InitializeAbilityListFromInventory();
+}
+
 void UTPSWeaponComponent::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

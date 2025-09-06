@@ -48,18 +48,6 @@ void ATPSMultiPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (HasAuthority())
-	{
-		UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
-		if (GI)
-		{
-			WeaponAbilityList = GI->WeaponAbilityList;
-			DroneAbilityList = GI->DroneAbilityList;
-			SpAttackAbilityList = GI->SpAttackAbilityList;
-			UltimateAbilityList = GI->UltimateAbilityList;
-		}
-	}
-
 	if (IsLocalController())
 	{
 		UTPSHUDWidget* HUD = CreateWidget<UTPSHUDWidget>(this, HUDWidgetClass);
@@ -69,6 +57,26 @@ void ATPSMultiPlayerController::BeginPlay()
 			HUD->SetVisibility(ESlateVisibility::Visible);
 		}
 
+		// 로컬 특성 설정
+		UTPSGameInstance* GI = Cast<UTPSGameInstance>(GetGameInstance());
+		if (GI)
+		{
+			WeaponAbilityList = GI->WeaponAbilityList;
+			DroneAbilityList = GI->DroneAbilityList;
+			SpAttackAbilityList = GI->SpAttackAbilityList;
+			UltimateAbilityList = GI->UltimateAbilityList;
+		}
+
+		// WeaponAbilityList 로그 출력
+		for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : WeaponAbilityList)
+		{
+			FString ItemName = Pair.Value ? Pair.Value->AbilityClass ? Pair.Value->AbilityClass->GetName() : TEXT("None") : TEXT("Null");
+			FString Authority = HasAuthority() ? TEXT("Server") : TEXT("Client");
+
+			UE_LOG(LogTemp, Log, TEXT("[%s] AbilityType: %d, AbilityClass: %s"), *Authority, (int32)Pair.Key, *ItemName);
+		}
+
+		// Server RPC
 		TArray<EAbilityType> WeaponKeys, DroneKeys, SpAttackKeys, UltimateKeys;
 		TArray<TSubclassOf<UTPSEquipmentAbilityBase>> WeaponValues, DroneValues, SpAttackValues, UltimateValues;
 

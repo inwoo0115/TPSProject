@@ -26,4 +26,6 @@ public:
 
 	// 스킬 사용 가능 
 	virtual bool GetCanCastSkill() override;
+
+	virtual void InitEquipmentAbilityList() override;
 };

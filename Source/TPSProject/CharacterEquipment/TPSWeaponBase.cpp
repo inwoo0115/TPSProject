@@ -284,6 +284,7 @@ void ATPSWeaponBase::InitializeAbilityListFromInventory()
 				AbilityList.Add(AbilityType, Item->AbilityClass);
 			}
 		}
+
 		return;
 	}
 

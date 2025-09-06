@@ -81,3 +81,7 @@ void UTPSSkillComponentBase::ServerRPCEquip_Implementation(TSubclassOf<ATPSAbili
 {
 	Equip(EquipmentClass, Ability1, Ability2, Ability3);
 }
+
+void UTPSSkillComponentBase::InitEquipmentAbilityList()
+{
+}

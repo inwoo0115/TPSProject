@@ -69,16 +69,7 @@ void UTPSEquipmentWidget::OnWeapon01Clicked()
 
 void UTPSEquipmentWidget::OnWeapon02Clicked()
 {
-	//if (SubWeaponSettingWidgetClass)
-	//{
-	//	// 위젯 생성
-	//	UTPSMainWeaponSettingWidget* Widget = CreateWidget<UTPSMainWeaponSettingWidget>(GetWorld(), MainWeaponSettingWidgetClass);
-
-	//	if (Widget)
-	//	{
-	//		Widget->AddToViewport(12);
-	//	}
-	//}
+	// 두번쨰 무기 구현 시 추가
 }
 
 void UTPSEquipmentWidget::OnSpWeaponClicked()

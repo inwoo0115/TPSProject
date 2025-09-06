@@ -62,6 +62,7 @@ public:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, \
 		AActor* DamageCauser) override;
 
+	void InitializeEquipmentAbilityList();
 protected:
 	UPROPERTY(EditAnywhere, Category = CharacterControl, Meta = (AllowPrivateAccess = "true"))
 	TMap<ECharacterControlType, class UTPSCharacterControlData*> CharacterControlManager;

@@ -62,3 +62,9 @@ bool UTPSUltimateComponent::IsInRange()
 
 	return false;
 }
+
+void UTPSUltimateComponent::InitEquipmentAbilityList()
+{
+    auto UltiEquipment = Cast<ATPSUltimateSkillBase>(Equipment);
+    UltiEquipment->InitializeAbilityListFromInventory();
+}

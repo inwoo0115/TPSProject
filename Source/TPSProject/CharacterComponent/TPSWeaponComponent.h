@@ -38,6 +38,7 @@ public:
 	UPROPERTY(Replicated)
 	TObjectPtr<class ATPSWeaponBase> EquippedWeapon;
 
+	void InitEquipmentAbilityList();
 protected:
 	// RPC
 	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;

@@ -154,7 +154,6 @@ void UTPSEquipmentSettingWidgetBase::InitializeWidget(const ATPSAbilityEquipment
 	//// 장비 이름 할당
 	EquipmentName->SetText(ContextName);
 
-
 	// 버튼 & 텍스트 배열 구성
 	TArray<UButton*> Buttons = {
 		EquipmentAbility1_1, EquipmentAbility1_2,
@@ -167,6 +166,13 @@ void UTPSEquipmentSettingWidgetBase::InitializeWidget(const ATPSAbilityEquipment
 		EquipmentAbilityText2_1, EquipmentAbilityText2_2,
 		EquipmentAbilityText3_1, EquipmentAbilityText3_2
 	};
+
+	ATPSCharacterBase* Character = Cast<ATPSCharacterBase>(GetOwningPlayer()->GetPawn());
+	if (Character)
+	{
+		Character->InitializeEquipmentAbilityList();
+	}
+
 
 	int32 Index = 0;
 	for (const TPair<EAbilityType, TSubclassOf<UTPSEquipmentAbilityBase>>& Pair : CurrentEquipment->AbilityList)
@@ -199,7 +205,7 @@ void UTPSEquipmentSettingWidgetBase::InitializeWidget(const ATPSAbilityEquipment
 		// 현재 선택된 특성 표시
 		for (UTPSEquipmentAbilityBase* Ability : CurrentEquipment->AbilitySlot)
 		{
-			if (AbilityCDO->GetClass() == Ability->GetClass())
+			if (AbilityCDO->GetClass() && AbilityCDO->GetClass() == Ability->GetClass())
 			{
 				ToggleRowSelection(Buttons[Index], (Index / 2) + 1);
 			}

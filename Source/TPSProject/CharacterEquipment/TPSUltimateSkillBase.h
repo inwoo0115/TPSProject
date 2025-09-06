@@ -38,7 +38,7 @@ struct FUltimateSkillContext
 	TSubclassOf <class ATPSSkillRangeDecalBase> RangeDecal;
 
 	UPROPERTY(EditAnywhere, Category = SkillInfo)
-	EUltimateType CurrentUltimate;
+	EUltimateType CurrentUltimate = EUltimateType::BasicUltimate;
 };
 
 

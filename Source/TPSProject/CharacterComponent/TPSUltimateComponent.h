@@ -32,4 +32,6 @@ public:
 
 	// 범위 여부
 	virtual bool IsInRange();
+
+	virtual void InitEquipmentAbilityList() override;
 };

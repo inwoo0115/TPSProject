@@ -40,3 +40,12 @@ bool UTPSDroneSkillComponent::GetCanCastSkill()
 	}
 	return false;
 }
+
+void UTPSDroneSkillComponent::InitEquipmentAbilityList()
+{
+	auto SkillEquipment = Cast<ATPSDroneSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->InitializeAbilityListFromInventory();
+	}
+}

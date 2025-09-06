@@ -15,7 +15,7 @@ UTPSCharacterStatComponent::UTPSCharacterStatComponent()
 	MaxHP = 500;
 	Defensive = 10;
 
-	SetIsReplicated(true);
+	SetIsReplicatedByDefault(true);
 }
 
 void UTPSCharacterStatComponent::BeginPlay()
