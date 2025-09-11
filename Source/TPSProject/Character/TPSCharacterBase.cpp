@@ -19,10 +19,12 @@
 #include "Animation/TPSAnimMontageData.h"
 #include "CharacterComponent/TPSGameplayEventComponent.h"
 #include "Interface/TPSUltiGaugeInterface.h"
+#include "CharacterComponent/TPSCharacterMovementComponent.h"
 
 
 // Sets default values
-ATPSCharacterBase::ATPSCharacterBase()
+ATPSCharacterBase::ATPSCharacterBase(const FObjectInitializer& ObjectInitializer)
+	: Super(ObjectInitializer.SetDefaultSubobjectClass<UTPSCharacterMovementComponent>(ACharacter::CharacterMovementComponentName))
 {
  	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -108,6 +110,7 @@ ATPSCharacterBase::ATPSCharacterBase()
 	SetReplicateMovement(true);
 }
 
+
 void ATPSCharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -170,7 +173,7 @@ void ATPSCharacterBase::SetCharacterControlData(ECharacterControlType ControlTyp
 
 bool ATPSCharacterBase::CanPlayMontageByPriority(UAnimMontage* NewPlayMontage)
 {
-	auto CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
+	UAnimMontage* CurrentMontage = GetMesh()->GetAnimInstance()->GetCurrentActiveMontage();
 	if (CurrentMontage)
 	{
 		EMontagePriority CurrentPriority = AnimMontageData->AnimMontagePriority[CurrentMontage];

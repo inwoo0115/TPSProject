@@ -21,7 +21,7 @@ class TPSPROJECT_API ATPSCharacterBase : public ACharacter, public ITPSEventComp
 
 public:
 	// Sets default values for this character's properties
-	ATPSCharacterBase();
+	ATPSCharacterBase(const FObjectInitializer& ObjectInitializer);
 
 	virtual void BeginPlay() override;
 

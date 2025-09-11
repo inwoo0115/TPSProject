@@ -17,10 +17,6 @@ class TPSPROJECT_API UTPSRopeActionComponent : public UCableComponent
 public:
 	UTPSRopeActionComponent();
 
-	void UpdateTension();
-
-	void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
 	virtual void OnRegister() override;
 
 	virtual void BeginPlay() override;
@@ -41,9 +37,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
 	TObjectPtr<class ACharacter> Owner;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Character")
-	TObjectPtr<class UCharacterMovementComponent> Movement;
 
 	FVector3d RopeLocation;
 

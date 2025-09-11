@@ -17,9 +17,11 @@
 #include "Net/UnrealNetwork.h"
 #include "Components/TimelineComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "CharacterComponent/TPSCharacterMovementComponent.h"
 
 
-ATPSCharacterPlayer::ATPSCharacterPlayer()
+
+ATPSCharacterPlayer::ATPSCharacterPlayer(const FObjectInitializer& ObjectInitializer) : ATPSCharacterBase(ObjectInitializer)
 {
 	//Input 설정
 	static ConstructorHelpers::FObjectFinder<UInputAction> MoveActionRef(TEXT("/Game/TPSProject/Input/Actions/IA_Move.IA_Move"));
@@ -316,6 +318,11 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 		// RopeActionComponent 설정
 		RopeActionComponent->SetIsGrappling(false);
 		RopeActionComponent->UnregisterComponent();
+		UTPSCharacterMovementComponent* MoveComp = Cast<UTPSCharacterMovementComponent>(GetCharacterMovement());
+		if (MoveComp)
+		{
+			MoveComp->StopRope();
+		}
 	}
 	else if (SpInteractionTargetActor)
 	{
@@ -328,6 +335,11 @@ void ATPSCharacterPlayer::SpAction(const FInputActionValue& Value)
 		// 물체와 플레이어 잇는 케이블 활성화
 		RopeActionComponent->RegisterComponent();
 		RopeActionComponent->SetAttachEndTo(SpInteractionTargetActor, TEXT("StaticMesh"));
+		UTPSCharacterMovementComponent* MoveComp = Cast<UTPSCharacterMovementComponent>(GetCharacterMovement());
+		if (MoveComp)
+		{
+			MoveComp->StartRope(SpInteractionTargetActor->GetActorLocation());
+		}
 	}
 }
 
@@ -352,7 +364,7 @@ void ATPSCharacterPlayer::Interact(const FInputActionValue& Value)
 {
 	if (IsLocallyControlled())
 	{
-		auto PC = Cast<ATPSPlayerController>(GetController());
+		ATPSPlayerController* PC = Cast<ATPSPlayerController>(GetController());
 		if (PC)
 		{
 			for (auto& Elem : PC->InteractionUIManager)
@@ -487,9 +499,17 @@ void ATPSCharacterPlayer::MulticastRPCSpAction_Implementation()
 			// RopeActionComponent 설정
 			RopeActionComponent->SetIsGrappling(false);
 			RopeActionComponent->UnregisterComponent();
+
+			UTPSCharacterMovementComponent* MoveComp = Cast<UTPSCharacterMovementComponent>(GetCharacterMovement());
+			if (MoveComp)
+			{
+				MoveComp->StopRope();
+			}
 		}
 		else if (SpInteractionTargetActor)
 		{
+			//애님 몽타주 재생
+			GetMesh()->GetAnimInstance()->Montage_Play(AnimMontageData->AnimMontages[EMontageType::RopeAction]);
 
 			// RopeActionComponent 설정
 			RopeActionComponent->SetIsGrappling(true);
@@ -497,6 +517,11 @@ void ATPSCharacterPlayer::MulticastRPCSpAction_Implementation()
 			// 물체와 플레이어 잇는 케이블 활성화
 			RopeActionComponent->RegisterComponent();
 			RopeActionComponent->SetAttachEndTo(SpInteractionTargetActor, TEXT("StaticMesh"));
+			UTPSCharacterMovementComponent* MoveComp = Cast<UTPSCharacterMovementComponent>(GetCharacterMovement());
+			if (MoveComp)
+			{
+				MoveComp->StartRope(SpInteractionTargetActor->GetActorLocation());
+			}
 		}
 	}
 }

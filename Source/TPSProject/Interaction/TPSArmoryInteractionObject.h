@@ -17,7 +17,7 @@ class TPSPROJECT_API ATPSArmoryInteractionObject : public ATPSInteractionObjectB
 public:
 	ATPSArmoryInteractionObject();
 
-	virtual void Interact(APlayerController* PC);
+	virtual void Interact(APlayerController* PC) override;
 
 protected:
 	UPROPERTY(VisibleAnywhere)

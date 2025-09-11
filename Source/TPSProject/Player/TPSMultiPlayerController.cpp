@@ -67,15 +67,6 @@ void ATPSMultiPlayerController::BeginPlay()
 			UltimateAbilityList = GI->UltimateAbilityList;
 		}
 
-		// WeaponAbilityList 로그 출력
-		for (const TPair<EAbilityType, TObjectPtr<UTPSAbilityItem>>& Pair : WeaponAbilityList)
-		{
-			FString ItemName = Pair.Value ? Pair.Value->AbilityClass ? Pair.Value->AbilityClass->GetName() : TEXT("None") : TEXT("Null");
-			FString Authority = HasAuthority() ? TEXT("Server") : TEXT("Client");
-
-			UE_LOG(LogTemp, Log, TEXT("[%s] AbilityType: %d, AbilityClass: %s"), *Authority, (int32)Pair.Key, *ItemName);
-		}
-
 		// Server RPC
 		TArray<EAbilityType> WeaponKeys, DroneKeys, SpAttackKeys, UltimateKeys;
 		TArray<TSubclassOf<UTPSEquipmentAbilityBase>> WeaponValues, DroneValues, SpAttackValues, UltimateValues;

@@ -18,7 +18,7 @@ class TPSPROJECT_API ATPSCharacterPlayer : public ATPSCharacterBase, public ITPS
 	GENERATED_BODY()
 	
 public:
-	ATPSCharacterPlayer();
+	ATPSCharacterPlayer(const FObjectInitializer& ObjectInitializer);
 
 	virtual void BeginPlay() override;
  
