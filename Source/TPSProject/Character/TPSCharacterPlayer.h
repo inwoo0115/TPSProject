@@ -51,6 +51,8 @@ protected:
 	void SpAction(const FInputActionValue& Value);
 
 	void SpAttack(const FInputActionValue& Value);
+	
+	void SpAttackUI(const FInputActionValue& Value);
 
 	void Interact(const FInputActionValue& Value);
 

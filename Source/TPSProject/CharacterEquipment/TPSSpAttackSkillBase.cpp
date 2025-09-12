@@ -10,6 +10,8 @@
 #include "GameInstance/TPSGameInstance.h"
 #include "Item/TPSAbilityItem.h"
 #include "Player/TPSMultiPlayerController.h"
+#include "Kismet/GameplayStatics.h"
+
 
 void ATPSSpAttackSkillBase::BeginPlay()
 {
@@ -106,6 +108,11 @@ void ATPSSpAttackSkillBase::CastSkill()
 			Projectile->ExplosionRadius = SkillContext.ExplosionRadius; 
         }
     }
+}
+
+void ATPSSpAttackSkillBase::ShowUI()
+{
+    // 수류탄 궤적 출력
 }
 
 void ATPSSpAttackSkillBase::LaunchSkill()

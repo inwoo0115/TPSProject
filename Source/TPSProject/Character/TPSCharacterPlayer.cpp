@@ -142,7 +142,8 @@ void ATPSCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInput
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::AimIn);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::AimOut);
 	EnhancedInputComponent->BindAction(SpActionAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::SpAction);
-	EnhancedInputComponent->BindAction(SpAttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::SpAttack);
+	EnhancedInputComponent->BindAction(SpAttackAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::SpAttack);
+	EnhancedInputComponent->BindAction(SpAttackAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::SpAttackUI);
 	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Reload);
 	EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &ATPSCharacterPlayer::Interact);
 	EnhancedInputComponent->BindAction(UltimateAction, ETriggerEvent::Completed, this, &ATPSCharacterPlayer::Ultimate);
@@ -357,6 +358,14 @@ void ATPSCharacterPlayer::SpAttack(const FInputActionValue& Value)
 		{
 			MulticastRPCSpAttackAction();
 		}
+	}
+}
+
+void ATPSCharacterPlayer::SpAttackUI(const FInputActionValue& Value)
+{
+	if (IsLocallyControlled() && SpAttackComponent->GetCanCastSkill())
+	{
+		SpAttackComponent->ShowCastUI();
 	}
 }
 

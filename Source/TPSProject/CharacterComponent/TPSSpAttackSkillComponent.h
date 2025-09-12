@@ -21,6 +21,8 @@ public:
 	// 스킬 입력 처리
 	virtual void LaunchSkill() override;
 
+	void ShowCastUI();
+
 	// 스킬 사용 가능 
 	virtual bool GetCanCastSkill() override;
 

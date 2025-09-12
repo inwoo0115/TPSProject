@@ -22,6 +22,16 @@ void UTPSSpAttackSkillComponent::LaunchSkill()
 	}
 }
 
+void UTPSSpAttackSkillComponent::ShowCastUI()
+{
+	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);
+	if (SkillEquipment)
+	{
+		SkillEquipment->ShowUI();
+	}
+}
+
+
 bool UTPSSpAttackSkillComponent::GetCanCastSkill()
 {
 	auto SkillEquipment = Cast<ATPSSpAttackSkillBase>(Equipment);

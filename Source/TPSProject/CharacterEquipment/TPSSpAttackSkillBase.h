@@ -44,6 +44,7 @@ class TPSPROJECT_API ATPSSpAttackSkillBase : public ATPSAbilityEquipmentBase
 	GENERATED_BODY()
 
 public:
+
 	virtual void BeginPlay() override;
 
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
@@ -51,6 +52,8 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	virtual void CastSkill();
+
+	virtual void ShowUI();
 
 	virtual void LaunchSkill();
 	
@@ -82,6 +85,7 @@ public:
 	virtual void InitializeAbilityListFromInventory() override;
 
 	float CurrentCoolTime = 0.0f;
+
 protected:
 
 	FTimerHandle CastCooldownHandle;

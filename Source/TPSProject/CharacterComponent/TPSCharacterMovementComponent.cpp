@@ -75,6 +75,12 @@ void UTPSCharacterMovementComponent::PhysRope(float DeltaTime, int32 Iterations)
     FVector Delta = Velocity * DeltaTime;
     FHitResult Hit;
     SafeMoveUpdatedComponent(Delta, UpdatedComponent->GetComponentQuat(), true, Hit);
+
+    // 충돌 시 슬라이드
+    if (Hit.IsValidBlockingHit())
+    {
+        SlideAlongSurface(Delta, 1.f - Hit.Time, Hit.Normal, Hit, true);
+    }
 }
 
 void UTPSCharacterMovementComponent::StartRope(const FVector& InRopeLocation)
