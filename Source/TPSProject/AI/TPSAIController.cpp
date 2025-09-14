@@ -38,7 +38,7 @@ void ATPSAIController::Tick(float DeltaSeconds)
     TargetRotation.Pitch = 0.f;
     TargetRotation.Roll = 0.f;
 
-    const float RotationInterpSpeed = 0.1f;
+    const float RotationInterpSpeed = 0.9f;
 
     FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaSeconds, RotationInterpSpeed);
 

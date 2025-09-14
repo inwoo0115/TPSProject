@@ -63,8 +63,8 @@ void UBTService_CheckInRange::TickNode(UBehaviorTreeComponent& OwnerComp, uint8*
 		Params
 	);
 
-	FColor LineColor = bHit ? FColor::Red : FColor::Green;
-	DrawDebugLine(World, StartLocation, EndLocation, LineColor, false, 1.0f, 0, 2.0f);
+	//FColor LineColor = bHit ? FColor::Red : FColor::Green;
+	//DrawDebugLine(World, StartLocation, EndLocation, LineColor, false, 1.0f, 0, 2.0f);
 
 	bool bHasLineOfSight = false;
 

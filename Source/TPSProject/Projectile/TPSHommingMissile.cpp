@@ -44,7 +44,7 @@ void ATPSHommingMissile::BeginPlay()
 	GetWorldTimerManager().SetTimer(HomingTimerHandle, this, &ATPSHommingMissile::EnableHoming, 1.0f, false);
 
 	// 일정 시간 후 유도 해제
-	GetWorldTimerManager().SetTimer(DisableHomingTimerHandle, this, &ATPSHommingMissile::DisableHoming, 5.0f, false);
+	GetWorldTimerManager().SetTimer(DisableHomingTimerHandle, this, &ATPSHommingMissile::DisableHoming, 2.5f, false);
 
 
 	// 일정 시간 후 자동 파괴

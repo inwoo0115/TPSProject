@@ -43,6 +43,7 @@ void ATPSBulletBase::BeginPlay()
 	Super::BeginPlay();
 
 	Collision->OnComponentHit.AddDynamic(this, &ATPSBulletBase::OnHit);
+	Collision->IgnoreActorWhenMoving(GetOwner(), true);
 
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(LifeTime);

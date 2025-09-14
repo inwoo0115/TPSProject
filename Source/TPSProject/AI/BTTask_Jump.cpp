@@ -34,21 +34,35 @@ EBTNodeResult::Type UBTTask_Jump::ExecuteTask(UBehaviorTreeComponent& OwnerComp,
     FVector EndLocation = BB->GetValueAsVector(TEXT("MoveLocation"));
     FVector StartLocation = ControlPawn->GetActorLocation();
 
+
+    float LaunchSpeed = 500.f;
+    const float MaxSpeed = 5000.f;
+    const float Step = 100.f;
     FVector LaunchVelocity;
 
-    bool bHaveAimSolution = UGameplayStatics::SuggestProjectileVelocity(
-        this,
-        LaunchVelocity,
-        StartLocation,
-        EndLocation,
-        1000.f, // 발사 속도 (cm/s)
-        true,  // 고각 해결책 사용 여부
-        0.f,    // 충돌 반경
-        0.f,    // 중력 오버라이드 (0이면 기본 중력 사용)
-        ESuggestProjVelocityTraceOption::DoNotTrace
-    );
+    bool bFoundSolution = false;
 
-    if (bHaveAimSolution && !bIsJumping)
+    while (LaunchSpeed <= MaxSpeed)
+    {
+        bFoundSolution = UGameplayStatics::SuggestProjectileVelocity(
+            this,
+            LaunchVelocity,
+            StartLocation,
+            EndLocation,
+            LaunchSpeed,
+            true,
+            0.f,
+            0.f,
+            ESuggestProjVelocityTraceOption::DoNotTrace
+        );
+
+        if (bFoundSolution)
+            break;
+
+        LaunchSpeed += Step;
+    }
+
+    if (bFoundSolution && !bIsJumping)
     {
 		ACharacter* ControlCharacter = Cast<ACharacter>(ControlPawn);
 		ControlCharacter->LaunchCharacter(LaunchVelocity, true, true);

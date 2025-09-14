@@ -44,15 +44,15 @@ void UBTService_Detect::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeM
 		QueryParams
 	);
 	
-	DrawDebugSphere(
-		World,
-		OwnerLocation,
-		SearchRadius,
-		16,             // 세그먼트 수
-		FColor::Green,  // 색상
-		false,          // 영구 표시 여부(false면 일정 시간 후 사라짐)
-		0.5f            // 표시 지속 시간
-	);
+	//DrawDebugSphere(
+	//	World,
+	//	OwnerLocation,
+	//	SearchRadius,
+	//	16,             // 세그먼트 수
+	//	FColor::Green,  // 색상
+	//	false,          // 영구 표시 여부(false면 일정 시간 후 사라짐)
+	//	0.5f            // 표시 지속 시간
+	//);
 
 	if (bOverlap)
 	{

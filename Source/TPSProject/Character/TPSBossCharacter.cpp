@@ -69,6 +69,8 @@ void ATPSBossCharacter::Tick(float DeltaSeconds)
 		
 		FVector NewLocation = GetActorLocation() + FRotator(0, SkillDecal->GetActorRotation().Yaw, 0).Vector() * (500.f + (CurrentScale * 0.5f)) + FVector(0.0f, 0.0f, -250.0f);
 		SkillDecal->SetActorLocation(NewLocation);
+		EffectSpawnRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
+		SkillDecal->SetActorRotation(EffectSpawnRotation);
 		
 		SkillDecal->RangeDecal->MarkRenderStateDirty();
 		
@@ -110,10 +112,9 @@ void ATPSBossCharacter::CastSkill()
 		SpawnLocations.Add(BoxCenter + RandOffset);
 	}
 
-	for (FVector SpawnLocation : SpawnLocations)
+	for (const FVector SpawnLocation : SpawnLocations)
 	{
-		FRotator SpawnRotation = FRotator(0, 0, 0);
-
+		FRotator SpawnRotation = (SpawnLocation - GetActorLocation()).Rotation();
 		// 총알 스폰
 		FActorSpawnParameters SpawnParams;
 
@@ -138,7 +139,10 @@ void ATPSBossCharacter::CastSkill()
 				if (BlackboardComp)
 				{
 					AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
-					Projectile->SetHomingTarget(TargetActor->GetRootComponent());
+					if (TargetActor)
+					{
+						Projectile->SetHomingTarget(TargetActor->GetRootComponent());
+					}
 				}
 			}
 		}
@@ -157,7 +161,7 @@ void ATPSBossCharacter::CastUlti()
 		SpawnLocation,
 		EffectSpawnRotation
 	);
-	SkillDecal->RangeDecal->DecalSize = FVector(1.0f, 50.0f, 0.0f);
+	SkillDecal->RangeDecal->DecalSize = FVector(500.0f, 50.0f, 0.0f);
 	SkillDecal->RangeDecal->MarkRenderStateDirty();
 }
 
@@ -221,16 +225,16 @@ void ATPSBossCharacter::SpawnExplosion()
 			}
 		}
 
-		DrawDebugBox(
-			GetWorld(),
-			BoxCenter,
-			HalfExtents,
-			EffectSpawnRotation.Quaternion(),
-			FColor::Green,
-			false,      // 지속 여부
-			5.f,        // 지속 시간
-			0,
-			5.f         // 선 두께
-		);
+		//DrawDebugBox(
+		//	GetWorld(),
+		//	BoxCenter,
+		//	HalfExtents,
+		//	EffectSpawnRotation.Quaternion(),
+		//	FColor::Green,
+		//	false,      // 지속 여부
+		//	5.f,        // 지속 시간
+		//	0,
+		//	5.f         // 선 두께
+		//);
 	}
 }
