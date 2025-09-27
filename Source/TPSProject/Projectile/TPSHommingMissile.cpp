@@ -38,6 +38,7 @@ void ATPSHommingMissile::BeginPlay()
 	Collision->IgnoreActorWhenMoving(GetOwner(), true);
 
 	RandomCurveOffset = FMath::VRand() * CurveStrength;
+
 	GetWorldTimerManager().SetTimer(CurveTimerHandle, this, &ATPSHommingMissile::ApplyRandomCurve, 0.02f, true);
 
 	// 일정 시간 후 유도 활성화
@@ -45,7 +46,6 @@ void ATPSHommingMissile::BeginPlay()
 
 	// 일정 시간 후 유도 해제
 	GetWorldTimerManager().SetTimer(DisableHomingTimerHandle, this, &ATPSHommingMissile::DisableHoming, 2.5f, false);
-
 
 	// 일정 시간 후 자동 파괴
 	SetLifeSpan(10.0f);

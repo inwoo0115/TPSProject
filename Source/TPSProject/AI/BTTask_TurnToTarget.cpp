@@ -5,6 +5,7 @@
 #include "BTTask_TurnToTarget.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "TPSAIController.h"
+#include "Character/TPSBossCharacter.h"
 
 UBTTask_TurnToTarget::UBTTask_TurnToTarget()
 {
@@ -27,6 +28,13 @@ EBTNodeResult::Type UBTTask_TurnToTarget::ExecuteTask(UBehaviorTreeComponent& Ow
 	{
 		return EBTNodeResult::Failed;
 	}
+
+	ATPSBossCharacter* BossChar = Cast<ATPSBossCharacter>(ControllingPawn);
+	if (nullptr == BossChar)
+	{
+		return EBTNodeResult::Failed;
+	}
+
 
 	float TurnSpeed = 3.0f;
 	FVector LookVector = TargetPawn->GetActorLocation() - ControllingPawn->GetActorLocation();

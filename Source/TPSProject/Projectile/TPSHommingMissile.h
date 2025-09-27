@@ -46,6 +46,7 @@ public:
 	UPROPERTY(EditAnywhere, Category = "VFX")
 	TObjectPtr<class UNiagaraSystem> ExplosionEffect;
 private:
+
 	void EnableHoming();
 
 	void DisableHoming();

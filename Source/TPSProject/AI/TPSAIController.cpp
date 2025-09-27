@@ -12,7 +12,6 @@ ATPSAIController::ATPSAIController(const FObjectInitializer& ObjectInitializer)
 		BossBehaviorTree = BehaviorTreeAsset.Object;
 	}
 
-
 	bAllowStrafe = true;
 }
 
@@ -32,19 +31,22 @@ void ATPSAIController::Tick(float DeltaSeconds)
         return;
     }
 
-    FRotator CurrentRotation = ControlledPawn->GetActorRotation();
+    if (HasAuthority())
+    {
+        FRotator CurrentRotation = ControlledPawn->GetActorRotation();
 
-    FRotator TargetRotation = GetControlRotation();
-    TargetRotation.Pitch = 0.f;
-    TargetRotation.Roll = 0.f;
+        FRotator TargetRotation = GetControlRotation();
+        TargetRotation.Pitch = 0.f;
+        TargetRotation.Roll = 0.f;
 
-    const float RotationInterpSpeed = 0.9f;
+        const float RotationInterpSpeed = 0.9f;
 
-    FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaSeconds, RotationInterpSpeed);
+        FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaSeconds, RotationInterpSpeed);
 
-    ControlledPawn->SetActorRotation(NewRotation);
-  
+        ControlledPawn->SetActorRotation(NewRotation);
+    }
 }
+
 
 void ATPSAIController::StopBehaviorTree()
 {
@@ -67,3 +69,4 @@ void ATPSAIController::OnPossess(APawn* InPawn)
 		RunBehaviorTree(BossBehaviorTree);
 	}
 }
+

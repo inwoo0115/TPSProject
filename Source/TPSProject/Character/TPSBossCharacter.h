@@ -34,14 +34,32 @@ public:
 	bool GetIsDead();
 
 	void SpawnExplosion();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCCastSkill(AActor* Target);
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCCastUlti();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCDead();
+
+	UFUNCTION(NetMulticast, Reliable)
+	void MulticastRPCStart();
+
+	UPROPERTY(Replicated)
+	FRotator AimRotation;
 protected:
+
+	void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
 	UPROPERTY(EditAnywhere, Category = Projectile)
 	TSubclassOf<class ATPSProjectileBase> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = Decal)
 	TSubclassOf<class ATPSSkillRangeDecalBase> DecalClass;
 
-	UPROPERTY(EditAnywhere, Category = Decal)
+	UPROPERTY(EditAnywhere, Replicated, Category = Decal)
 	TObjectPtr<class ATPSSkillRangeDecalBase> SkillDecal;
 
 	UPROPERTY(EditAnywhere, Category = Effect)

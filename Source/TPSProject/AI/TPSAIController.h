@@ -31,8 +31,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UBlackboardComponent* BlackboardComponent;
 
-	//virtual void UpdateControlRotation(float DeltaTime, bool bUpdatePawn = true) override;
-
 	UPROPERTY()
 	bool bIsCustomTurning = false;
 

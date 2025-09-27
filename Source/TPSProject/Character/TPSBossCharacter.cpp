@@ -11,6 +11,7 @@
 #include "NiagaraFunctionLibrary.h"
 #include "Kismet/GameplayStatics.h"
 #include "Engine/OverlapResult.h"
+#include "Net/UnrealNetwork.h"
 
 ATPSBossCharacter::ATPSBossCharacter(const FObjectInitializer& ObjectInitializer)
 {
@@ -49,14 +50,18 @@ void ATPSBossCharacter::Tick(float DeltaSeconds)
 	SkillCoolTime += DeltaSeconds;
 	UltiCoolTime += DeltaSeconds;
 
+	if (HasAuthority())
+	{
+		AimRotation = GetControlRotation();
+	}
+
 	if (CurrentHp <= 0.0f && !bIsDead)
 	{
 		ATPSAIController* AICon = Cast<ATPSAIController>(GetController());
 		if (AICon)
 		{
 			AICon->StopBehaviorTree();
-			bIsDead = true;
-			PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::LevelEnd]);
+			MulticastRPCDead();
 		}
 	}
 
@@ -69,7 +74,7 @@ void ATPSBossCharacter::Tick(float DeltaSeconds)
 		
 		FVector NewLocation = GetActorLocation() + FRotator(0, SkillDecal->GetActorRotation().Yaw, 0).Vector() * (500.f + (CurrentScale * 0.5f)) + FVector(0.0f, 0.0f, -250.0f);
 		SkillDecal->SetActorLocation(NewLocation);
-		EffectSpawnRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
+		EffectSpawnRotation = FRotator(0.f, AimRotation.Yaw, 0.f);
 		SkillDecal->SetActorRotation(EffectSpawnRotation);
 		
 		SkillDecal->RangeDecal->MarkRenderStateDirty();
@@ -86,83 +91,24 @@ void ATPSBossCharacter::Tick(float DeltaSeconds)
 
 void ATPSBossCharacter::CastSkill()
 {
-	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::SkillCast]);
-	SkillCoolTime = 0.0f;
-
-	// 발사체 소환
-	if (!ProjectileClass)
+	AAIController* AICon = Cast<AAIController>(GetController());
+	AActor* TargetActor = nullptr;
+	if (AICon)
 	{
-		return;
-	}
-
-	FVector SocketLocation = GetMesh()->GetSocketLocation(TEXT("head"));
-
-	FVector BoxExtent = FVector(40.f, 40.f, 40.f);
-	FVector BoxCenter = SocketLocation + FVector(0.0f, 0.0f, 100.0f);
-
-	TArray<FVector> SpawnLocations;
-
-	for (int i = 0; i < 4; i++)
-	{
-		FVector RandOffset = FVector(
-			FMath::FRandRange(-BoxExtent.X, BoxExtent.X),
-			FMath::FRandRange(-BoxExtent.Y, BoxExtent.Y),
-			FMath::FRandRange(-BoxExtent.Z, BoxExtent.Z)
-		);
-		SpawnLocations.Add(BoxCenter + RandOffset);
-	}
-
-	for (const FVector SpawnLocation : SpawnLocations)
-	{
-		FRotator SpawnRotation = (SpawnLocation - GetActorLocation()).Rotation();
-		// 총알 스폰
-		FActorSpawnParameters SpawnParams;
-
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = this;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-
-		ATPSHommingMissile* Projectile = GetWorld()->SpawnActor<ATPSHommingMissile>(
-			ProjectileClass,
-			SpawnLocation,
-			SpawnRotation,
-			SpawnParams
-		);
-
-
-		if (Projectile)
+		UBlackboardComponent* BlackboardComp = AICon->GetBlackboardComponent();
+		if (BlackboardComp)
 		{
-			AAIController* AICon = Cast<AAIController>(GetController());
-			if (AICon)
-			{
-				UBlackboardComponent* BlackboardComp = AICon->GetBlackboardComponent();
-				if (BlackboardComp)
-				{
-					AActor* TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
-					if (TargetActor)
-					{
-						Projectile->SetHomingTarget(TargetActor->GetRootComponent());
-					}
-				}
-			}
+			TargetActor = Cast<AActor>(BlackboardComp->GetValueAsObject(TEXT("TargetActor")));
+
 		}
 	}
+
+	MulticastRPCCastSkill(TargetActor);
 }
 
 void ATPSBossCharacter::CastUlti()
 {
-	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::UltiCast]);
-	UltiCoolTime = 0.0f;
-	FVector SpawnLocation = GetActorLocation() + FRotator(0, GetControlRotation().Yaw, 0).Vector() * 100.f + FVector(0.0f, 0.0f, -250.0f);
-	EffectSpawnRotation = FRotator(0.f, GetControlRotation().Yaw, 0.f);
-
-	SkillDecal = GetWorld()->SpawnActor<ATPSSkillRangeDecalBase>(
-		DecalClass,
-		SpawnLocation,
-		EffectSpawnRotation
-	);
-	SkillDecal->RangeDecal->DecalSize = FVector(500.0f, 50.0f, 0.0f);
-	SkillDecal->RangeDecal->MarkRenderStateDirty();
+	MulticastRPCCastUlti();
 }
 
 float ATPSBossCharacter::GetSkillCoolTime()
@@ -237,4 +183,96 @@ void ATPSBossCharacter::SpawnExplosion()
 		//	5.f         // 선 두께
 		//);
 	}
+}
+
+void ATPSBossCharacter::MulticastRPCDead_Implementation()
+{
+	bIsDead = true;
+	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::LevelEnd]);
+}
+
+void ATPSBossCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(ATPSBossCharacter, AimRotation);
+	DOREPLIFETIME(ATPSBossCharacter, SkillDecal);
+}
+
+
+void ATPSBossCharacter::MulticastRPCStart_Implementation()
+{
+	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::LevelStart]);
+}
+
+void ATPSBossCharacter::MulticastRPCCastSkill_Implementation(AActor* Target)
+{
+	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::SkillCast]);
+	SkillCoolTime = 0.0f;
+
+	// 발사체 소환
+	if (!ProjectileClass)
+	{
+		return;
+	}
+
+	FVector SocketLocation = GetMesh()->GetSocketLocation(TEXT("head"));
+
+	FVector BoxExtent = FVector(40.f, 40.f, 40.f);
+	FVector BoxCenter = SocketLocation + FVector(0.0f, 0.0f, 100.0f);
+
+	TArray<FVector> SpawnLocations;
+
+	for (int i = 0; i < 4; i++)
+	{
+		FVector RandOffset = FVector(
+			FMath::FRandRange(-BoxExtent.X, BoxExtent.X),
+			FMath::FRandRange(-BoxExtent.Y, BoxExtent.Y),
+			FMath::FRandRange(-BoxExtent.Z, BoxExtent.Z)
+		);
+		SpawnLocations.Add(BoxCenter + RandOffset);
+	}
+
+	for (const FVector SpawnLocation : SpawnLocations)
+	{
+		FRotator SpawnRotation = (SpawnLocation - GetActorLocation()).Rotation();
+	
+		FActorSpawnParameters SpawnParams;
+
+		SpawnParams.Owner = this;
+		SpawnParams.Instigator = this;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		ATPSHommingMissile* Projectile = GetWorld()->SpawnActor<ATPSHommingMissile>(
+			ProjectileClass,
+			SpawnLocation,
+			SpawnRotation,
+			SpawnParams
+		);
+
+
+		if (Projectile)
+		{
+			if (Target)
+			{
+				Projectile->SetHomingTarget(Target->GetRootComponent());
+			}
+		}
+	}
+}
+
+void ATPSBossCharacter::MulticastRPCCastUlti_Implementation()
+{
+	PlayAnimMontage(AnimMontageData->AnimMontages[EMontageType::UltiCast]);
+	UltiCoolTime = 0.0f;
+	FVector SpawnLocation = GetActorLocation() + FRotator(0, AimRotation.Yaw, 0).Vector() * 100.f + FVector(0.0f, 0.0f, -250.0f);
+	EffectSpawnRotation = FRotator(0.f, AimRotation.Yaw, 0.f);
+
+	SkillDecal = GetWorld()->SpawnActor<ATPSSkillRangeDecalBase>(
+		DecalClass,
+		SpawnLocation,
+		EffectSpawnRotation
+	);
+	SkillDecal->RangeDecal->DecalSize = FVector(500.0f, 50.0f, 0.0f);
+	SkillDecal->RangeDecal->MarkRenderStateDirty();
 }

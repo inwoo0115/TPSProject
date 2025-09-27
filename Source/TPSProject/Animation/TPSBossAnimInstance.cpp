@@ -27,23 +27,29 @@ void UTPSBossAnimInstance::NativeUpdateAnimation(float DeltaSceonds)
 		Velocity = Owner->GetVelocity().Length();
 		bIsFalling = Movement->IsFalling();
 		Axis = Owner->GetActorTransform().InverseTransformVector(Owner->GetVelocity().GetSafeNormal(0.0001));
-		AimOffsetAxis = Owner->GetActorTransform().InverseTransformRotation(Owner->GetControlRotation().Quaternion()).Rotator();
 		bIsMontagePlaying = Montage_IsPlaying(nullptr);
+		FRotator ControlRotation;
 		if (Owner->GetController())
 		{
-			FRotator ControlRotation = Owner->GetController()->GetControlRotation();
-
-			Yaw = ControlRotation.Yaw;
-			Roll = ControlRotation.Roll;
-			if (ControlRotation.Pitch > 180.0)
-			{
-				Pitch = ControlRotation.Pitch - 360.0;
-			}
-			else
-			{
-				Pitch = ControlRotation.Pitch;
-			}
+			ControlRotation = Owner->GetController()->GetControlRotation();
+			AimOffsetAxis = Owner->GetActorTransform().InverseTransformRotation(Owner->GetControlRotation().Quaternion()).Rotator();
 		}
+		else
+		{
+			ControlRotation = Owner->AimRotation;
+			AimOffsetAxis = Owner->GetActorTransform().InverseTransformRotation(Owner->AimRotation.Quaternion()).Rotator();
+		}
+		Yaw = ControlRotation.Yaw;
+		Roll = ControlRotation.Roll;
+		if (ControlRotation.Pitch > 180.0)
+		{
+			Pitch = ControlRotation.Pitch - 360.0;
+		}
+		else
+		{
+			Pitch = ControlRotation.Pitch;
+		}
+
 		bIsDead = Owner->GetIsDead();
 	}
 }

@@ -37,7 +37,7 @@ EBTNodeResult::Type UBTTask_LevelStart::ExecuteTask(UBehaviorTreeComponent& Owne
         return EBTNodeResult::Failed;
     }
 
-    BossCharacter->PlayAnimMontage(BossCharacter->AnimMontageData->AnimMontages[EMontageType::LevelStart]);
+    BossCharacter->MulticastRPCStart();
 
     return EBTNodeResult::InProgress;
 }
