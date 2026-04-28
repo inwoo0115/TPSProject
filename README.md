@@ -100,23 +100,6 @@ Source/TPSProject/
 | 네트워크 | OnlineSubsystem, RPC, Replication |
 | UI | UMG |
 | VFX/기타 | Niagara, CableComponent |
-| 플러그인 | ModelingToolsEditorMode, VisualStudioTools |
-
----
-
-## 빌드 & 실행
-
-### 요구 사항
-- Windows 10/11
-- Unreal Engine **5.4**
-- Visual Studio 2022 (Game development with C++ 워크로드)
-
-### 절차
-1. 본 저장소를 클론
-2. 아래 **에셋 다운로드** 링크에서 `Content/` 에셋을 받아 프로젝트 루트에 배치
-3. `TPSProject.uproject` 우클릭 → **Generate Visual Studio project files**
-4. `TPSProject.sln` 을 Visual Studio 2022로 열고 **Development Editor / Win64** 빌드
-5. 에디터 실행 후 `Play` (멀티플레이 테스트 시 `Number of Players` ≥ 2)
 
 ---
 
